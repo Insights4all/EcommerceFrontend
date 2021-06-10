@@ -102,6 +102,7 @@ const useStyles = makeStyles((theme) => ({
   navbar: {
     padding: 10,
     marginLeft: 50,
+    marginTop: 5,
   },
   cartnumber: {
     marginLeft: 10,
@@ -118,7 +119,7 @@ const useStyles = makeStyles((theme) => ({
       color: "black",
       marginLeft: 8,
       marginRight: 5,
-      marginTop: 30,
+      marginTop: 35,
     },
     fontSize: 0,
   },
