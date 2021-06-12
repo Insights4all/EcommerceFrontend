@@ -301,7 +301,7 @@ function Navbar(props) {
 
           <div className="p-5">
             <IconButton
-              color="black"
+              color="default"
               style={{ flexGrow: 1 }}
               className={classes.icondesign}
               edge="end"
