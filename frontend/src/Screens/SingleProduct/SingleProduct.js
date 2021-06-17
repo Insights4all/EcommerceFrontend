@@ -13,16 +13,61 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Select from "@material-ui/core/Select";
 import Checkbox from "@material-ui/core/Checkbox";
 import Chip from "@material-ui/core/Chip";
+import AppBar from "@material-ui/core/AppBar";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import PropTypes from "prop-types";
+
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box p={3}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
+  };
+}
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     overflow: "hidden",
+    backgroundColor: theme.palette.background.paper,
   },
   formControl: {
+    [theme.breakpoints.up("sm")]: {
+      margin: theme.spacing(1),
+      minWidth: 120,
+      maxWidth: 300,
+      marginLeft: 25,
+    },
     margin: theme.spacing(1),
     minWidth: 120,
     maxWidth: 300,
+    marginLeft: 25,
   },
   chips: {
     display: "flex",
@@ -47,6 +92,13 @@ const useStyles = makeStyles((theme) => ({
 
       background: "black",
     },
+    width: 90,
+    height: 90,
+    marginLeft: 5,
+    marginTop: 15,
+    display: "inline-block",
+
+    background: "pink",
   },
 
   mainbox: {
@@ -59,6 +111,13 @@ const useStyles = makeStyles((theme) => ({
 
       background: "black",
     },
+    width: 325,
+    height: 325,
+    marginLeft: 34,
+    marginTop: 30,
+    align: "center",
+
+    background: "black",
   },
   firstpaper: {
     [theme.breakpoints.up("sm")]: {
@@ -67,21 +126,30 @@ const useStyles = makeStyles((theme) => ({
       marginLeft: 40,
       marginRight: 40,
     },
+    marginLeft: 10,
   },
   secondpaper: {
     [theme.breakpoints.up("sm")]: {
-      width: 325,
+      width: 425,
       height: 350,
       marginTop: 0,
     },
+    width: 425,
+    height: 350,
+    marginTop: 5,
   },
   thirdpaper: {
     [theme.breakpoints.up("sm")]: {
-      width: 500,
-      height: 350,
+      width: 400,
+      height: 320,
       marginLeft: 20,
       marginTop: 25,
     },
+    width: 500,
+    height: 250,
+    marginLeft: 0,
+    marginRight: 0,
+    marginTop: 0,
   },
   productname: {
     fontFamily: "Segoe UI Emoji",
@@ -94,16 +162,28 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 5,
   },
   price: {
+    [theme.breakpoints.up("sm")]: {
+      fontFamily: "Segoe UI Emoji",
+      fontStyle: "normal",
+      fontDisplay: "swap",
+      fontWeight: 400,
+      padding: 5,
+      fontSize: 22,
+      marginLeft: 20,
+      marginRight: 5,
+      color: "black",
+      marginTop: 2,
+    },
     fontFamily: "Segoe UI Emoji",
     fontStyle: "normal",
     fontDisplay: "swap",
-    fontWeight: 400,
-    padding: 5,
-    fontSize: 22,
+    fontWeight: 550,
+    padding: 3,
+    fontSize: 25,
     marginLeft: 20,
     marginRight: 5,
     color: "black",
-    marginTop: 2,
+    marginTop: 1,
   },
   cancelprice: {
     color: "grey",
@@ -123,14 +203,27 @@ const useStyles = makeStyles((theme) => ({
 
 function SingleProduct() {
   const classes = useStyles();
+  const [size, setSize] = React.useState("");
+  const [color, setColor] = React.useState("");
+  const [value, setValue] = React.useState(0);
+
+  const handleTabs = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  const handleChange = (event) => {
+    setSize(event.target.value);
+  };
+  const handleColor = (event) => {
+    setColor(event.target.value);
+  };
 
   return (
     <div className={classes.root}>
       <Navbar />
-
       <Grid container spacing={1} className={classes.allgrids}>
         <Grid item xs={12} sm={3}>
-          <Paper className={classes.firstpaper}>
+          <Paper className={classes.firstpaper} elevation={0}>
             <Box className={classes.mybox} border={1}>
               <img
                 width="90px"
@@ -163,7 +256,7 @@ function SingleProduct() {
           </Paper>
         </Grid>
         <Grid item xs={12} sm={3}>
-          <Paper className={classes.secondpaper}>
+          <Paper className={classes.secondpaper} elevation={0}>
             <Box className={classes.mainbox} border={1}>
               <img
                 width="325px"
@@ -174,7 +267,7 @@ function SingleProduct() {
           </Paper>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Paper className={classes.thirdpaper}>
+          <Paper className={classes.thirdpaper} elevation={3}>
             <Typography className={classes.productname}>
               Rice Water Bright Cleansing Foam
             </Typography>
@@ -187,15 +280,33 @@ function SingleProduct() {
             </Typography>
 
             <FormControl className={classes.formControl}>
-              <InputLabel id="demo-mutiple-name-label">Name</InputLabel>
+              <InputLabel id="demo-mutiple-name-label">Size</InputLabel>
               <Select
                 labelId="demo-mutiple-name-label"
                 id="demo-mutiple-name"
-                value=""
-                onChange=""
+                value={size}
+                onChange={handleChange}
                 input={<Input />}
               >
-                <MenuItem value="XLL">XL</MenuItem>
+                <MenuItem value={"XLL"}>XL</MenuItem>
+                <MenuItem value={"L"}>L</MenuItem>
+                <MenuItem value={"M"}>M</MenuItem>
+                <MenuItem value={"XLL"}>S</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl className={classes.formControl}>
+              <InputLabel id="demo-mutiple-name-label">Color</InputLabel>
+              <Select
+                labelId="demo-mutiple-name-label"
+                id="demo-mutiple-name"
+                value={color}
+                onChange={handleColor}
+                input={<Input />}
+              >
+                <MenuItem value={"XLL"}>Red</MenuItem>
+                <MenuItem value={"L"}>Blue</MenuItem>
+                <MenuItem value={"M"}>Green</MenuItem>
+                <MenuItem value={"XLL"}>Blue</MenuItem>
               </Select>
             </FormControl>
 
@@ -210,7 +321,29 @@ function SingleProduct() {
           </Paper>
         </Grid>
       </Grid>
-
+      <Box border={1}>
+        <AppBar position="static">
+          <Tabs
+            value={value}
+            onChange={handleTabs}
+            aria-label="simple tabs example"
+          >
+            <Tab label="Item One" {...a11yProps(0)} />
+            <Tab label="Item Two" {...a11yProps(1)} />
+            <Tab label="Item Three" {...a11yProps(2)} />
+          </Tabs>
+        </AppBar>
+        <TabPanel value={value} index={0}>
+          Item One
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          Item Two
+        </TabPanel>
+        <TabPanel value={value} index={2}>
+          Item Three
+        </TabPanel>
+      </Box>
+      /
       <Footer />
     </div>
   );
