@@ -9,12 +9,14 @@ import Divider from "@material-ui/core/Divider";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
 import Product from "../Product/Product";
+import EachCategory from "../EachCategory/EachCategory";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     overflow: "hidden",
     flexGrow: 1,
+    backgroundColor: "white",
   },
 
   content: {
@@ -71,6 +73,10 @@ const useStyles = makeStyles((theme) => ({
   icon: {
     padding: 10,
   },
+  categorygrid: {
+    marginTop: 10,
+    backgroundColor: "#eeeeee",
+  },
 }));
 
 function Home(props) {
@@ -91,6 +97,28 @@ function Home(props) {
         </Box>
 
         <div className={classes.toolbar}>
+          <Typography className={classes.headings}>Top Categories</Typography>
+          <Divider variant="middle" />
+        </div>
+
+        <Grid className={classes.categorygrid}>
+          <Grid item xs={12}>
+            <Grid container justify="center" spacing={1}>
+              <EachCategory />
+              <EachCategory />
+              <EachCategory />
+              <EachCategory />
+              <EachCategory />
+              <EachCategory />
+              <EachCategory />
+              <EachCategory />
+              <EachCategory />
+              <EachCategory />
+            </Grid>
+          </Grid>
+        </Grid>
+
+        <div className={classes.toolbar}>
           <Typography className={classes.headings}>Best Seller</Typography>
           <Divider variant="middle" />
         </div>
@@ -107,6 +135,7 @@ function Home(props) {
             </Grid>
           </Grid>
         </Grid>
+
         <Footer />
       </main>
     </div>

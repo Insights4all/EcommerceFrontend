@@ -3,7 +3,15 @@ import Footer from "../Footer/Footer";
 import Navbar from "../Navbar/Navbar";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
-import { Container, Grid, Paper, Typography } from "@material-ui/core";
+import {
+  Container,
+  Grid,
+  List,
+  ListItem,
+  Paper,
+  Typography,
+} from "@material-ui/core";
+import Product from "../Product/Product";
 import Button from "@material-ui/core/Button";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -17,7 +25,8 @@ import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import PropTypes from "prop-types";
-
+import { blue } from "@material-ui/core/colors";
+import Divider from "@material-ui/core/Divider";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -199,6 +208,38 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 20,
     width: 300,
   },
+  featuresbox: {
+    [theme.breakpoints.up("sm")]: {
+      marginLeft: 150,
+      marginRight: 150,
+      marginTop: 50,
+      background: blue,
+    },
+    marginLeft: 10,
+    marginRight: 10,
+    marginTop: 50,
+    background: blue,
+  },
+  headings: {
+    [theme.breakpoints.up("sm")]: {
+      fontFamily: "Segoe UI Emoji",
+      fontStyle: "normal",
+      fontDisplay: "swap",
+      fontWeight: 600,
+      padding: 5,
+      fontSize: 30,
+      marginLeft: 30,
+      color: "#f50057",
+    },
+    fontFamily: "Segoe UI Emoji",
+    fontStyle: "normal",
+    fontDisplay: "swap",
+    fontWeight: 600,
+    padding: 5,
+    fontSize: 27,
+    marginLeft: 15,
+    color: "#f50057",
+  },
 }));
 
 function SingleProduct() {
@@ -321,29 +362,70 @@ function SingleProduct() {
           </Paper>
         </Grid>
       </Grid>
-      <Box border={1}>
-        <AppBar position="static">
+      <Box border={1} borderColor="grey.500" className={classes.featuresbox}>
+        <AppBar position="static" color="inherit">
           <Tabs
             value={value}
             onChange={handleTabs}
             aria-label="simple tabs example"
           >
-            <Tab label="Item One" {...a11yProps(0)} />
-            <Tab label="Item Two" {...a11yProps(1)} />
-            <Tab label="Item Three" {...a11yProps(2)} />
+            <Tab label="Features" {...a11yProps(0)} />
+            <Tab label="About" {...a11yProps(1)} />
+            <Tab label="Description" {...a11yProps(2)} />
           </Tabs>
         </AppBar>
         <TabPanel value={value} index={0}>
-          Item One
+          <List href="#simple-list">
+            <ListItemText primary="1 . After using the toner and serum, take an appropriate amount of emulsion and lightly dab it on the face." />
+            <ListItemText primary="2.  The emulsion will seep deep into the layers of skin and reduce the" />
+          </List>
         </TabPanel>
         <TabPanel value={value} index={1}>
-          Item Two
+          <Typography>
+            Water, Glycerin, Alcohol, Dipropylene Glycol, Caprylic/Capric
+            Triglyceride, Hydrogenated Polydecene, Betaine, Cyclomethicone,
+            Cetyl Ethylhexanoate, Polyglyceryl-3 Methylglucose Distearate,
+            DI-C12-13 Alkyl Malate, Oryza Sativa (Rice) Extract (1.0%), Cetearyl
+            Alcohol, Glyceryl Stearate, PEG-100 Stearate, Butyrospermum Parkii
+            (Shea Butter), Dimethicone, Lecithin, Caprylic/Capric Glycerides,
+            Dimethicone/Vinyl Dimethicone Crosspolymer, Oryza Sativa (Rice) Bran
+            Oil (0.1%), Acrylates/C10-30 Alkyl Acrylate Crosspolymer, Butylene
+            Glycol, C12-14 Pareth-12, Sodium Hyaluronate, Ceramide 3 (0.001%),
+            Polyglyceryl-10 Oleate, Hydrogenated Lecithin, Glycosphingolipids,
+            Carbomer, Potassium Hydroxide, Fragrance, Methylparaben, Disodium
+            EDTA, Alpha-Isomethyl Ionone, Benzyl Salicylate, Butylphenyl
+            Methylpropional, CItronellol, Coumarin, Geraniol, Hexyl CInnamal,
+            Hydroxycitronellal, Hydroxyisohexyl 3-Cyclohexene Carboxaldehyde,
+            Limonene, Linalool
+          </Typography>
         </TabPanel>
         <TabPanel value={value} index={2}>
-          Item Three
+          <List href="#simple-list">
+            <ListItemText
+              primary="1 . Helps to seal in all the hydration
+Moisturizes the skin
+"
+            />
+            <ListItemText primary="2.  It is a lighter version of a cream and can be used during the day" />
+          </List>
         </TabPanel>
       </Box>
-      /
+
+      <Typography className={classes.headings}>See more Products</Typography>
+      <Divider variant="middle" />
+
+      <Grid>
+        <Grid item xs={12}>
+          <Grid container justify="center" spacing={2}>
+            <Product />
+            <Product />
+            <Product />
+            <Product />
+            <Product />
+          </Grid>
+        </Grid>
+      </Grid>
+
       <Footer />
     </div>
   );

@@ -12,10 +12,23 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("sm")]: {
       height: 350,
       width: 220,
+      marginTop: 8,
+      backgroundColor: "transparent",
     },
     height: 350,
     width: 190,
   },
+  mybox: {
+    [theme.breakpoints.up("sm")]: {
+      height: 190,
+
+      marginTop: 8,
+      backgroundColor: "transparent",
+    },
+    marginTop: 8,
+    height: 190,
+  },
+
   control: {
     padding: theme.spacing(3),
   },
@@ -88,8 +101,8 @@ function Product() {
   const classes = useStyles();
   return (
     <Grid item>
-      <Paper className={classes.productpaper} elevation={3}>
-        <Box width={1} height="200px" p={1} bgcolor="grey.300">
+      <Paper className={classes.productpaper} elevation={0}>
+        <Box className={classes.mybox} p={1} bgcolor="grey.300">
           <Link href="/singleproduct">
             <img
               width="100%"
