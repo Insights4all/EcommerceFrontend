@@ -5,6 +5,7 @@ import React from "react";
 import "./App.css";
 import SingleProduct from "./Screens/SingleProduct/SingleProduct";
 import Categories from "./Screens/Categories/Categories";
+import Cart from "./Screens/Cart/Cart";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/" exact component={Home} />
         <Route path="/singleproduct" exact component={SingleProduct} />
         <Route path="/Categories" exact component={Categories} />
+        <Route path="/Cart" exact component={Cart} />
       </Switch>
     </Router>
   );
