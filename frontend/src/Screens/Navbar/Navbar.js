@@ -2,6 +2,7 @@ import React from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
+import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
@@ -18,6 +19,8 @@ import FormControl from "@material-ui/core/FormControl";
 import NativeSelect from "@material-ui/core/NativeSelect";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
+import { useHistory } from "react-router-dom";
+
 
 const drawerWidth = 200;
 
@@ -186,6 +189,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
+
+
+
+
 function Navbar(props) {
   const { window } = props;
   const classes = useStyles();
@@ -195,6 +203,10 @@ function Navbar(props) {
     age: "",
     name: "hai",
   });
+
+  let history = useHistory();
+
+
   const handleChange = (event) => {
     const name = event.target.name;
     setCategory({
@@ -207,12 +219,22 @@ function Navbar(props) {
     setMobileOpen(!mobileOpen);
   };
 
+
+
+
+  const redirect = () => {
+    
+    history.push("/profile");
+  }
+
   const drawer = (
     <div>
       <div className={classes.toolbar}>
-        <Typography className={classes.username} variant="h6" noWrap>
+       
+        <Typography  className={classes.username} variant="h6" noWrap>
           Hello , Safiya
         </Typography>
+       
       </div>
 
       <List>
@@ -234,6 +256,7 @@ function Navbar(props) {
 
   const container =
     window !== undefined ? () => window().document.body : undefined;
+
 
   return (
     <div>
@@ -294,7 +317,7 @@ function Navbar(props) {
             </Button>
           </div>
           <div className={classes.signupbutton}>
-            <Button variant="outlined" href="#outlined-buttons">
+            <Button onClick={redirect} variant="outlined" href="#outlined-buttons">
               Signup
             </Button>
           </div>
@@ -309,7 +332,7 @@ function Navbar(props) {
             >
               <div className={classes.acounticon}>
                 <AccountCircle />
-                <Typography className={classes.cartnumber}>Safiya</Typography>
+                <Typography onClick={redirect} className={classes.cartnumber}>Safiya</Typography>
               </div>
               <div className={classes.icondesign}>
                 <ShoppingCartIcon />
