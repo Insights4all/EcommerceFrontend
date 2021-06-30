@@ -5,6 +5,10 @@ import { DataGrid } from "@material-ui/data-grid";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
+import { Box, Divider, Typography } from "@material-ui/core";
+import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
+import { height } from "@material-ui/system";
 
 var count = 1;
 
@@ -12,7 +16,7 @@ const columns: GridColDef[] = [
   { field: "id", headerName: " ", width: 30 },
   {
     field: "img",
-    headerName: " Image",
+    headerName: " ",
     width: 150,
   },
   {
@@ -75,11 +79,69 @@ const rows = [
 ];
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+    marginTop: 150,
+    height: 400,
+  },
   datagrid: {
+    display: "none",
     [theme.breakpoints.up("sm")]: {
-      marginTop: 100,
-      marginLeft: 50,
+      marginLeft: 40,
       width: 900,
+      display: "inline-block",
+    },
+  },
+  paper: {
+    width: 350,
+    marginTop: 30,
+    height: 150,
+    marginLeft: 280,
+  },
+  subtotaltext: {
+    [theme.breakpoints.up("sm")]: {
+      fontFamily: "Segoe UI Emoji",
+      fontStyle: "normal",
+      fontDisplay: "swap",
+      fontWeight: 500,
+      padding: 8,
+      fontSize: 20,
+      marginLeft: 20,
+      marginTop: 40,
+    },
+  },
+  item: {
+    [theme.breakpoints.up("sm")]: {
+      fontFamily: "Segoe UI Emoji",
+      fontStyle: "normal",
+      fontDisplay: "swap",
+      fontWeight: 500,
+      padding: 1,
+      fontSize: 17,
+      marginLeft: 28,
+    },
+  },
+  price: {
+    [theme.breakpoints.up("sm")]: {
+      fontFamily: "Segoe UI Emoji",
+      fontStyle: "normal",
+      fontDisplay: "swap",
+      fontWeight: 700,
+      padding: 3,
+      fontSize: 20,
+      marginLeft: 20,
+      marginTop: 10,
+    },
+  },
+  divider: {
+    width: 280,
+    marginLeft: 20,
+    marginTop: 10,
+  },
+  websiteview: {
+    display: "none",
+    [theme.breakpoints.up("sm")]: {
+      display: "inline",
     },
   },
 }));
@@ -89,20 +151,44 @@ function Cart() {
   return (
     <div>
       <Navbar />
-      <div className={classes.datagrid}>
-        <DataGrid
-          isRowSelectable="false"
-          isCellEditable="false"
-          rows={rows}
-          columns={columns}
-          autoHeight="true"
-          hideFooterPagination="true"
-          hideFooter="true"
-          disableSelectionOnClick="true"
-          rowsPerPageOptions={[]}
-          rowHeight={85}
-          wrapText="true"
-        />
+      <div className={classes.websiteview}>
+        <Grid container className={classes.root} spacing={1}>
+          <Grid item xs={6}>
+            <Grid container spacing={1}>
+              <Grid item>
+                <Box className={classes.datagrid}>
+                  <DataGrid
+                    isRowSelectable="false"
+                    isCellEditable="false"
+                    rows={rows}
+                    columns={columns}
+                    autoHeight="true"
+                    hideFooterPagination="true"
+                    hideFooter="true"
+                    disableSelectionOnClick="true"
+                    rowsPerPageOptions={[]}
+                    rowHeight={85}
+                    wrapText="true"
+                  />
+                </Box>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item>
+            <Grid container spacing={1}>
+              <Grid item>
+                <Paper className={classes.paper}>
+                  <Typography className={classes.subtotaltext}>
+                    Sub Total
+                  </Typography>
+                  <Typography className={classes.item}>4 items</Typography>
+                  <Divider className={classes.divider} />
+                  <Typography className={classes.price}>INR 2,340</Typography>
+                </Paper>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
       </div>
 
       <Footer />
