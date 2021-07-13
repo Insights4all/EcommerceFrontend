@@ -14,8 +14,8 @@ const useStyles = makeStyles((theme) => ({
   },
   categorypaper: {
     [theme.breakpoints.up("sm")]: {
-      width: 230,
-      height: 250,
+      width: 200,
+      height: 210,
       marginBottom: 20,
       backgroundColor: "transparent",
     },
@@ -44,8 +44,8 @@ const useStyles = makeStyles((theme) => ({
   },
   categoryimg: {
     [theme.breakpoints.up("sm")]: {
-      width: "100%",
-      heigth: "190px",
+      width: "70%",
+      heigth: "160px",
       background: lightBlue,
     },
     width: "100%",

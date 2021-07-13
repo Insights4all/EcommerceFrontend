@@ -21,7 +21,6 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import { useHistory } from "react-router-dom";
 
-
 const drawerWidth = 200;
 
 const useStyles = makeStyles((theme) => ({
@@ -117,22 +116,23 @@ const useStyles = makeStyles((theme) => ({
       fontStyle: "normal",
       fontDisplay: "swap",
       fontWeight: 400,
-      padding: 5,
-      fontSize: 18,
+      padding: 1,
+      fontSize: 16,
       color: "black",
-      marginLeft: 8,
-      marginRight: 5,
-      marginTop: 35,
+      marginLeft: 15,
+      marginTop: 5,
+      marginRight: 15,
     },
     fontSize: 0,
   },
   formControl: {
     [theme.breakpoints.up("sm")]: {
-      margin: theme.spacing(0),
-      minWidth: 120,
+      width: 70,
       marginLeft: 8,
       marginRight: 5,
       display: "inline",
+      marginTop: 15,
+      padding: "5px",
     },
     minWidth: 0,
     marginLeft: 0,
@@ -140,7 +140,7 @@ const useStyles = makeStyles((theme) => ({
     display: "none",
   },
   selectEmpty: {
-    marginTop: theme.spacing(0),
+    marginTop: "1px",
   },
   icondesign: {
     [theme.breakpoints.up("sm")]: {
@@ -189,11 +189,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
-
-
-
-
 function Navbar(props) {
   const { window } = props;
   const classes = useStyles();
@@ -205,7 +200,6 @@ function Navbar(props) {
   });
 
   let history = useHistory();
-
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -219,22 +213,16 @@ function Navbar(props) {
     setMobileOpen(!mobileOpen);
   };
 
-
-
-
   const redirect = () => {
-    
     history.push("/profile");
-  }
+  };
 
   const drawer = (
     <div>
       <div className={classes.toolbar}>
-       
-        <Typography  className={classes.username} variant="h6" noWrap>
+        <Typography className={classes.username} variant="h6" noWrap>
           Hello , Safiya
         </Typography>
-       
       </div>
 
       <List>
@@ -257,7 +245,6 @@ function Navbar(props) {
   const container =
     window !== undefined ? () => window().document.body : undefined;
 
-
   return (
     <div>
       <AppBar position="fixed" className={classes.appBar}>
@@ -275,20 +262,22 @@ function Navbar(props) {
             MyShop
           </Typography>
           <div className={classes.navbar}>
-            <Link to="#" className={classes.navlinks}>
-              Home
-            </Link>
-
             <FormControl className={classes.formControl}>
+              <Link to="#" className={classes.navlinks}>
+                Home
+              </Link>
+
               <NativeSelect
-                value=""
+                value="hello"
                 onChange={handleChange}
                 inputProps={{
                   name: "name",
                   id: "",
                 }}
               >
-                <option value="Categories">Categories</option>
+                <option className={classes.cat} value="Categories">
+                  Categories
+                </option>
                 <optgroup label="Author">
                   <option value="hai">Hai</option>
                 </optgroup>
@@ -297,17 +286,17 @@ function Navbar(props) {
                   <option value="kevin">Kevin</option>
                 </optgroup>
               </NativeSelect>
-            </FormControl>
 
-            <Link to="#" className={classes.navlinks}>
-              Categories
-            </Link>
-            <Link to="#" className={classes.navlinks}>
-              About
-            </Link>
-            <Link to="#" className={classes.navlinks}>
-              Contact
-            </Link>
+              <Link to="#" className={classes.navlinks}>
+                Categories
+              </Link>
+              <Link to="#" className={classes.navlinks}>
+                About
+              </Link>
+              <Link to="#" className={classes.navlinks}>
+                Contact
+              </Link>
+            </FormControl>
           </div>
           <div className={classes.icondesign}></div>
 
@@ -317,7 +306,11 @@ function Navbar(props) {
             </Button>
           </div>
           <div className={classes.signupbutton}>
-            <Button onClick={redirect} variant="outlined" href="#outlined-buttons">
+            <Button
+              onClick={redirect}
+              variant="outlined"
+              href="#outlined-buttons"
+            >
               Signup
             </Button>
           </div>
@@ -332,7 +325,9 @@ function Navbar(props) {
             >
               <div className={classes.acounticon}>
                 <AccountCircle />
-                <Typography onClick={redirect} className={classes.cartnumber}>Safiya</Typography>
+                <Typography onClick={redirect} className={classes.cartnumber}>
+                  Safiya
+                </Typography>
               </div>
               <div className={classes.icondesign}>
                 <ShoppingCartIcon />

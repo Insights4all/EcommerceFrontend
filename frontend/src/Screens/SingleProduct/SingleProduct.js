@@ -3,14 +3,7 @@ import Footer from "../Footer/Footer";
 import Navbar from "../Navbar/Navbar";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
-import {
-  Container,
-  Grid,
-  List,
-  ListItem,
-  Paper,
-  Typography,
-} from "@material-ui/core";
+import { Grid, List, Paper, Typography } from "@material-ui/core";
 import Product from "../Product/Product";
 import Button from "@material-ui/core/Button";
 import Input from "@material-ui/core/Input";
@@ -19,8 +12,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import ListItemText from "@material-ui/core/ListItemText";
 import Select from "@material-ui/core/Select";
-import Checkbox from "@material-ui/core/Checkbox";
-import Chip from "@material-ui/core/Chip";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";

@@ -7,7 +7,6 @@ import AppBar from "@material-ui/core/AppBar";
 import { makeStyles } from "@material-ui/core/styles";
 import { Box, Typography } from "@material-ui/core";
 import PropTypes from "prop-types";
-import Divider from "@material-ui/core/Divider";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -17,12 +16,10 @@ import Paper from "@material-ui/core/Paper";
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
 import Input from "@material-ui/core/Input";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import TextField from "@material-ui/core/TextField";
-import { FormLabel } from "@material-ui/core";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import Button from "@material-ui/core/Button";
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -58,16 +55,25 @@ function a11yProps(index) {
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    [theme.breakpoints.up("sm")]: {
+      flexGrow: 1,
+      backgroundColor: theme.palette.background.paper,
+      marginTop: 80,
+      marginLeft: 380,
+      marginRight: 380,
+    },
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
-    marginTop: 80,
-    marginLeft: 280,
-    marginRight: 280,
-    height: 1000,
+    marginTop: 100,
+    marginLeft: 10,
+    marginRight: 10,
   },
   probox: {
-    width: 700,
-    padding: 21,
+    [theme.breakpoints.up("sm")]: {
+      width: 700,
+      padding: 21,
+    },
+    marginLeft: "0px",
   },
   table: {
     maxWidth: 450,
@@ -76,9 +82,12 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 20,
   },
   form: {
-    width: 350,
-    marginTop: 5,
-    padding: 10,
+    [theme.breakpoints.up("sm")]: {
+      width: 350,
+      marginTop: 5,
+      padding: 10,
+    },
+    marginLeft: "0px",
   },
   formControl: {
     [theme.breakpoints.up("sm")]: {
@@ -93,6 +102,34 @@ const useStyles = makeStyles((theme) => ({
   },
   update: {
     marginTop: 20,
+  },
+  ordersbox: {
+    [theme.breakpoints.up("sm")]: {
+      width: "430px",
+    },
+    marginLeft: "0px",
+    marginTop: "0px",
+  },
+  paperbox: {
+    height: "90px",
+  },
+  proimage: {
+    width: "100px",
+    height: "80px",
+    marginLeft: "5px",
+    marginRight: "10px",
+    marginTop: "5px",
+    marginBottom: "5px",
+  },
+  protext: {
+    marginTop: "5px",
+    fontSize: 16,
+    marginLeft: "10px",
+  },
+  process: {
+    color: "green",
+
+    marginLeft: "10px",
   },
 }));
 function createData(name, calories) {
@@ -124,7 +161,7 @@ function UserProfile() {
     <div>
       <Navbar />
       <div className={classes.root}>
-        <AppBar position="static">
+        <AppBar position="static" color="inherit" elevation={0}>
           <Tabs
             value={value}
             onChange={handleChange}
@@ -233,7 +270,59 @@ function UserProfile() {
           </form>
         </TabPanel>
         <TabPanel value={value} index={2}>
-          Orders
+          <Box
+            display="flex"
+            flexDirection="column"
+            p={1}
+            m={1}
+            bgcolor="background.paper"
+            className={classes.ordersbox}
+          >
+            <Box p={1}>
+              <Paper className={classes.paperbox}>
+                <Box display="flex" flexDirection="row">
+                  <Box>
+                    <img
+                      alt="proimage"
+                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTpb_Kdq-q5ymJ8Uk4izotbcFGTZCo6EG85Q&usqp=CAU"
+                      className={classes.proimage}
+                    />
+                  </Box>
+                  <Box>
+                    <Typography className={classes.protext}>
+                      IPHONE 11 PRO
+                    </Typography>
+                    <Typography className={classes.protext}>₹599</Typography>
+                    <Typography className={classes.process}>
+                      Arriving
+                    </Typography>
+                  </Box>
+                </Box>
+              </Paper>
+            </Box>
+            <Box p={1}>
+              <Paper className={classes.paperbox}>
+                <Box display="flex" flexDirection="row">
+                  <Box>
+                    <img
+                      alt="proimage"
+                      src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTpb_Kdq-q5ymJ8Uk4izotbcFGTZCo6EG85Q&usqp=CAU"
+                      className={classes.proimage}
+                    />
+                  </Box>
+                  <Box>
+                    <Typography className={classes.protext}>
+                      IPHONE 11 PRO
+                    </Typography>
+                    <Typography className={classes.protext}>₹599</Typography>
+                    <Typography className={classes.process}>
+                      Delivered
+                    </Typography>
+                  </Box>
+                </Box>
+              </Paper>
+            </Box>
+          </Box>
         </TabPanel>
       </div>
       <Footer />
