@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
@@ -10,6 +10,10 @@ import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
 import Product from "../Product/Product";
 import EachCategory from "../EachCategory/EachCategory";
+import { Button } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
+import axios from "axios";
+//import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -27,8 +31,24 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
   },
   offerbox: {
-    width: "100%",
+    [theme.breakpoints.up("sm")]: {
+      height: "23%",
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      width: `calc(100vw + 48px)`,
+      padding: 200,
+
+      marginTop: 60,
+      backgroundImage: `url(${"https://www.sbicard.com/sbi-card-en/assets/media/images/personal/offers/categories/shopping/jc-brother/d-jc-brother.jpg"})`,
+    },
+
+    height: "250px",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    width: `calc(100vw + 48px)`,
+
     marginTop: 60,
+    backgroundImage: `url(${"https://www.sbicard.com/sbi-card-en/assets/media/images/personal/offers/categories/shopping/jc-brother/d-jc-brother.jpg"})`,
   },
   textstyle: {
     fontFamily: "Segoe UI Emoji",
@@ -77,23 +97,67 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 10,
     backgroundColor: "#eeeeee",
   },
+  shopregister: {
+    marginLeft: 50,
+    marginRight: 10,
+  },
+
+  shoplogin: {
+    marginLeft: 50,
+    marginRight: 10,
+  },
 }));
 
 function Home(props) {
   const classes = useStyles();
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setusername] = useState("unknown");
+
+  useEffect(() => {
+    checklogin();
+    console.log("Home props", props);
+  }, [props]);
+
+  function checklogin() {
+    axios
+      .get("/checklogin")
+      .then((response) => {
+        if (response.data["status"] === "Yes") {
+          console.log(response.data["status"]);
+          // setIsLoggedIn(true);
+          localStorage.setItem("isLoggedin", true);
+
+          setusername(response.data["fullname"]);
+        } else {
+          console.log(response.data["status"]);
+          //setIsLoggedIn(false);
+          localStorage.setItem("isLoggedin", false);
+        }
+      })
+      .catch((error) => {
+        console.log("Erroorrrr");
+      });
+    console.log("Local storage value", localStorage.getItem("isLoggedin"));
+  }
 
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <Navbar />
+      <Navbar data={localStorage.getItem("isLoggedin")} />
       <main className={classes.content}>
         <Box width={1} bgcolor="grey.300" className={classes.offerbox}>
-          <img
-            width="100%"
-            height="25%"
-            alt="offer"
-            src="https://www.sbicard.com/sbi-card-en/assets/media/images/personal/offers/categories/shopping/jc-brother/d-jc-brother.jpg"
-          />
+          <div className={classes.shopregister}>
+            <Button variant="outlined" href="/shopregister">
+              SHOP REGISTER
+            </Button>
+            <Button
+              variant="outlined"
+              href="/shoplogin"
+              className={classes.shoplogin}
+            >
+              SHOP LOGIN
+            </Button>
+          </div>
         </Box>
 
         <div className={classes.toolbar}>

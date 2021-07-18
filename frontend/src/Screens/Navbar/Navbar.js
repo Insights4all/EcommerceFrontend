@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
-import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
@@ -20,7 +19,8 @@ import NativeSelect from "@material-ui/core/NativeSelect";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import { useHistory } from "react-router-dom";
-
+import axios from "axios";
+import BrowserRouter from "react-router-dom";
 const drawerWidth = 200;
 
 const useStyles = makeStyles((theme) => ({
@@ -199,7 +199,10 @@ function Navbar(props) {
     name: "hai",
   });
 
-  let history = useHistory();
+  const history = useHistory();
+  useEffect(() => {
+    console.log("Navbar props", props.data);
+  }, [props]);
 
   const handleChange = (event) => {
     const name = event.target.name;
@@ -221,7 +224,7 @@ function Navbar(props) {
     <div>
       <div className={classes.toolbar}>
         <Typography className={classes.username} variant="h6" noWrap>
-          Hello , Safiya
+          Hello "safiya"
         </Typography>
       </div>
 
@@ -301,9 +304,15 @@ function Navbar(props) {
           <div className={classes.icondesign}></div>
 
           <div className={classes.loginbutton}>
-            <Button variant="outlined" href="#outlined-buttons">
-              Login
-            </Button>
+            {props.data === "true" ? (
+              <Button variant="outlined" href="/logout">
+                Logout
+              </Button>
+            ) : (
+              <Button variant="outlined" href="/login">
+                Login
+              </Button>
+            )}
           </div>
           <div className={classes.signupbutton}>
             <Button
@@ -326,7 +335,7 @@ function Navbar(props) {
               <div className={classes.acounticon}>
                 <AccountCircle />
                 <Typography onClick={redirect} className={classes.cartnumber}>
-                  Safiya
+                  "hello"
                 </Typography>
               </div>
               <div className={classes.icondesign}>

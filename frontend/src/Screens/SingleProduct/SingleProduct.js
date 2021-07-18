@@ -260,6 +260,7 @@ function SingleProduct() {
               <img
                 width="90px"
                 height="90px"
+                alt="myimage"
                 src="https://cdn.shopify.com/s/files/1/0486/7552/0664/products/rice-water-bright-cleansing-foam_180x.jpg?v=1621925486"
               />
             </Box>
@@ -267,6 +268,7 @@ function SingleProduct() {
               <img
                 width="90px"
                 height="90px"
+                alt="myimage"
                 src="https://cdn.shopify.com/s/files/1/0486/7552/0664/products/rice-water-bright-cleansing-foam_180x.jpg?v=1621925486"
               />
             </Box>
@@ -274,6 +276,7 @@ function SingleProduct() {
               <img
                 width="90px"
                 height="90px"
+                alt="myimage"
                 src="https://cdn.shopify.com/s/files/1/0486/7552/0664/products/rice-water-bright-cleansing-foam_180x.jpg?v=1621925486"
               />
             </Box>
@@ -282,6 +285,7 @@ function SingleProduct() {
               <img
                 width="90px"
                 height="90px"
+                alt="myimage"
                 src="https://cdn.shopify.com/s/files/1/0486/7552/0664/products/rice-water-bright-cleansing-foam_180x.jpg?v=1621925486"
               />
             </Box>
@@ -293,6 +297,7 @@ function SingleProduct() {
               <img
                 width="325px"
                 height="325px"
+                alt="myimage"
                 src="https://cdn.shopify.com/s/files/1/0486/7552/0664/products/rice-water-bright-cleansing-foam_180x.jpg?v=1621925486"
               />
             </Box>

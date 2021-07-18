@@ -8,7 +8,6 @@ import Box from "@material-ui/core/Box";
 import Link from "@material-ui/core/Link";
 import InstagramIcon from "@material-ui/icons/Instagram";
 import MailOutlineIcon from "@material-ui/icons/MailOutline";
-import { FormHelperText } from "@material-ui/core";
 const useStyles = makeStyles((theme) => ({
   textstyle: {
     fontFamily: "Segoe UI Emoji",

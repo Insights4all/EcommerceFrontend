@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import Footer from "../Footer/Footer";
 import Navbar from "../Navbar/Navbar";
+import Footer from "../Footer/Footer";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
@@ -9,6 +9,10 @@ import TextField from "@material-ui/core/TextField";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { Input } from "@material-ui/core";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -86,57 +90,41 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Signup() {
+function ShopRegister() {
   const classes = useStyles();
-  const [fullname, setfullname] = useState("");
-  const [email, setemail] = useState("");
-  const [contact, setcontact] = useState(0);
-  const [address, setaddress] = useState("");
-  const [password, setpassword] = useState("");
+  const [shopname, setshopname] = useState("");
+  const [shopemail, setshopemail] = useState("");
+  const [shopcontact, setshopcontact] = useState();
+  const [shopaddress, setshopaddress] = useState("");
+  const [shoppassword, setshoppassword] = useState("");
+  const [shopinstagram, setshopinstagram] = useState("");
+  const [shopfacebook, setshopfacebook] = useState("");
+  const [shoptype, setshoptype] = useState("");
+
+  const [ownername, setownername] = useState("");
+  const [owneremail, setowneremail] = useState("");
+  const [ownercontact, setownercontact] = useState("");
+  const [owneradress, setowneraddress] = useState("");
+
   const history = useHistory();
-
-  function handleSubmit(e) {
-    e.preventDefault();
-    const payload = {
-      fullname: fullname,
-      username: email,
-      contact: contact,
-      address: address,
-      password: password,
-    };
-    console.log(payload);
-
-    axios({
-      url: "/register",
-      method: "POST",
-      data: payload,
-    }).then((res) => console.log(res), history.push("/signup"));
-
-    reset();
-  }
-
-  function reset() {
-    setfullname("");
-    setemail("");
-    setcontact("");
-    setaddress("");
-    setpassword("");
-  }
+  const handletype = (event) => {
+    setshoptype(event.target.value);
+  };
 
   return (
-    <div class={classes.root}>
+    <div>
       <Navbar />
       <Paper className={classes.signup} elevation={0}>
         <Typography className={classes.create}>Create Account</Typography>
-        <form onSubmit={handleSubmit} className={classes.root} noValidate>
+        <form className={classes.root} noValidate>
           <TextField
             className={classes.input}
             id="name"
             label="Full Name"
             variant="outlined"
             size="small"
-            value={fullname}
-            onChange={(e) => setfullname(e.target.value)}
+            value={shopname}
+            onChange={(e) => setshopname(e.target.value)}
           />
           <TextField
             className={classes.eminput}
@@ -144,8 +132,8 @@ function Signup() {
             label="Email"
             variant="outlined"
             size="small"
-            value={email}
-            onChange={(e) => setemail(e.target.value)}
+            value={shopemail}
+            onChange={(e) => setshopemail(e.target.value)}
           />
           <TextField
             className={classes.eminput}
@@ -153,8 +141,8 @@ function Signup() {
             label="Contact"
             variant="outlined"
             size="small"
-            value={contact}
-            onChange={(e) => setcontact(e.target.value)}
+            value={shopcontact}
+            onChange={(e) => setshopcontact(e.target.value)}
           />
           <TextField
             className={classes.eminput}
@@ -162,8 +150,8 @@ function Signup() {
             label="Address"
             variant="outlined"
             size="small"
-            value={address}
-            onChange={(e) => setaddress(e.target.value)}
+            value={shopaddress}
+            onChange={(e) => setshopaddress(e.target.value)}
           />
           <TextField
             className={classes.eminput}
@@ -171,9 +159,52 @@ function Signup() {
             label="Password"
             variant="outlined"
             size="small"
-            value={password}
-            onChange={(e) => setpassword(e.target.value)}
+            value={shoppassword}
+            onChange={(e) => setshoppassword(e.target.value)}
           />
+          <TextField
+            className={classes.eminput}
+            id="instagram"
+            label="Instagram Id"
+            variant="outlined"
+            size="small"
+            value={shopinstagram}
+            onChange={(e) => setshopinstagram(e.target.value)}
+          />
+          <TextField
+            className={classes.eminput}
+            id="facebook"
+            label="Facebook"
+            variant="outlined"
+            size="small"
+            value={shopfacebook}
+            onChange={(e) => setshopfacebook(e.target.value)}
+          />
+          <FormControl className={classes.formControl}>
+            <InputLabel id="demo-mutiple-name-label">Size</InputLabel>
+            <Select
+              labelId="demo-mutiple-name-label"
+              id="demo-mutiple-name"
+              value={shoptype}
+              onChange={handletype}
+              input={<Input />}
+            >
+              <MenuItem value={"Automotive"}>Automotive</MenuItem>
+              <MenuItem value={"Baby & Toddler"}>Baby & Toddler</MenuItem>
+              <MenuItem value={"Clothing & Shoes"}>Clothing & Shoes</MenuItem>
+              <MenuItem value={"Entertainment & Art"}>
+                Entertainment & Art
+              </MenuItem>
+              <MenuItem value={"Electronics"}>Electronics</MenuItem>
+              <MenuItem value={"Food"}>Food </MenuItem>
+              <MenuItem value={"Health"}>Health</MenuItem>
+              <MenuItem value={"Beauty"}>Beauty</MenuItem>
+              <MenuItem value={"Beauty"}>Beauty</MenuItem>
+              <MenuItem value={"Beauty"}>Beauty</MenuItem>
+              <MenuItem value={"Beauty"}>Beauty</MenuItem>c
+            </Select>
+          </FormControl>
+
           <Button
             className={classes.signupbtn}
             variant="contained"
@@ -181,7 +212,7 @@ function Signup() {
             size="small"
             type="submit"
           >
-            Signup
+            Register
           </Button>
           <Button
             className={classes.loginbtn}
@@ -199,4 +230,4 @@ function Signup() {
   );
 }
 
-export default Signup;
+export default ShopRegister;
