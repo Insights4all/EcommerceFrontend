@@ -13,22 +13,32 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-
+import Box from "@material-ui/core/Box";
 const useStyles = makeStyles((theme) => ({
+  formbox: {
+    [theme.breakpoints.up("sm")]: {
+      marginTop: 90,
+      marginLeft: 120,
+      display: "flex",
+      flexDirection: "row",
+    },
+    marginTop: 90,
+    marginLeft: 10,
+    display: "flex",
+    flexDirection: "column",
+  },
   root: {
     overflow: "hidden",
   },
   signup: {
     [theme.breakpoints.up("sm")]: {
-      marginTop: 100,
-      marginLeft: 420,
-      marginRight: 350,
+      marginTop: 10,
+      marginLeft: 10,
+      marginRight: 50,
       width: 450,
-      height: 450,
     },
-    marginTop: 100,
-    width: 450,
-    height: 450,
+    marginTop: 0,
+    width: 350,
   },
   create: {
     [theme.breakpoints.up("sm")]: {
@@ -46,7 +56,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 600,
     fontSize: 22,
     padding: 20,
-    marginLeft: 100,
+    marginLeft: 10,
   },
   input: {
     [theme.breakpoints.up("sm")]: {
@@ -55,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
       marginTop: 20,
     },
     width: 320,
-    marginLeft: 40,
+    marginLeft: 10,
     marginTop: 20,
   },
   eminput: {
@@ -65,7 +75,7 @@ const useStyles = makeStyles((theme) => ({
       marginTop: 15,
     },
     width: 320,
-    marginLeft: 70,
+    marginLeft: 10,
     marginTop: 15,
   },
   signupbtn: {
@@ -74,8 +84,8 @@ const useStyles = makeStyles((theme) => ({
       marginTop: 20,
       width: 155,
     },
-    marginLeft: 40,
-    marginTop: 20,
+    marginLeft: 10,
+    marginTop: 10,
     width: 155,
   },
   loginbtn: {
@@ -87,6 +97,15 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 20,
     marginLeft: 10,
     width: 155,
+  },
+  formControl: {
+    [theme.breakpoints.up("sm")]: {
+      width: 200,
+      marginLeft: 70,
+    },
+    width: 200,
+    marginLeft: 10,
+    marginTop: 10,
   },
 }));
 
@@ -114,117 +133,187 @@ function ShopRegister() {
   return (
     <div>
       <Navbar />
-      <Paper className={classes.signup} elevation={0}>
-        <Typography className={classes.create}>Create Account</Typography>
-        <form className={classes.root} noValidate>
-          <TextField
-            className={classes.input}
-            id="name"
-            label="Full Name"
-            variant="outlined"
-            size="small"
-            value={shopname}
-            onChange={(e) => setshopname(e.target.value)}
-          />
-          <TextField
-            className={classes.eminput}
-            id="email"
-            label="Email"
-            variant="outlined"
-            size="small"
-            value={shopemail}
-            onChange={(e) => setshopemail(e.target.value)}
-          />
-          <TextField
-            className={classes.eminput}
-            id="contact"
-            label="Contact"
-            variant="outlined"
-            size="small"
-            value={shopcontact}
-            onChange={(e) => setshopcontact(e.target.value)}
-          />
-          <TextField
-            className={classes.eminput}
-            id="address"
-            label="Address"
-            variant="outlined"
-            size="small"
-            value={shopaddress}
-            onChange={(e) => setshopaddress(e.target.value)}
-          />
-          <TextField
-            className={classes.eminput}
-            id="password"
-            label="Password"
-            variant="outlined"
-            size="small"
-            value={shoppassword}
-            onChange={(e) => setshoppassword(e.target.value)}
-          />
-          <TextField
-            className={classes.eminput}
-            id="instagram"
-            label="Instagram Id"
-            variant="outlined"
-            size="small"
-            value={shopinstagram}
-            onChange={(e) => setshopinstagram(e.target.value)}
-          />
-          <TextField
-            className={classes.eminput}
-            id="facebook"
-            label="Facebook"
-            variant="outlined"
-            size="small"
-            value={shopfacebook}
-            onChange={(e) => setshopfacebook(e.target.value)}
-          />
-          <FormControl className={classes.formControl}>
-            <InputLabel id="demo-mutiple-name-label">Size</InputLabel>
-            <Select
-              labelId="demo-mutiple-name-label"
-              id="demo-mutiple-name"
-              value={shoptype}
-              onChange={handletype}
-              input={<Input />}
-            >
-              <MenuItem value={"Automotive"}>Automotive</MenuItem>
-              <MenuItem value={"Baby & Toddler"}>Baby & Toddler</MenuItem>
-              <MenuItem value={"Clothing & Shoes"}>Clothing & Shoes</MenuItem>
-              <MenuItem value={"Entertainment & Art"}>
-                Entertainment & Art
-              </MenuItem>
-              <MenuItem value={"Electronics"}>Electronics</MenuItem>
-              <MenuItem value={"Food"}>Food </MenuItem>
-              <MenuItem value={"Health"}>Health</MenuItem>
-              <MenuItem value={"Beauty"}>Beauty</MenuItem>
-              <MenuItem value={"Beauty"}>Beauty</MenuItem>
-              <MenuItem value={"Beauty"}>Beauty</MenuItem>
-              <MenuItem value={"Beauty"}>Beauty</MenuItem>c
-            </Select>
-          </FormControl>
+      <Box p={1} className={classes.formbox}>
+        <Box p={1}>
+          <Paper className={classes.signup} elevation={0}>
+            <Typography className={classes.create}>Register Shop</Typography>
+            <form className={classes.root}>
+              <TextField
+                className={classes.input}
+                id="name"
+                label="Shop Name"
+                variant="outlined"
+                size="small"
+                value={shopname}
+                onChange={(e) => setshopname(e.target.value)}
+              />
+              <TextField
+                className={classes.eminput}
+                id="email"
+                label="Shop Email"
+                variant="outlined"
+                size="small"
+                value={shopemail}
+                onChange={(e) => setshopemail(e.target.value)}
+              />
+              <TextField
+                className={classes.eminput}
+                id="contact"
+                label="Shop Contact"
+                variant="outlined"
+                size="small"
+                value={shopcontact}
+                onChange={(e) => setshopcontact(e.target.value)}
+              />
+              <TextField
+                className={classes.eminput}
+                id="address"
+                label="Shop Address"
+                variant="outlined"
+                size="small"
+                value={shopaddress}
+                onChange={(e) => setshopaddress(e.target.value)}
+              />
+              <TextField
+                className={classes.eminput}
+                id="instagram"
+                label="Business Instagram Id"
+                variant="outlined"
+                size="small"
+                value={shopinstagram}
+                onChange={(e) => setshopinstagram(e.target.value)}
+              />
+              <TextField
+                className={classes.eminput}
+                id="facebook"
+                label="Business Facebook"
+                variant="outlined"
+                size="small"
+                value={shopfacebook}
+                onChange={(e) => setshopfacebook(e.target.value)}
+              />
 
-          <Button
-            className={classes.signupbtn}
-            variant="contained"
-            color="primary"
-            size="small"
-            type="submit"
-          >
-            Register
-          </Button>
-          <Button
-            className={classes.loginbtn}
-            variant="outlined"
-            color="primary"
-            href="#outlined-buttons"
-            size="small"
-          >
-            Login
-          </Button>
-        </form>
-      </Paper>
+              <br />
+              <FormControl className={classes.formControl}>
+                <InputLabel id="demo-mutiple-name-label">Shop Type</InputLabel>
+                <Select
+                  labelId="demo-mutiple-name-label"
+                  id="demo-mutiple-name"
+                  value={shoptype}
+                  onChange={handletype}
+                  input={<Input />}
+                >
+                  <MenuItem value={"Automotive"}>Automotive</MenuItem>
+                  <MenuItem value={"Baby & Toddler"}>Baby & Toddler</MenuItem>
+                  <MenuItem value={"Clothing & Shoes"}>
+                    Clothing & Shoes
+                  </MenuItem>
+                  <MenuItem value={"Entertainment & Art"}>
+                    Entertainment & Art
+                  </MenuItem>
+                  <MenuItem value={"Electronics"}>Electronics</MenuItem>
+                  <MenuItem value={"Food"}>Food</MenuItem>
+                  <MenuItem value={"Gifts"}>Gifts</MenuItem>
+                  <MenuItem value={"Health"}>Health</MenuItem>
+                  <MenuItem value={"Beauty"}>Beauty</MenuItem>
+                  <MenuItem value={"Home & Graden"}>Home & Graden</MenuItem>
+                  <MenuItem value={"Office & Professional Services"}>
+                    Office & Professional Services
+                  </MenuItem>
+                  <MenuItem value={"Personal & Home Services"}>
+                    Personal & Home Services
+                  </MenuItem>
+                  <MenuItem value={"Restaurants & Dining"}>
+                    Restaurants & Dining
+                  </MenuItem>
+                  <MenuItem value={"Sports & Outdoors"}>
+                    Sports & Outdoors
+                  </MenuItem>
+                  <MenuItem value={"Travel"}>Travel</MenuItem>
+                </Select>
+              </FormControl>
+              <br />
+              <br />
+              <br />
+            </form>
+          </Paper>
+        </Box>
+        <Box p={1}>
+          <Paper className={classes.signup} elevation={0}>
+            <Typography className={classes.create}>Owner Details</Typography>
+            <form className={classes.root}>
+              <TextField
+                className={classes.input}
+                id="name"
+                label="Full Name"
+                variant="outlined"
+                size="small"
+                value={shopname}
+                onChange={(e) => setshopname(e.target.value)}
+              />
+              <TextField
+                className={classes.eminput}
+                id="email"
+                label="Email"
+                variant="outlined"
+                size="small"
+                value={shopemail}
+                onChange={(e) => setshopemail(e.target.value)}
+              />
+              <TextField
+                className={classes.eminput}
+                id="contact"
+                label="Contact"
+                variant="outlined"
+                size="small"
+                value={shopcontact}
+                onChange={(e) => setshopcontact(e.target.value)}
+              />
+              <TextField
+                className={classes.eminput}
+                id="password"
+                label="Password"
+                variant="outlined"
+                size="small"
+                value={shoppassword}
+                onChange={(e) => setshoppassword(e.target.value)}
+              />
+              <TextField
+                className={classes.eminput}
+                id="password"
+                label="Confirm Password"
+                variant="outlined"
+                size="small"
+                value={shoppassword}
+                onChange={(e) => setshoppassword(e.target.value)}
+              />
+              <br />
+
+              <Button
+                className={classes.signupbtn}
+                variant="contained"
+                color="primary"
+                size="small"
+                type="submit"
+              >
+                Register
+              </Button>
+              <Button
+                className={classes.loginbtn}
+                variant="outlined"
+                color="primary"
+                href="#outlined-buttons"
+                size="small"
+              >
+                Login
+              </Button>
+              <br />
+              <br />
+            </form>
+          </Paper>
+        </Box>
+      </Box>
+
       <Footer />
     </div>
   );
