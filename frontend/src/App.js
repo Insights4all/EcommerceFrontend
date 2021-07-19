@@ -11,8 +11,10 @@ import Login from "./Screens/Login/Login";
 import Logout from "./Screens/Login/Logout";
 import Signup from "./Screens/Signup/Signup";
 import { BrowserRouter as Router } from "react-router-dom";
-import ShopRegister from "./Screens/ShopRegister/ShopRegister";
 import { connect } from "react-redux";
+import ShopRegister from "./Screens/ShopRegister/ShopRegister";
+import Main from "./Screens/ShopRegister/Main";
+import Admin from "./Screens/Admin/Admin";
 function App() {
   return (
     <Router>
@@ -26,6 +28,8 @@ function App() {
         <Route path="/signup" exact component={Signup} />
         <Route path="/logout" exact component={Logout} />
         <Route path="/registershop" exact component={ShopRegister} />
+        <Route path="/main" exact component={Main} />
+        <Route path="/admin" exact component={Admin} />
       </Switch>
     </Router>
   );
