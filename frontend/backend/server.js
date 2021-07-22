@@ -1,7 +1,5 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const morgan = require("morgan");
-const path = require("path");
 var cors = require('cors')
 
 
@@ -62,18 +60,11 @@ mongoose.connection.on("connected", () => {
 });
 
 
-
 app.get("/allproducts", (req, res) => {
   Product.find({}, function (err, products) {
     res.send(products);
   });
 });
-
-
-
-
-
-
 
 app.post("/register", (req, res) => {
   console.log("In register route");
@@ -100,6 +91,7 @@ app.post("/register", (req, res) => {
     }
   );
 });
+
 app.post("/login", function (req, res) {
   console.log("In login rooute");
   const user = new User({
@@ -123,6 +115,7 @@ app.post("/login", function (req, res) {
     }
   });
 });
+
 app.get("/checklogin", function (req, res) {
   if (req.isAuthenticated()) {
     res.json({ status: "Yes", id: req.user.id, fullname: req.user.fullname });
@@ -136,5 +129,5 @@ app.get("/logout", function (req, res) {
   //console.log("Logout sucess");
   res.json({ status: "No" });
 });
-app.use(morgan("tiny"));
+
 app.listen(PORT, console.log(`Server is starting at ${PORT}`));
