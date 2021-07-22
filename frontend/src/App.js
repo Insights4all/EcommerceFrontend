@@ -12,7 +12,7 @@ import Logout from "./Screens/Login/Logout";
 import Signup from "./Screens/Signup/Signup";
 import { BrowserRouter as Router } from "react-router-dom";
 import { connect } from "react-redux";
-import ShopRegister from "./Screens/ShopRegister/ShopRegister";
+import ShopRegister from "./Screens/ShopRegister";
 import Main from "./Screens/ShopRegister/Main";
 import Admin from "./Screens/Admin/Admin";
 function App() {

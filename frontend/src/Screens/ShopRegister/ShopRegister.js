@@ -1,115 +1,196 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
-import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-import { Input } from "@material-ui/core";
+import { Grid, Input } from "@material-ui/core";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Box from "@material-ui/core/Box";
+import ShopDetailsInput from "../../Components/ShopDetails.Input";
+import ShopOwnerInput from "../../Components/ShopOwner.Input";
+import Stepper from "@material-ui/core/Stepper";
+import Step from "@material-ui/core/Step";
+import StepLabel from "@material-ui/core/StepLabel";
+// const useStyles = makeStyles((theme) => ({
+//   formbox: {
+//     [theme.breakpoints.up("sm")]: {
+//       marginTop: 90,
+//       marginLeft: 120,
+//       display: "flex",
+//       flexDirection: "row",
+//     },
+//     marginTop: 90,
+//     marginLeft: 10,
+//     display: "flex",
+//     flexDirection: "column",
+//   },
+//   root: {
+//     overflow: "hidden",
+//   },
+//   signup: {
+//     [theme.breakpoints.up("sm")]: {
+//       marginTop: 10,
+//       marginLeft: 10,
+//       marginRight: 50,
+//       width: 450,
+//     },
+//     marginTop: 0,
+//     width: 350,
+//   },
+//   create: {
+//     [theme.breakpoints.up("sm")]: {
+//       fontFamily: "Segoe UI Emoji",
+//       fontStyle: "normal",
+//       fontDisplay: "swap",
+//       fontWeight: 600,
+//       fontSize: 20,
+//       padding: 10,
+//       marginLeft: 150,
+//     },
+//     fontFamily: "Segoe UI Emoji",
+//     fontStyle: "normal",
+//     fontDisplay: "swap",
+//     fontWeight: 600,
+//     fontSize: 22,
+//     padding: 20,
+//     marginLeft: 10,
+//   },
+//   input: {
+//     [theme.breakpoints.up("sm")]: {
+//       width: 320,
+//       marginLeft: 70,
+//       marginTop: 20,
+//     },
+//     width: 320,
+//     marginLeft: 10,
+//     marginTop: 20,
+//   },
+//   eminput: {
+//     [theme.breakpoints.up("sm")]: {
+//       width: 320,
+//       marginLeft: 70,
+//       marginTop: 15,
+//     },
+//     width: 320,
+//     marginLeft: 10,
+//     marginTop: 15,
+//   },
+//   signupbtn: {
+//     [theme.breakpoints.up("sm")]: {
+//       marginLeft: 70,
+//       marginTop: 20,
+//       width: 155,
+//     },
+//     marginLeft: 10,
+//     marginTop: 10,
+//     width: 155,
+//   },
+//   loginbtn: {
+//     [theme.breakpoints.up("sm")]: {
+//       marginTop: 20,
+//       marginLeft: 10,
+//       width: 155,
+//     },
+//     marginTop: 20,
+//     marginLeft: 10,
+//     width: 155,
+//   },
+//   formControl: {
+//     [theme.breakpoints.up("sm")]: {
+//       width: 200,
+//       marginLeft: 70,
+//     },
+//     width: 200,
+//     marginLeft: 10,
+//     marginTop: 10,
+//   },
+// }));
+
 const useStyles = makeStyles((theme) => ({
-  formbox: {
-    [theme.breakpoints.up("sm")]: {
-      marginTop: 90,
-      marginLeft: 120,
-      display: "flex",
-      flexDirection: "row",
-    },
-    marginTop: 90,
-    marginLeft: 10,
-    display: "flex",
-    flexDirection: "column",
-  },
   root: {
-    overflow: "hidden",
+    width: "100%",
+    marginTop: 50,
   },
-  signup: {
-    [theme.breakpoints.up("sm")]: {
-      marginTop: 10,
-      marginLeft: 10,
-      marginRight: 50,
-      width: 450,
-    },
-    marginTop: 0,
-    width: 350,
+  backButton: {
+    marginRight: theme.spacing(1),
   },
-  create: {
-    [theme.breakpoints.up("sm")]: {
-      fontFamily: "Segoe UI Emoji",
-      fontStyle: "normal",
-      fontDisplay: "swap",
-      fontWeight: 600,
-      fontSize: 20,
-      padding: 10,
-      marginLeft: 150,
-    },
-    fontFamily: "Segoe UI Emoji",
-    fontStyle: "normal",
-    fontDisplay: "swap",
-    fontWeight: 600,
-    fontSize: 22,
-    padding: 20,
-    marginLeft: 10,
-  },
-  input: {
-    [theme.breakpoints.up("sm")]: {
-      width: 320,
-      marginLeft: 70,
-      marginTop: 20,
-    },
-    width: 320,
-    marginLeft: 10,
-    marginTop: 20,
-  },
-  eminput: {
-    [theme.breakpoints.up("sm")]: {
-      width: 320,
-      marginLeft: 70,
-      marginTop: 15,
-    },
-    width: 320,
-    marginLeft: 10,
-    marginTop: 15,
-  },
-  signupbtn: {
-    [theme.breakpoints.up("sm")]: {
-      marginLeft: 70,
-      marginTop: 20,
-      width: 155,
-    },
-    marginLeft: 10,
-    marginTop: 10,
-    width: 155,
-  },
-  loginbtn: {
-    [theme.breakpoints.up("sm")]: {
-      marginTop: 20,
-      marginLeft: 10,
-      width: 155,
-    },
-    marginTop: 20,
-    marginLeft: 10,
-    width: 155,
-  },
-  formControl: {
-    [theme.breakpoints.up("sm")]: {
-      width: 200,
-      marginLeft: 70,
-    },
-    width: 200,
-    marginLeft: 10,
-    marginTop: 10,
+  instructions: {
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
   },
 }));
 
-function ShopRegister() {
+function getSteps() {
+  return [
+    "Enter Bussiness Details",
+    "Enter Owner Details",
+    "Username & Password",
+  ];
+}
+
+
+
+
+function ShopRegister(props) {
+
+  const verifyStep = (value) => {
+    // console.log("the value is ", value);
+    setActiveStep(value);
+
+    // console.log("active step", activeStep)
+    // console.log("steps.length", steps.length)
+
+    // {activeStep === steps.length - 1 ? ("Finish" ) : "Next"}
+  };
+
+
+  useEffect(() => {
+   
+    props.getProducts()
+props.formData("abc")
+    
+  }, [])
+
+  console.log("newprops", props)
+
+
+
+  const dataArray = []
+
+  const getData = (formData) => {
+    
+    console.log("formData is",formData)
+    dataArray.push(formData);
+    console.log("dataArrayIs",dataArray);
+
+  }
+  
+
+
+  function getStepContent(stepIndex) {
+    switch (stepIndex) {
+      case 0:
+        return (
+          <Grid style={{ display: "flex", justifyContent: "center" }}>
+            <ShopDetailsInput verifyStep={verifyStep} getData={getData} />
+          </Grid>
+        );
+      case 1:
+        return <ShopOwnerInput verifyStep={verifyStep} getData={getData} />;
+      case 2:
+        return "This is the bit I really care about!";
+      default:
+        return "Unknown stepIndex";
+    }
+  }
+
   const classes = useStyles();
   const [shopname, setshopname] = useState("");
   const [shopemail, setshopemail] = useState("");
@@ -129,189 +210,69 @@ function ShopRegister() {
   const handletype = (event) => {
     setshoptype(event.target.value);
   };
+  const [activeStep, setActiveStep] = React.useState(0);
+  const steps = getSteps();
+
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleReset = () => {
+    setActiveStep(0);
+  };
 
   return (
     <div>
       <Navbar />
       <Box p={1} className={classes.formbox}>
-        <Box p={1}>
-          <Paper className={classes.signup} elevation={0}>
-            <Typography className={classes.create}>Register Shop</Typography>
-            <form className={classes.root}>
-              <TextField
-                className={classes.input}
-                id="name"
-                label="Shop Name"
-                variant="outlined"
-                size="small"
-                value={shopname}
-                onChange={(e) => setshopname(e.target.value)}
-              />
-              <TextField
-                className={classes.eminput}
-                id="email"
-                label="Shop Email"
-                variant="outlined"
-                size="small"
-                value={shopemail}
-                onChange={(e) => setshopemail(e.target.value)}
-              />
-              <TextField
-                className={classes.eminput}
-                id="contact"
-                label="Shop Contact"
-                variant="outlined"
-                size="small"
-                value={shopcontact}
-                onChange={(e) => setshopcontact(e.target.value)}
-              />
-              <TextField
-                className={classes.eminput}
-                id="address"
-                label="Shop Address"
-                variant="outlined"
-                size="small"
-                value={shopaddress}
-                onChange={(e) => setshopaddress(e.target.value)}
-              />
-              <TextField
-                className={classes.eminput}
-                id="instagram"
-                label="Business Instagram Id"
-                variant="outlined"
-                size="small"
-                value={shopinstagram}
-                onChange={(e) => setshopinstagram(e.target.value)}
-              />
-              <TextField
-                className={classes.eminput}
-                id="facebook"
-                label="Business Facebook"
-                variant="outlined"
-                size="small"
-                value={shopfacebook}
-                onChange={(e) => setshopfacebook(e.target.value)}
-              />
+        {/* <ShopDetailsInput />
+          <ShopOwnerInput /> */}
 
-              <br />
-              <FormControl className={classes.formControl}>
-                <InputLabel id="demo-mutiple-name-label">Shop Type</InputLabel>
-                <Select
-                  labelId="demo-mutiple-name-label"
-                  id="demo-mutiple-name"
-                  value={shoptype}
-                  onChange={handletype}
-                  input={<Input />}
-                >
-                  <MenuItem value={"Automotive"}>Automotive</MenuItem>
-                  <MenuItem value={"Baby & Toddler"}>Baby & Toddler</MenuItem>
-                  <MenuItem value={"Clothing & Shoes"}>
-                    Clothing & Shoes
-                  </MenuItem>
-                  <MenuItem value={"Entertainment & Art"}>
-                    Entertainment & Art
-                  </MenuItem>
-                  <MenuItem value={"Electronics"}>Electronics</MenuItem>
-                  <MenuItem value={"Food"}>Food</MenuItem>
-                  <MenuItem value={"Gifts"}>Gifts</MenuItem>
-                  <MenuItem value={"Health"}>Health</MenuItem>
-                  <MenuItem value={"Beauty"}>Beauty</MenuItem>
-                  <MenuItem value={"Home & Graden"}>Home & Graden</MenuItem>
-                  <MenuItem value={"Office & Professional Services"}>
-                    Office & Professional Services
-                  </MenuItem>
-                  <MenuItem value={"Personal & Home Services"}>
-                    Personal & Home Services
-                  </MenuItem>
-                  <MenuItem value={"Restaurants & Dining"}>
-                    Restaurants & Dining
-                  </MenuItem>
-                  <MenuItem value={"Sports & Outdoors"}>
-                    Sports & Outdoors
-                  </MenuItem>
-                  <MenuItem value={"Travel"}>Travel</MenuItem>
-                </Select>
-              </FormControl>
-              <br />
-              <br />
-              <br />
-            </form>
-          </Paper>
-        </Box>
-        <Box p={1}>
-          <Paper className={classes.signup} elevation={0}>
-            <Typography className={classes.create}>Owner Details</Typography>
-            <form className={classes.root}>
-              <TextField
-                className={classes.input}
-                id="name"
-                label="Full Name"
-                variant="outlined"
-                size="small"
-                value={shopname}
-                onChange={(e) => setshopname(e.target.value)}
-              />
-              <TextField
-                className={classes.eminput}
-                id="email"
-                label="Email"
-                variant="outlined"
-                size="small"
-                value={shopemail}
-                onChange={(e) => setshopemail(e.target.value)}
-              />
-              <TextField
-                className={classes.eminput}
-                id="contact"
-                label="Contact"
-                variant="outlined"
-                size="small"
-                value={shopcontact}
-                onChange={(e) => setshopcontact(e.target.value)}
-              />
-              <TextField
-                className={classes.eminput}
-                id="password"
-                label="Password"
-                variant="outlined"
-                size="small"
-                value={shoppassword}
-                onChange={(e) => setshoppassword(e.target.value)}
-              />
-              <TextField
-                className={classes.eminput}
-                id="password"
-                label="Confirm Password"
-                variant="outlined"
-                size="small"
-                value={shoppassword}
-                onChange={(e) => setshoppassword(e.target.value)}
-              />
-              <br />
-
-              <Button
-                className={classes.signupbtn}
-                variant="contained"
-                color="primary"
-                size="small"
-                type="submit"
-              >
-                Register
-              </Button>
-              <Button
-                className={classes.loginbtn}
-                variant="outlined"
-                color="primary"
-                href="#outlined-buttons"
-                size="small"
-              >
-                Login
-              </Button>
-              <br />
-              <br />
-            </form>
-          </Paper>
-        </Box>
+        <div className={classes.root}>
+          <Stepper activeStep={activeStep} alternativeLabel>
+            {steps.map((label) => (
+              <Step key={label}>
+                <StepLabel>{label}</StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            {activeStep === steps.length ? (
+              <div>
+                <Typography className={classes.instructions}>
+                  All steps completed
+                </Typography>
+                <Button onClick={handleReset}>Reset</Button>
+              </div>
+            ) : (
+              <div>
+                <Typography className={classes.instructions}>
+                  {getStepContent(activeStep)}
+                </Typography>
+                <div>
+                  <Button
+                    disabled={activeStep === 0}
+                    onClick={handleBack}
+                    className={classes.backButton}
+                  >
+                    Back
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleNext}
+                  >
+                    {activeStep === steps.length - 1 ? "Finish" : "Next"}
+                  </Button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       </Box>
 
       <Footer />

@@ -2,6 +2,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
 const path = require("path");
+var cors = require('cors')
+
 
 var session = require("express-session");
 const passport = require("passport");
@@ -14,6 +16,7 @@ var LocalStrategy = require("passport-local").Strategy;
 //Initializing express
 const app = express();
 const PORT = process.env.PORT || 8080;
+app.use(cors())
 
 app.use(express.json());
 app.use(express.static("public"));
@@ -38,6 +41,7 @@ app.use(cookieParser("secretcode"));
 app.use(passport.initialize());
 app.use(passport.session());
 const User = require("./models/User");
+const Product = require("./models/products");
 
 passport.use(User.createStrategy());
 
@@ -56,6 +60,20 @@ mongoose.connect(mongodburi, {
 mongoose.connection.on("connected", () => {
   console.log("Mongoose is connected!!");
 });
+
+
+
+app.get("/allproducts", (req, res) => {
+  Product.find({}, function (err, products) {
+    res.send(products);
+  });
+});
+
+
+
+
+
+
 
 app.post("/register", (req, res) => {
   console.log("In register route");
@@ -92,7 +110,7 @@ app.post("/login", function (req, res) {
   req.login(user, function (err) {
     if (err) {
       console.log(err);
-    }
+    } 
     // if (user == null) {
     //   res.json("aaa");
     // }
