@@ -130,9 +130,11 @@ const ShopDetailsInput = (props) => {
     const handleSubmit = () => {
     console.log("userValue",userValue)
     props.verifyStep(1)
-    props.getData(userValue)
+    // props.getData(userValue)
+    props.submit(userValue)
 
     };
+    // console.log("Child props", props)
 
     const handletype = (event) => {
         setshoptype(event.target.value);

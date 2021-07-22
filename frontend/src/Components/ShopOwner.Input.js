@@ -94,6 +94,8 @@ const ShopOwnerInput = (props) => {
     console.log("userValue", userValue);
     props.verifyStep(2);
     props.getData(userValue);
+    props.submit(userValue)
+
   };
 
   const validate = (values) => {

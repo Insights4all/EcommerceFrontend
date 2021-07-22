@@ -69,7 +69,9 @@ export const CustomerReducer = (state = initialState, action) => {
                     ...state.form_data,
                     isLoading: false,
                     isLoadingFailed: false,
-                    data: action.payload
+                    data: [...state.form_data.data , action.payload]
+                    //lastValues: [...state.lastValues, action.payload],
+
                 }
             };
         

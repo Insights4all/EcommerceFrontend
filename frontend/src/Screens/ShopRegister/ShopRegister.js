@@ -18,100 +18,6 @@ import ShopOwnerInput from "../../Components/ShopOwner.Input";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
-// const useStyles = makeStyles((theme) => ({
-//   formbox: {
-//     [theme.breakpoints.up("sm")]: {
-//       marginTop: 90,
-//       marginLeft: 120,
-//       display: "flex",
-//       flexDirection: "row",
-//     },
-//     marginTop: 90,
-//     marginLeft: 10,
-//     display: "flex",
-//     flexDirection: "column",
-//   },
-//   root: {
-//     overflow: "hidden",
-//   },
-//   signup: {
-//     [theme.breakpoints.up("sm")]: {
-//       marginTop: 10,
-//       marginLeft: 10,
-//       marginRight: 50,
-//       width: 450,
-//     },
-//     marginTop: 0,
-//     width: 350,
-//   },
-//   create: {
-//     [theme.breakpoints.up("sm")]: {
-//       fontFamily: "Segoe UI Emoji",
-//       fontStyle: "normal",
-//       fontDisplay: "swap",
-//       fontWeight: 600,
-//       fontSize: 20,
-//       padding: 10,
-//       marginLeft: 150,
-//     },
-//     fontFamily: "Segoe UI Emoji",
-//     fontStyle: "normal",
-//     fontDisplay: "swap",
-//     fontWeight: 600,
-//     fontSize: 22,
-//     padding: 20,
-//     marginLeft: 10,
-//   },
-//   input: {
-//     [theme.breakpoints.up("sm")]: {
-//       width: 320,
-//       marginLeft: 70,
-//       marginTop: 20,
-//     },
-//     width: 320,
-//     marginLeft: 10,
-//     marginTop: 20,
-//   },
-//   eminput: {
-//     [theme.breakpoints.up("sm")]: {
-//       width: 320,
-//       marginLeft: 70,
-//       marginTop: 15,
-//     },
-//     width: 320,
-//     marginLeft: 10,
-//     marginTop: 15,
-//   },
-//   signupbtn: {
-//     [theme.breakpoints.up("sm")]: {
-//       marginLeft: 70,
-//       marginTop: 20,
-//       width: 155,
-//     },
-//     marginLeft: 10,
-//     marginTop: 10,
-//     width: 155,
-//   },
-//   loginbtn: {
-//     [theme.breakpoints.up("sm")]: {
-//       marginTop: 20,
-//       marginLeft: 10,
-//       width: 155,
-//     },
-//     marginTop: 20,
-//     marginLeft: 10,
-//     width: 155,
-//   },
-//   formControl: {
-//     [theme.breakpoints.up("sm")]: {
-//       width: 200,
-//       marginLeft: 70,
-//     },
-//     width: 200,
-//     marginLeft: 10,
-//     marginTop: 10,
-//   },
-// }));
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -154,7 +60,7 @@ function ShopRegister(props) {
   useEffect(() => {
    
     props.getProducts()
-props.formData("abc")
+  // props.formData("abc")
     
   }, [])
 
@@ -179,11 +85,11 @@ props.formData("abc")
       case 0:
         return (
           <Grid style={{ display: "flex", justifyContent: "center" }}>
-            <ShopDetailsInput verifyStep={verifyStep} getData={getData} />
+            <ShopDetailsInput verifyStep={verifyStep} submit={props.formData} getData={getData} />
           </Grid>
         );
       case 1:
-        return <ShopOwnerInput verifyStep={verifyStep} getData={getData} />;
+        return <ShopOwnerInput verifyStep={verifyStep} submit={props.formData} getData={getData} />;
       case 2:
         return "This is the bit I really care about!";
       default:
