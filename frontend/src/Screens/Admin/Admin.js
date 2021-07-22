@@ -10,7 +10,10 @@ import Tab from "@material-ui/core/Tab";
 import Box from "@material-ui/core/Box";
 import Link from "@material-ui/core/Link";
 import { blue } from "@material-ui/core/colors";
-
+import Storehome from "./Storehome";
+import Avatar from "@material-ui/core/Avatar";
+import Navbar from "../Navbar/Navbar";
+import Storenavbar from "./Storenavbar";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -53,8 +56,11 @@ const useStyles = makeStyles((theme) => ({
     borderRight: `1px solid ${theme.palette.divider}`,
   },
   navigationtabs: {
-    width: 300,
-    display: "flex",
+    [theme.breakpoints.up("sm")]: {
+      width: 300,
+      display: "flex",
+    },
+    display: "none",
   },
   icon: {
     padding: 10,
@@ -72,8 +78,8 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 0,
 
     width: "100%",
-    height: 30,
-    backgroundColor: "blue",
+    height: 40,
+    backgroundColor: "#2196f3",
   },
   cartnumber: {
     marginLeft: 10,
@@ -92,8 +98,36 @@ const useStyles = makeStyles((theme) => ({
       display: "flex",
       flex: 1,
       alignSelf: "flex-end",
+      marginTop: 5,
     },
     fontSize: 0,
+  },
+  sidebar: {
+    backgroundColor: "#2196f3",
+    color: "white",
+    height: 800,
+  },
+  shopname: {
+    [theme.breakpoints.up("sm")]: {
+      fontFamily: "Segoe UI Emoji",
+      fontStyle: "normal",
+      fontDisplay: "swap",
+      fontWeight: 600,
+      padding: 1,
+      fontSize: 18,
+      color: "white",
+      marginLeft: 12,
+      marginTop: 5,
+    },
+    fontFamily: "Segoe UI Emoji",
+    fontStyle: "normal",
+    fontDisplay: "swap",
+    fontWeight: 400,
+    padding: 1,
+    fontSize: 15,
+    color: "white",
+    marginLeft: 12,
+    marginTop: 7,
   },
 }));
 
@@ -107,34 +141,44 @@ function Admin() {
 
   return (
     <div className={classes.root}>
+      <Storenavbar />
       <div className={classes.navbar}>
         <Box display="flex" flexDirection="row">
+          <Avatar
+            alt="Remy Sharp"
+            src="https://www.giftcart.com/pub/media/giftcart/manifest/icons/default/giftcart-pwa.png"
+          />
+
           <Box>
-            <Typography>Customised Gift Cart</Typography>
+            <Typography className={classes.shopname}>
+              Customised Gift Cart
+            </Typography>
           </Box>
           <Box>
             <Link to="#" className={classes.navlinks}>
-              Home
+              Logout
             </Link>
           </Box>
         </Box>
       </div>
       <div className={classes.navigationtabs}>
-        <Tabs
-          orientation="vertical"
-          variant=""
-          value={value}
-          onChange={handleChange}
-          aria-label="Vertical tabs example"
-          className={classes.tabs}
-        >
-          <Tab label="Home" {...a11yProps(0)} />
-          <Tab label="Products" {...a11yProps(1)} />
-          <Tab label="ORDERS" {...a11yProps(2)} />
-          <Tab label="PROFILE" {...a11yProps(3)} />
-        </Tabs>
+        <div className={classes.sidebar}>
+          <Tabs
+            orientation="vertical"
+            variant=""
+            value={value}
+            onChange={handleChange}
+            aria-label="Vertical tabs example"
+            className={classes.tabs}
+          >
+            <Tab label="Home" {...a11yProps(0)} />
+            <Tab label="Products" {...a11yProps(1)} />
+            <Tab label="ORDERS" {...a11yProps(2)} />
+            <Tab label="PROFILE" {...a11yProps(3)} />
+          </Tabs>
+        </div>
         <TabPanel value={value} index={0}>
-          Item One
+          <Storehome />
         </TabPanel>
         <TabPanel value={value} index={1}>
           Item Two
