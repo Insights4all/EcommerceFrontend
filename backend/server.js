@@ -1,15 +1,9 @@
 const express = require("express");
 const mongoose = require("mongoose");
 var cors = require('cors')
-
-
 var session = require("express-session");
 const passport = require("passport");
-const passportLocalMongoose = require("passport-local-mongoose");
-const passportLocal = require("passport-local").Strategy;
 const cookieParser = require("cookie-parser");
-const bodyParser = require("body-parser");
-var LocalStrategy = require("passport-local").Strategy;
 
 //Initializing express
 const app = express();
@@ -17,12 +11,7 @@ const PORT = process.env.PORT || 8080;
 app.use(cors())
 
 app.use(express.json());
-app.use(express.static("public"));
-app.use(
-  bodyParser.urlencoded({
-    extended: true,
-  })
-);
+
 app.use(express.urlencoded({ extended: false }));
 
 app.use(
