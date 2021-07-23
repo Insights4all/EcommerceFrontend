@@ -13,6 +13,12 @@ const initialState = {
         isLoadingFailed: false,
         isInitialCalled: false,
         data : []
+    },
+    shopkeeper_data : {
+        isLoading: false,
+        isLoadingFailed: false,
+        isInitialCalled: false,
+        data : []
     }
 
 }
@@ -74,6 +80,42 @@ export const CustomerReducer = (state = initialState, action) => {
 
                 }
             };
+
+            //Shopkeeper Data
+            case CustomerActionTypes.SUBMIT_SHOPKEEPER_DATA_REQUEST :
+                return {
+                    ...state,
+                    shopkeeper_data:{
+                        ...state.shopkeeper_data,
+                        isLoading: true,
+                        isInitialCalled: true
+                    }
+                };
+            
+            case CustomerActionTypes.SUBMIT_SHOPKEEPER_DATA_SUCCESS:
+                console.log("redededed", action)
+                return {
+                    ...state,
+                    shopkeeper_data:{
+                        ...state.shopkeeper_data,
+                        isLoading: false,
+                        isLoadingFailed: false,
+                        data: action.payload
+                    }
+                };
+            
+            // eslint-disable-next-line no-lone-blocks
+            case CustomerActionTypes.SUBMIT_SHOPKEEPER_DATA_FAILED: {
+                return {
+                    ...state,
+                    shopkeeper_data:{
+                        ...state.shopkeeper_data,
+                        isLoading: false,
+                        isLoadingFailed: true,
+                    }
+                };
+            };
+
         
         default:
             return state;

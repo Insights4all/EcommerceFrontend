@@ -6,7 +6,12 @@ export const CustomerActionTypes = {
 
     //Save Form Data
     SAVE_FORM_DATA_REQUEST:"SAVE_FORM_DATA_REQUEST",
-    SAVE_FORM_DATA_SUCCESS:"SAVE_FORM_DATA_SUCCESS"
+    SAVE_FORM_DATA_SUCCESS:"SAVE_FORM_DATA_SUCCESS",
+
+    //Submit Shopkeeper Data
+    SUBMIT_SHOPKEEPER_DATA_REQUEST:"SUBMIT_SHOPKEEPER_DATA_REQUEST",
+    SUBMIT_SHOPKEEPER_DATA_SUCCESS:"SUBMIT_SHOPKEEPER_DATA_SUCCESS",
+    SUBMIT_SHOPKEEPER_DATA_FAILED:"SUBMIT_SHOPKEEPER_DATA_FAILED"
 }
 
 const GetAllProducts = (payload) => {   
@@ -17,9 +22,14 @@ const SaveFormData = (payload) => {
     return { type: CustomerActionTypes.SAVE_FORM_DATA_REQUEST, payload };
 }
 
+const ShopkeeperData = (payload) => {   
+    return { type: CustomerActionTypes.SUBMIT_SHOPKEEPER_DATA_REQUEST, payload };
+}
+
 
 
 export const CustomerAction = { 
     GetAllProducts,
-    SaveFormData
+    SaveFormData,
+    ShopkeeperData
 }

@@ -92,9 +92,10 @@ const ShopOwnerInput = (props) => {
 
   const handleSubmit = () => {
     console.log("userValue", userValue);
-    props.verifyStep(2);
-    props.getData(userValue);
+    // props.verifyStep(2);
+    // props.getData();
     props.submit(userValue)
+    props.submitFormData(userValue)
 
   };
 

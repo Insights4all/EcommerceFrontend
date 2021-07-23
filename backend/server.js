@@ -29,6 +29,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 const User = require("./models/User");
 const Product = require("./models/products");
+const Shopkeeper = require("./models/shopkeeper");
+
 
 passport.use(User.createStrategy());
 
@@ -38,6 +40,9 @@ passport.deserializeUser(User.deserializeUser());
 //Using Mongodb atlas
 const mongodburi =
   "mongodb+srv://insights4all:insights4all@7866@ourshop.kuht5.mongodb.net/OurShop?retryWrites=true&w=majority";
+
+
+  
 mongoose.connect(mongodburi, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -54,6 +59,19 @@ app.get("/allproducts", (req, res) => {
     res.send(products);
   });
 });
+
+app.post("/shopregister", (req, res) => {
+  console.log("shopRegisterBody", req.body);
+  let shopData = req.body
+  let ShopData = new Shopkeeper({ shopName: shopData.shopName });
+  ShopData.save(function (err, data) {
+    if (err) return console.error("error in shopkeeper",err);
+    console.log(data, " saved to bookstore collection.");
+  });
+
+  res.json(shopData);
+});
+
 
 app.post("/register", (req, res) => {
   console.log("In register route");

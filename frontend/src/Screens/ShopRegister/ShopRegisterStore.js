@@ -14,7 +14,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
     getProducts: CustomerAction.GetAllProducts,
-    formData: CustomerAction.SaveFormData
+    formData: CustomerAction.SaveFormData,
+    submitFormData:CustomerAction.ShopkeeperData
 
     //  CPCustomerAction.CPCustomerList ,
 

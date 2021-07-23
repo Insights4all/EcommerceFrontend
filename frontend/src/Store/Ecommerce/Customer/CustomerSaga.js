@@ -22,6 +22,24 @@ import { CustomerService } from "./CustomerService";
     }
 }
 
+function* SubmitShopkeeperData(action) {
+    console.log("action.payload",)
+    try {
+        const res = yield call(CustomerService.SubmitShopkeeperData, action.payload);
+        
+        if ([1, 200].includes(res.status)) {
+                console.log("saga yes")
+            // const payload = yield call(CPCustomerParser.CPCustomerPersonalInfo, res);
+            yield put({ type: CustomerActionTypes.SUBMIT_SHOPKEEPER_DATA_SUCCESS, payload:action.payload });
+        } else {
+            console.log("saga no", res)
+            yield put({ type: CustomerActionTypes.SUBMIT_SHOPKEEPER_DATA_FAILED });
+        }
+    } catch (error) {
+        console.log(`Action ${action.type} failed with ${error}`);
+    }
+}
+
 
 function* SaveFormData(action) {
     try {
@@ -37,5 +55,7 @@ function* SaveFormData(action) {
 export function* CustomerSaga() {
     yield takeLatest(CustomerActionTypes.GET_ALL_PRODUCTS_REQUEST , GetAllProducts);
     yield takeLatest(CustomerActionTypes.SAVE_FORM_DATA_REQUEST , SaveFormData);
+    yield takeLatest(CustomerActionTypes.SUBMIT_SHOPKEEPER_DATA_REQUEST , SubmitShopkeeperData);
+
 
 }

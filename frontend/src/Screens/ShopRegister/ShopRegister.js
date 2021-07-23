@@ -41,11 +41,7 @@ function getSteps() {
   ];
 }
 
-
-
-
 function ShopRegister(props) {
-
   const verifyStep = (value) => {
     // console.log("the value is ", value);
     setActiveStep(value);
@@ -56,40 +52,42 @@ function ShopRegister(props) {
     // {activeStep === steps.length - 1 ? ("Finish" ) : "Next"}
   };
 
+  // useEffect(() => {
+  //   props.getProducts();
+  //   // props.formData("abc")
+  // }, []);
 
-  useEffect(() => {
-   
-    props.getProducts()
-  // props.formData("abc")
-    
-  }, [])
+  console.log("newprops", props);
 
-  console.log("newprops", props)
-
-
-
-  const dataArray = []
+  const dataArray = [];
 
   const getData = (formData) => {
-    
-    console.log("formData is",formData)
+    console.log("formData is", formData);
     dataArray.push(formData);
-    console.log("dataArrayIs",dataArray);
-
-  }
-  
-
+    console.log("dataArrayIs", dataArray);
+  };
 
   function getStepContent(stepIndex) {
     switch (stepIndex) {
       case 0:
         return (
           <Grid style={{ display: "flex", justifyContent: "center" }}>
-            <ShopDetailsInput verifyStep={verifyStep} submit={props.formData} getData={getData} />
+            <ShopDetailsInput
+              verifyStep={verifyStep}
+              submit={props.formData}
+              getData={getData}
+            />
           </Grid>
         );
       case 1:
-        return <ShopOwnerInput verifyStep={verifyStep} submit={props.formData} getData={getData} />;
+        return (
+          <ShopOwnerInput
+            verifyStep={verifyStep}
+            submit={props.formData}
+            getData={getData}
+            submitFormData={props.submitFormData}
+          />
+        );
       case 2:
         return "This is the bit I really care about!";
       default:
@@ -98,24 +96,10 @@ function ShopRegister(props) {
   }
 
   const classes = useStyles();
-  const [shopname, setshopname] = useState("");
-  const [shopemail, setshopemail] = useState("");
-  const [shopcontact, setshopcontact] = useState();
-  const [shopaddress, setshopaddress] = useState("");
-  const [shoppassword, setshoppassword] = useState("");
-  const [shopinstagram, setshopinstagram] = useState("");
-  const [shopfacebook, setshopfacebook] = useState("");
-  const [shoptype, setshoptype] = useState("");
-
-  const [ownername, setownername] = useState("");
-  const [owneremail, setowneremail] = useState("");
-  const [ownercontact, setownercontact] = useState("");
-  const [owneradress, setowneraddress] = useState("");
+  
 
   const history = useHistory();
-  const handletype = (event) => {
-    setshoptype(event.target.value);
-  };
+
   const [activeStep, setActiveStep] = React.useState(0);
   const steps = getSteps();
 
