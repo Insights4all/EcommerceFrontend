@@ -14,6 +14,7 @@ import Storehome from "./Storehome";
 import Avatar from "@material-ui/core/Avatar";
 import Navbar from "../Navbar/Navbar";
 import Storenavbar from "./Storenavbar";
+import StoreProducts from "./StoreProducts";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -181,7 +182,7 @@ function Admin() {
           <Storehome />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          Item Two
+          <StoreProducts />
         </TabPanel>
         <TabPanel value={value} index={2}>
           Item Three
