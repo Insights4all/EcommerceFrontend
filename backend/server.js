@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 var cors = require('cors')
@@ -5,14 +6,17 @@ var session = require("express-session");
 const passport = require("passport");
 const cookieParser = require("cookie-parser");
 
+const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken");
+
 //Initializing express
 const app = express();
 const PORT = process.env.PORT || 8080;
 app.use(cors())
 
 app.use(express.json());
-
-app.use(express.urlencoded({ extended: false }));
+const users = [];
+app.use(express.urlencoded({ extended: true }));
 
 app.use(
   session({
@@ -59,6 +63,8 @@ app.get("/allproducts", (req, res) => {
     res.send(products);
   });
 });
+
+
 
 app.post("/shopregister", (req, res) => {
   console.log("shopRegisterBody", req.body);
@@ -136,5 +142,84 @@ app.get("/logout", function (req, res) {
   //console.log("Logout sucess");
   res.json({ status: "No" });
 });
+
+app.post("/newregister", async (req, res) => {
+  console.log("adasdf", req.body);
+  try {
+    try {
+      const salt = await bcrypt.genSalt();
+      const hashedPassword = await bcrypt.hash(req.body.password, salt);
+      const user = { email: req.body.email, password: hashedPassword };
+      users.push(user);
+
+      const User = {
+        email: req.body.email,
+      };
+      const accessToken = generateAccessToken(User);
+      const refreshToken = jwt.sign(User, process.env.REFRESH_TOKEN_SECRET);
+      //   res.json({ accessToken: accessToken, refreshToken: refreshToken });
+      res
+        .status(201)
+        .json({ accessToken: accessToken, refreshToken: refreshToken });
+    } catch (error) {
+      res.status(500).send();
+    }
+    res.status(201).send(user);
+  } catch {
+    res.status(500).send();
+  }
+});
+
+app.post("/newlogin", async (req, res) => {
+  const user = users.find((user) => user.email === req.body.email);
+  if (user == null) {
+    return res.status(400).send("Cannot Find User");
+  }
+  try {
+    if (await bcrypt.compare(req.body.password, user.password)) {
+        try {
+            const User = {
+              email: req.body.email,
+            };
+            const accessToken = generateAccessToken(User);
+            const refreshToken = jwt.sign(User, process.env.REFRESH_TOKEN_SECRET);
+            res
+              .status(201)
+              .json({ accessToken: accessToken, refreshToken: refreshToken });
+          } catch (error) {
+            res.status(500).send();
+          }
+    } else {
+      res.send("Not allowed");
+    }
+  } catch {
+    res.send(500).send();
+  }
+});
+
+
+
+app.get("/authcheck",authenticateToken, (req,res) => {
+  console.log(req.user.email)
+  res.json("good User")
+
+})
+
+const generateAccessToken = (user) => {
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "300s" });
+};
+
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  if (token == null) return res.sendStatus(401);
+
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    next();
+  });
+}  
+
 
 app.listen(PORT, console.log(`Server is starting at ${PORT}`));
