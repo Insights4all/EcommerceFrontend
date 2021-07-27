@@ -15,6 +15,7 @@ import Avatar from "@material-ui/core/Avatar";
 import Navbar from "../Navbar/Navbar";
 import Storenavbar from "./Storenavbar";
 import StoreProducts from "./StoreProducts";
+import AddProduct from "./AddProduct";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 

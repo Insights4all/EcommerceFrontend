@@ -6,6 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { DataGrid } from "@material-ui/data-grid";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
+import AddProduct from "./AddProduct";
 
 const useStyles = makeStyles((theme) => ({
   neworders: {
@@ -42,19 +43,15 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-function StoreProducts() {
+function StoreProducts(props) {
   const classes = useStyles();
+  const [addproduct, setAddproduct] = React.useState(false);
   const columns: GridColDef[] = [
     { field: "id", headerName: "Product Id", width: 150 },
     {
       field: "name",
       headerName: "Product Name",
       width: 250,
-    },
-    {
-      field: "img",
-      headerName: "Product Images",
-      width: 200,
     },
     {
       field: "productmrp",
@@ -93,8 +90,8 @@ function StoreProducts() {
       width: 200,
     },
     {
-      field: "desc",
-      headerName: "Description",
+      field: "stock",
+      headerName: "Stock",
       width: 200,
     },
     {
@@ -132,19 +129,26 @@ function StoreProducts() {
     { id: "4", img: "abcd", productName: "Lannister", price: 599 },
     { id: "5", img: "abcd", productName: "Lannister", price: 599 },
   ];
+
+  function settrue() {
+    setAddproduct(true);
+  }
+
   return (
     <div>
-      <Typography className={classes.neworders}>All Products</Typography>
-      <Divider className={classes.divider} />
       <Box className={classes.datagrid}>
         <Button
           variant="contained"
           color="primary"
           size="small"
           className={classes.addproductbtn}
+          onClick={settrue}
         >
           Add New Product
         </Button>
+        {addproduct ? <AddProduct /> : " "}
+        <Typography className={classes.neworders}>All Products</Typography>
+        <Divider className={classes.divider} />
 
         <DataGrid
           isRowSelectable="false"
