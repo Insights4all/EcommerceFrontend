@@ -200,9 +200,12 @@ function Navbar(props) {
     name: "hai",
   });
 
+
+
   const history = useHistory();
   useEffect(() => {
     // console.log("Navbar props", props.data);
+
   }, [props]);
 
   const handleChange = (event) => {

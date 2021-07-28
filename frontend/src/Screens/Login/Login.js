@@ -81,27 +81,9 @@ function Login(props) {
   const classes = useStyles();
   const [loginemail, setloginemail] = useState("");
   const [loginpassword, setloginpassword] = useState("");
+  const [error, setError] = useState(false);
+
   const history = useHistory();
-
-  // function handleSubmit(e) {
-  //   e.preventDefault();
-  //   const payload = {
-  //     username: loginemail,
-  //     password: loginpassword,
-  //   };
-  //   axios({
-  //     url: "/login",
-  //     method: "POST",
-  //     data: payload,
-  //   }).then((res) =>
-  //     history.push({
-  //       pathname: "/home",
-  //       state: res.data,
-  //     })
-  //   );
-  // }
-
-
 
 
   const handleSubmit = (e) => {
@@ -115,7 +97,11 @@ React.useEffect(() => {
 
   if (Object.keys(props.customer_login_Data.data).length) {
     history.push("/home");
+    window.location.reload()
+  } else if(props.customer_login_Data.errorMessage.length){
+    setError(true)
   }
+
 }, [props]);
 
   const validate = (values) => {
@@ -165,7 +151,10 @@ React.useEffect(() => {
             }
           />
 
-        <p>Error, Please Enter Valid Credentials</p>
+{
+error ? <p style={{textAlign:"center", color:"red"}}>Error, Please Enter Valid Credentials</p> : null
+}
+        
 
           <Button
             className={classes.signupbtn}
