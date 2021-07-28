@@ -1,14 +1,23 @@
-import { AuthAction, AuthActionTypes } from "./AuthAction";
+import { AuthActionTypes } from "./AuthAction";
 
 
 
 const initialState = {
-    login_Data: {
+    customer_login_Data: {
         isLoading: false,
         isLoadingFailed: false,
         isInitialCalled: false,
-        data: []
+        data: {},
+        errorMessage:"",
+        error:""
     },
+    customer_register_Data:{
+        isLoading: false,
+        isLoadingFailed: false,
+        isInitialCalled: false,
+        data: [],
+        
+    }
 
 }
 
@@ -17,32 +26,80 @@ export const AuthReducer = (state = initialState, action) => {
         case AuthActionTypes.USER_LOGIN_REQUEST :
             return {
                 ...state,
-                login_Data:{
-                    ...state.login_Data,
+                customer_login_Data:{
+                    ...state.customer_login_Data,
                     isLoading: true,
-                    isInitialCalled: true
+                    isInitialCalled: true,
+                    data:{}
                 }
             };
         
         case AuthActionTypes.USER_LOGIN_SUCCESS :
+            console.log("sucessoNLogin", action)
             return {
                 ...state,
-                login_Data:{
-                    ...state.login_Data,
+                customer_login_Data:{
+                    ...state.customer_login_Data,
                     isLoading: false,
                     isLoadingFailed: false,
-                    data: action.payload
+                    // data: action.res,
+                    data: action.response.data,
+                    errorMessage:""
+
                 }
             };
         
         // eslint-disable-next-line no-lone-blocks
         case AuthActionTypes.USER_LOGIN_FAILED : {
+            console.log("FailedNLogin", action)
+
             return {
                 ...state,
-                login_Data:{
-                    ...state.login_Data,
+                customer_login_Data:{
+                    ...state.customer_login_Data,
                     isLoading: false,
                     isLoadingFailed: true,
+                    errorMessage:"Error",
+                    error:action,
+                    data:{}                    
+                }
+            };
+        };
+        case AuthActionTypes.USER_REGISTER_REQUEST :
+            return {
+                ...state,
+                customer_register_Data:{
+                    ...state.customer_register_Data,
+                    isLoading: true,
+                    isInitialCalled: true,
+
+                    
+                }
+            };
+        
+        case AuthActionTypes.USER_REGISTER_SUCCESS :
+            console.log("sucessoNRegister", action.res)
+            return {
+                ...state,
+                customer_register_Data:{
+                    ...state.customer_register_Data,
+                    isLoading: false,
+                    isLoadingFailed: false,
+                    data: action.res,
+                }
+            };
+        
+        // eslint-disable-next-line no-lone-blocks
+        case AuthActionTypes.USER_REGISTER_FAILED : {
+            return {
+                ...state,
+                customer_register_Data:{
+                    ...state.customer_register_Data,
+                    isLoading: false,
+                    isLoadingFailed: true,
+                    data: action.res,
+                    errorMessage:"error"
+
                 }
             };
         };

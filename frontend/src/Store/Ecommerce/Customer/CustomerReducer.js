@@ -19,7 +19,13 @@ const initialState = {
         isLoadingFailed: false,
         isInitialCalled: false,
         data : []
-    }
+    },
+    customer_login_Data: {
+        isLoading: false,
+        isLoadingFailed: false,
+        isInitialCalled: false,
+        data: []
+    },
 
 }
 
@@ -115,6 +121,42 @@ export const CustomerReducer = (state = initialState, action) => {
                     }
                 };
             };
+
+            //CUSTOMER LOGIN
+            // case CustomerActionTypes.USER_LOGIN_REQUEST :
+            //     return {
+            //         ...state,
+            //         customer_login_Data:{
+            //             ...state.customer_login_Data,
+            //             isLoading: true,
+            //             isInitialCalled: true
+            //         }
+            //     };
+            
+            // case CustomerActionTypes.USER_LOGIN_SUCCESS :
+            //     console.log("redededed", action)
+            //     return {
+            //         ...state,
+            //         customer_login_Data:{
+            //             ...state.customer_login_Data,
+            //             isLoading: false,
+            //             isLoadingFailed: false,
+            //             data: action.payload
+            //         }
+            //     };
+            
+            // // eslint-disable-next-line no-lone-blocks
+            // case CustomerActionTypes.USER_LOGIN_FAILED: {
+            //     return {
+            //         ...state,
+            //         customer_login_Data:{
+            //             ...state.customer_login_Data,
+            //             isLoading: false,
+            //             isLoadingFailed: true,
+            //         }
+            //     };
+            // };
+
 
         
         default:

@@ -14,6 +14,7 @@ import { EcommerceReducer } from "./Ecommerce";
 
 // sagas
 import { EcommerceSaga } from "./Ecommerce";
+// import { AuthReducer } from "./Ecommerce";
 
 // root reducer
 export const rootReducer = combineReducers({

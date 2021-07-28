@@ -1,25 +1,18 @@
 import { connect } from "react-redux"
 import { bindActionCreators } from "redux"
+import { AuthAction } from "../../Store/Ecommerce/Auth/AuthAction"
 import { CustomerAction } from "../../Store/Ecommerce/Customer/CustomerAction"
 
 
 
 const mapStateToProps = (state) => {
     return {
-        product_data: state.ecommerce.customer.product_data,
-        form_Data:state.ecommerce.customer.form_data
-
+        customer_login_Data: state.ecommerce.auth.customer_login_Data,
         }
 }
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-    getProducts: CustomerAction.GetAllProducts,
-    formData: CustomerAction.SaveFormData,
-    submitFormData:CustomerAction.ShopkeeperData,
-
-    //  CPCustomerAction.CPCustomerList ,
-
-
+    UserLogin: AuthAction.UserLogin,
 }, dispatch)
 
 // eslint-disable-next-line import/no-anonymous-default-export

@@ -11,7 +11,10 @@ export const CustomerActionTypes = {
     //Submit Shopkeeper Data
     SUBMIT_SHOPKEEPER_DATA_REQUEST:"SUBMIT_SHOPKEEPER_DATA_REQUEST",
     SUBMIT_SHOPKEEPER_DATA_SUCCESS:"SUBMIT_SHOPKEEPER_DATA_SUCCESS",
-    SUBMIT_SHOPKEEPER_DATA_FAILED:"SUBMIT_SHOPKEEPER_DATA_FAILED"
+    SUBMIT_SHOPKEEPER_DATA_FAILED:"SUBMIT_SHOPKEEPER_DATA_FAILED",
+
+
+  
 }
 
 const GetAllProducts = (payload) => {   
@@ -28,8 +31,10 @@ const ShopkeeperData = (payload) => {
 
 
 
+
+
 export const CustomerAction = { 
     GetAllProducts,
     SaveFormData,
-    ShopkeeperData
+    ShopkeeperData,
 }

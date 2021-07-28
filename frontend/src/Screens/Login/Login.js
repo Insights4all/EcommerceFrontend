@@ -9,6 +9,7 @@ import TextField from "@material-ui/core/TextField";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { Input } from "@material-ui/core";
+import useForm from '../../Utils/useForm'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -76,29 +77,62 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Login() {
+function Login(props) {
   const classes = useStyles();
   const [loginemail, setloginemail] = useState("");
   const [loginpassword, setloginpassword] = useState("");
   const history = useHistory();
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    const payload = {
-      username: loginemail,
-      password: loginpassword,
-    };
-    axios({
-      url: "/login",
-      method: "POST",
-      data: payload,
-    }).then((res) =>
-      history.push({
-        pathname: "/home",
-        state: res.data,
-      })
-    );
+  // function handleSubmit(e) {
+  //   e.preventDefault();
+  //   const payload = {
+  //     username: loginemail,
+  //     password: loginpassword,
+  //   };
+  //   axios({
+  //     url: "/login",
+  //     method: "POST",
+  //     data: payload,
+  //   }).then((res) =>
+  //     history.push({
+  //       pathname: "/home",
+  //       state: res.data,
+  //     })
+  //   );
+  // }
+
+
+
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    props.UserLogin(userValue)
+    // console.log("newprops", props)
+  };
+ 
+React.useEffect(() => {
+  console.log("useffect props", props);
+
+  if (Object.keys(props.customer_login_Data.data).length) {
+    history.push("/home");
   }
+}, [props]);
+
+  const validate = (values) => {
+    let errors = {};
+    console.log("validations", values);
+    console.log("errors", typeof errors, Object.keys(userValueErrors).length);
+    return errors;
+  };
+  const {
+    values: userValue,
+    errors: userValueErrors,
+    handleChange: onLoginChange,
+    handleSubmit: onLoginSubmit,
+  } = useForm(handleSubmit, validate);
+
+
+  
 
   return (
     <div class={classes.root}>
@@ -112,8 +146,11 @@ function Login() {
             label="Email"
             variant="outlined"
             size="small"
-            value={loginemail}
-            onChange={(e) => setloginemail(e.target.value)}
+            // value={loginemail}
+            // onChange={(e) => setloginemail(e.target.value)}
+            onChange={(e) =>
+              onLoginChange({ name: "email", value: e.target.value })
+            }
           />
           <TextField
             className={classes.eminput}
@@ -121,9 +158,15 @@ function Login() {
             label="Password"
             variant="outlined"
             size="small"
-            value={loginpassword}
-            onChange={(e) => setloginpassword(e.target.value)}
+            // value={loginpassword}
+            // onChange={(e) => setloginpassword(e.target.value)}
+            onChange={(e) =>
+              onLoginChange({ name: "password", value: e.target.value })
+            }
           />
+
+        <p>Error, Please Enter Valid Credentials</p>
+
           <Button
             className={classes.signupbtn}
             variant="outlined"
@@ -133,7 +176,7 @@ function Login() {
           >
             Signup
           </Button>
-          <Input
+          <Button
             className={classes.loginbtn}
             variant="contained"
             color="primary"
@@ -141,7 +184,7 @@ function Login() {
             size="small"
           >
             Login
-          </Input>
+          </Button>
         </form>
       </Paper>
       <Footer />

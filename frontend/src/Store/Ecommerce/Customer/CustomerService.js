@@ -12,8 +12,18 @@ const SubmitShopkeeperData = (payload) => {
     return axios.post(`http://localhost:8080/shopregister`, payload)
 }
 
+// const CustomerLogin = (payload) => {
+//     console.log("payload",payload)
+
+//     return axios.post(`http://localhost:8080/newregister`,payload)
+// }
+
+// const CustomerRegister = () => {
+//     return axios.post(`http://localhost:8080/newregister`)
+// }
 
 export const CustomerService = {
     GetAllProducts,
-    SubmitShopkeeperData
+    SubmitShopkeeperData,
+    // CustomerLogin
 }

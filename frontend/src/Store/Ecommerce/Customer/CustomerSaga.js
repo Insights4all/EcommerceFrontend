@@ -50,12 +50,8 @@ function* SaveFormData(action) {
     }
 }
 
-
-
 export function* CustomerSaga() {
     yield takeLatest(CustomerActionTypes.GET_ALL_PRODUCTS_REQUEST , GetAllProducts);
     yield takeLatest(CustomerActionTypes.SAVE_FORM_DATA_REQUEST , SaveFormData);
     yield takeLatest(CustomerActionTypes.SUBMIT_SHOPKEEPER_DATA_REQUEST , SubmitShopkeeperData);
-
-
 }

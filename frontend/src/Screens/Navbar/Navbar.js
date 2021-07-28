@@ -190,6 +190,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Navbar(props) {
+  // console.log("props", props)
   const { window } = props;
   const classes = useStyles();
   const theme = useTheme();
@@ -201,7 +202,7 @@ function Navbar(props) {
 
   const history = useHistory();
   useEffect(() => {
-    console.log("Navbar props", props.data);
+    // console.log("Navbar props", props.data);
   }, [props]);
 
   const handleChange = (event) => {
@@ -224,7 +225,7 @@ function Navbar(props) {
     <div>
       <div className={classes.toolbar}>
         <Typography className={classes.username} variant="h6" noWrap>
-          Hello "safiya"
+          Hello "SALMAN KAZI"
         </Typography>
       </div>
 
@@ -247,6 +248,9 @@ function Navbar(props) {
 
   const container =
     window !== undefined ? () => window().document.body : undefined;
+
+const login = localStorage.getItem("token")
+console.log("login",login)
 
   return (
     <div>
@@ -304,12 +308,15 @@ function Navbar(props) {
           <div className={classes.icondesign}></div>
 
           <div className={classes.loginbutton}>
-            {props.data === "true" ? (
-              <Button variant="outlined" href="/logout">
+            {login && login.length ? (
+              <Button variant="outlined" onClick={()=> {
+                localStorage.removeItem("token");
+                history.push("/home")
+              }}>
                 Logout
               </Button>
             ) : (
-              <Button variant="outlined" href="/login">
+              <Button variant="outlined" onClick={()=> history.push("/login")}  >
                 Login
               </Button>
             )}

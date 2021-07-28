@@ -7,7 +7,7 @@ import SingleProduct from "./Screens/SingleProduct/SingleProduct";
 import Categories from "./Screens/Categories/Categories";
 import Cart from "./Screens/Cart/Cart";
 import UserProfile from "./Screens/UserProfile/UserProfile";
-import Login from "./Screens/Login/Login";
+import Login from "./Screens/Login";
 import Logout from "./Screens/Login/Logout";
 import Signup from "./Screens/Signup/Signup";
 import { BrowserRouter as Router } from "react-router-dom";
