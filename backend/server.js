@@ -34,6 +34,7 @@ app.use(passport.session());
 const User = require("./models/User");
 const Product = require("./models/products");
 const Shopkeeper = require("./models/shopkeeper");
+const Admin = require("./models/admin");
 
 
 passport.use(User.createStrategy());
@@ -152,6 +153,16 @@ app.post("/newregister", async (req, res) => {
       const user = { email: req.body.email, password: hashedPassword };
       users.push(user);
 
+      let newUser = new Admin({
+        email: user.email,
+        password:user.password
+    })
+      
+    newUser.save((err,result)=>{
+      if(err){
+        res.status(500).send();
+      }
+    })
       const User = {
         email: req.body.email,
       };
@@ -171,30 +182,36 @@ app.post("/newregister", async (req, res) => {
 });
 
 app.post("/newlogin", async (req, res) => {
-  const user = users.find((user) => user.email === req.body.email);
-  if (user == null) {
-    return res.status(400).send("Cannot Find User");
-  }
-  try {
-    if (await bcrypt.compare(req.body.password, user.password)) {
-        try {
-            const User = {
-              email: req.body.email,
-            };
-            const accessToken = generateAccessToken(User);
-            const refreshToken = jwt.sign(User, process.env.REFRESH_TOKEN_SECRET);
-            res
-              .status(201)
-              .json({ accessToken: accessToken, refreshToken: refreshToken });
-          } catch (error) {
-            res.status(500).send();
-          }
+  // const user = users.find((user) => user.email === req.body.email);
+console.log("body is", req.body)
+  Admin.find({ email: req.body.email }, async function (err, docs) {
+    if (err) {
+      console.log("mongoose error", err);
+      res.status(500).send("Mongoose error")
     } else {
-      res.send("Not allowed");
+      if (!docs.length) {
+        return res.status(400).send("Cannot Find User");
+      }
+      const [docsData] = docs
+      const data = await bcrypt.compare(req.body.password, docsData.password)
+      if (data) {
+        try {
+          const User = {
+            email: req.body.email,
+          };
+          const accessToken = generateAccessToken(User);
+          const refreshToken = jwt.sign(User, process.env.REFRESH_TOKEN_SECRET);
+          res
+            .status(201)
+            .json({ accessToken: accessToken, refreshToken: refreshToken });
+        } catch (error) {
+          res.status(500).send();
+        }
+      } else {
+        res.status(400).send("Not allowed");
+      }
     }
-  } catch {
-    res.send(500).send();
-  }
+  });
 });
 
 
@@ -223,3 +240,29 @@ function authenticateToken(req, res, next) {
 
 
 app.listen(PORT, console.log(`Server is starting at ${PORT}`));
+
+
+
+// if (!user) {
+//   return res.status(400).send("Cannot Find User");
+// }
+// try {
+//   if (await bcrypt.compare(req.body.password, user.password)) { //remove function from here and add it to var
+//       try {
+//           const User = {
+//             email: req.body.email,
+//           };
+//           const accessToken = generateAccessToken(User);
+//           const refreshToken = jwt.sign(User, process.env.REFRESH_TOKEN_SECRET);
+//           res
+//             .status(201)
+//             .json({ accessToken: accessToken, refreshToken: refreshToken });
+//         } catch (error) {
+//           res.status(500).send();
+//         }
+//   } else {
+//     res.send("Not allowed");
+//   }
+// } catch {
+//   res.send(500).send();
+// }
