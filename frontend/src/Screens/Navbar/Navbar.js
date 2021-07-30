@@ -253,7 +253,7 @@ function Navbar(props) {
     window !== undefined ? () => window().document.body : undefined;
 
 const login = localStorage.getItem("token")
-console.log("login",login)
+// console.log("login",login)
 
   return (
     <div>
