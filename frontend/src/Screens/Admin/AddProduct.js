@@ -25,6 +25,8 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import MuiTableCell from "@material-ui/core/TableCell";
+import firebase from "./Firebase";
+import "firebase/storage"; // <----
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -61,8 +63,13 @@ function getStyles(name, personName, theme) {
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
-    minWidth: 180,
-    maxWidth: 300,
+    [theme.breakpoints.up("sm")]: {
+      minWidth: 180,
+      maxWidth: 300,
+
+      marginLeft: 10,
+      marginTop: 30,
+    },
   },
   chips: {
     display: "flex",
@@ -70,6 +77,16 @@ const useStyles = makeStyles((theme) => ({
   },
   chip: {
     margin: 2,
+  },
+  upload: {
+    [theme.breakpoints.up("sm")]: {
+      width: 320,
+      marginLeft: 10,
+      marginTop: 5,
+    },
+    width: 320,
+    marginLeft: 10,
+    marginTop: 5,
   },
 
   root: {
@@ -101,28 +118,48 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("sm")]: {
       width: 320,
       marginLeft: 10,
+      marginTop: 40,
     },
     width: 320,
     marginLeft: 10,
-    marginTop: 5,
+    marginTop: 10,
   },
-  signupbtn: {
+  label: {
+    [theme.breakpoints.up("sm")]: {
+      width: 320,
+      marginLeft: 10,
+      marginTop: 25,
+    },
+    width: 320,
+    marginLeft: 10,
+    marginTop: 10,
+  },
+  eglabel: {
+    [theme.breakpoints.up("sm")]: {
+      width: 320,
+      marginLeft: 10,
+      marginTop: 10,
+    },
+    width: 320,
+    marginLeft: 10,
+    marginTop: 10,
+  },
+  addbtn: {
     [theme.breakpoints.up("sm")]: {
       marginLeft: 0,
       width: 155,
+      marginTop: 20,
+      marginBottom: 30,
     },
     marginLeft: 40,
     width: 155,
   },
-  loginbtn: {
+  secondflex: {
     [theme.breakpoints.up("sm")]: {
-      marginTop: 20,
-      marginLeft: 10,
-      width: 155,
+      display: "flex",
+      flexDirection: "column",
+      marginLeft: 35,
     },
-    marginTop: 20,
-    marginLeft: 10,
-    width: 155,
   },
 }));
 
@@ -137,6 +174,12 @@ function AddProduct() {
   const [personName, setPersonName] = React.useState([]);
   const [age, setAge] = React.useState("");
 
+  const [count, setCount] = React.useState(0);
+  const [allfile, setAllfile] = React.useState([]);
+  const [imageurl, setImageurl] = React.useState([]);
+
+  const [getref, setGetref] = React.useState([]);
+
   const handleStock = (event) => {
     setAge(event.target.value);
   };
@@ -145,17 +188,40 @@ function AddProduct() {
     setPersonName(event.target.value);
   };
 
-  const handleChangeMultiple = (event) => {
-    const { options } = event.target;
-    const value = [];
-    for (let i = 0, l = options.length; i < l; i += 1) {
-      if (options[i].selected) {
-        value.push(options[i].value);
-      }
-    }
-    setPersonName(value);
+  const handleFile = (event) => {
+    setAllfile((allfile) => [...allfile, event.target.files[0]]);
+
+    //  console.log("in handle file", allfile);
+    setCount(count + 1);
+    setImageurl((imageurl) => [
+      ...imageurl,
+      URL.createObjectURL(event.target.files[0]),
+    ]);
   };
 
+  const uploadImage = (event) => {
+    console.log("in upload file", allfile);
+    console.log("in upload file imageurl", imageurl);
+    console.log(allfile.length);
+    var storageRef = firebase.storage().ref();
+
+    for (var i = 0; i < allfile.length; i++) {
+      var imageref = storageRef.child(allfile[i].name);
+      var uploadTask = imageref.put(allfile[i]);
+    }
+
+    uploadTask
+      .then(() => {
+        console.log("Image uploaded to the bucket!");
+
+        for (var i = 0; i < allfile.length; i++) {
+          var newgetref = storageRef.child(allfile[i].name).getDownloadURL();
+          setGetref([...getref, newgetref]);
+          console.log(getref);
+        }
+      })
+      .catch((e) => console.log("uploading image error => ", e));
+  };
   //   function handleSubmit(e) {
   //     e.preventDefault();
   //     const payload = {
@@ -186,211 +252,190 @@ function AddProduct() {
 
   return (
     <div>
-      <form className={classes.root} noValidate>
-        <TableContainer component={Paper}>
-          <Table
-            className={classes.table}
-            aria-label="simple table"
-            elevation={0}
-          >
-            <TableBody>
-              <TableRow className={classes.tablerow}>
-                <TableCell style={{ borderBottom: "none" }}>
-                  <TextField
-                    className={classes.eminput}
-                    id="product_name"
-                    label="Product Name"
-                    variant="outlined"
-                    size="small"
-                    value={productname}
-                    onChange={(e) => setproductname(e.target.value)}
-                  />
-                </TableCell>
-                <TableCell style={{ borderBottom: "none" }}>
-                  <TextField
-                    className={classes.eminput}
-                    id="productprice"
-                    label="Product Price"
-                    variant="outlined"
-                    size="small"
-                    value={productprice}
-                    onChange={(e) => setproductprice(e.target.productprice)}
-                  />
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell style={{ borderBottom: "none" }}>
-                  <TextField
-                    className={classes.eminput}
-                    id="percentagediscount"
-                    label="Percentage Discount"
-                    variant="outlined"
-                    size="small"
-                    value={percentagediscount}
-                    onChange={(e) =>
-                      setpercentagediscount(e.target.percentagediscount)
-                    }
-                  />
-                </TableCell>
-                <TableCell style={{ borderBottom: "none" }}>
-                  <TextField
-                    className={classes.eminput}
-                    id="discountprice"
-                    label="Discount Price"
-                    variant="outlined"
-                    size="small"
-                    value={discountprice}
-                    onChange={(e) => setdiscountprice(e.target.discountprice)}
-                  />
-                </TableCell>
-              </TableRow>
-
-              <TableRow>
-                <TableCell style={{ borderBottom: "none" }}>
-                  <FormControl className={classes.formControl}>
-                    <InputLabel id="demo-mutiple-chip-label">
-                      Available Colors
-                    </InputLabel>
-                    <Select
-                      labelId="demo-mutiple-chip-label"
-                      id="demo-mutiple-chip"
-                      multiple
-                      value={personName}
-                      onChange={handleChange}
-                      input={<Input id="select-multiple-chip" />}
-                      renderValue={(selected) => (
-                        <div className={classes.chips}>
-                          {selected.map((value) => (
-                            <Chip
-                              key={value}
-                              label={value}
-                              className={classes.chip}
-                            />
-                          ))}
-                        </div>
-                      )}
-                      MenuProps={MenuProps}
-                    >
-                      {names.map((name) => (
-                        <MenuItem
-                          key={name}
-                          value={name}
-                          style={getStyles(name, personName, theme)}
-                        >
-                          <Checkbox checked={personName.indexOf(name) > -1} />
-                          <ListItemText primary={name} />
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </TableCell>
-                <TableCell style={{ borderBottom: "none" }}>
-                  {" "}
-                  <FormControl className={classes.formControl}>
-                    <InputLabel id="demo-mutiple-chip-label">
-                      Available Size
-                    </InputLabel>
-                    <Select
-                      labelId="demo-mutiple-chip-label"
-                      id="demo-mutiple-chip"
-                      multiple
-                      value={personName}
-                      onChange={handleChange}
-                      input={<Input id="select-multiple-chip" />}
-                      renderValue={(selected) => (
-                        <div className={classes.chips}>
-                          {selected.map((value) => (
-                            <Chip
-                              key={value}
-                              label={value}
-                              className={classes.chip}
-                            />
-                          ))}
-                        </div>
-                      )}
-                      MenuProps={MenuProps}
-                    >
-                      {names.map((name) => (
-                        <MenuItem
-                          key={name}
-                          value={name}
-                          style={getStyles(name, personName, theme)}
-                        >
-                          <Checkbox checked={personName.indexOf(name) > -1} />
-                          <ListItemText primary={name} />
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell style={{ borderBottom: "none" }}>
-                  <TextField
-                    id="outlined-multiline-static"
-                    label="About Product"
-                    multiline
-                    rows={4}
-                    className={classes.eminput}
-                    defaultValue=""
-                    variant="outlined"
-                  />
-                </TableCell>
-                <TableCell style={{ borderBottom: "none" }}>
-                  <TextField
-                    id="outlined-multiline-static"
-                    label="Product Details"
-                    multiline
-                    rows={4}
-                    className={classes.eminput}
-                    defaultValue=""
-                    variant="outlined"
-                  />
-                </TableCell>
-              </TableRow>
-
-              <TableRow>
-                <TableCell style={{ borderBottom: "none" }}>
-                  <InputLabel id="demo-simple-select-label">
-                    Product Images
-                  </InputLabel>
-
-                  <Input type="file" />
-                </TableCell>
-                <TableCell style={{ borderBottom: "none" }}>
-                  <FormControl className={classes.formControl}>
-                    <InputLabel id="demo-simple-select-label">Stock</InputLabel>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={age}
-                      onChange={handleStock}
-                    >
-                      <MenuItem value={10}>Ten</MenuItem>
-                      <MenuItem value={20}>Twenty</MenuItem>
-                      <MenuItem value={30}>Thirty</MenuItem>
-                    </Select>
-                  </FormControl>
-                </TableCell>
-              </TableRow>
-
-              <TableRow>
-                <TableCell style={{ borderBottom: "none" }}>
-                  <Button
-                    className={classes.signupbtn}
-                    variant="contained"
-                    color="primary"
-                    size="medium"
-                    type="submit"
+      <form className={classes.root} enctype="multipart/form-data" noValidate>
+        <div style={{ display: "flex", flexDirection: "row" }}>
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <TextField
+              className={classes.eminput}
+              id="product_name"
+              label="Product Name"
+              variant="outlined"
+              size="small"
+              value={productname}
+              onChange={(e) => setproductname(e.target.value)}
+            />
+            <InputLabel className={classes.eglabel}>
+              For eg - Pink Polka Dot Dress
+            </InputLabel>
+            <TextField
+              className={classes.eminput}
+              id="percentagediscount"
+              label="Percentage Discount"
+              variant="outlined"
+              size="small"
+              value={percentagediscount}
+              onChange={(e) =>
+                setpercentagediscount(e.target.percentagediscount)
+              }
+            />
+            <InputLabel className={classes.eglabel}>For eg - 10%</InputLabel>
+            <FormControl className={classes.formControl}>
+              <InputLabel id="demo-mutiple-chip-label">
+                Available Colors
+              </InputLabel>
+              <Select
+                labelId="demo-mutiple-chip-label"
+                id="demo-mutiple-chip"
+                multiple
+                value={personName}
+                onChange={handleChange}
+                input={<Input id="select-multiple-chip" />}
+                renderValue={(selected) => (
+                  <div className={classes.chips}>
+                    {selected.map((value) => (
+                      <Chip
+                        key={value}
+                        label={value}
+                        className={classes.chip}
+                      />
+                    ))}
+                  </div>
+                )}
+                MenuProps={MenuProps}
+              >
+                {names.map((name) => (
+                  <MenuItem
+                    key={name}
+                    value={name}
+                    style={getStyles(name, personName, theme)}
                   >
-                    Add Product
-                  </Button>
-                </TableCell>
-                <TableCell style={{ borderBottom: "none" }}> </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
+                    <Checkbox checked={personName.indexOf(name) > -1} />
+                    <ListItemText primary={name} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <TextField
+              id="outlined-multiline-static"
+              label="About Product"
+              multiline
+              rows={4}
+              className={classes.eminput}
+              defaultValue=""
+              variant="outlined"
+            />
+            <InputLabel className={classes.label} id="demo-simple-select-label">
+              Product Images
+            </InputLabel>
+
+            <Input
+              className={classes.upload}
+              onChange={handleFile}
+              type="file"
+              accept="image/*"
+              multiple
+            />
+            <Typography>{count} files selected</Typography>
+            <Button
+              onClick={uploadImage}
+              className={classes.addbtn}
+              variant="contained"
+            >
+              Upload
+            </Button>
+            <Button
+              className={classes.addbtn}
+              variant="contained"
+              color="primary"
+              size="medium"
+              type="submit"
+            >
+              Add Product
+            </Button>
+          </div>
+          <div className={classes.secondflex}>
+            <TextField
+              className={classes.eminput}
+              id="productprice"
+              label="Product Price"
+              variant="outlined"
+              size="small"
+              value={productprice}
+              onChange={(e) => setproductprice(e.target.productprice)}
+            />
+            <InputLabel className={classes.eglabel}>For eg - 600</InputLabel>
+            <TextField
+              className={classes.eminput}
+              id="discountprice"
+              label="Discount Price"
+              variant="outlined"
+              size="small"
+              value={discountprice}
+              onChange={(e) => setdiscountprice(e.target.discountprice)}
+            />
+            <InputLabel className={classes.eglabel}>
+              For eg - (10/100)*600 = 540
+            </InputLabel>
+            <FormControl className={classes.formControl}>
+              <InputLabel id="demo-mutiple-chip-label">
+                Available Size
+              </InputLabel>
+              <Select
+                labelId="demo-mutiple-chip-label"
+                id="demo-mutiple-chip"
+                multiple
+                value={personName}
+                onChange={handleChange}
+                input={<Input id="select-multiple-chip" />}
+                renderValue={(selected) => (
+                  <div className={classes.chips}>
+                    {selected.map((value) => (
+                      <Chip
+                        key={value}
+                        label={value}
+                        className={classes.chip}
+                      />
+                    ))}
+                  </div>
+                )}
+                MenuProps={MenuProps}
+              >
+                {names.map((name) => (
+                  <MenuItem
+                    key={name}
+                    value={name}
+                    style={getStyles(name, personName, theme)}
+                  >
+                    <Checkbox checked={personName.indexOf(name) > -1} />
+                    <ListItemText primary={name} />
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <TextField
+              id="outlined-multiline-static"
+              label="Product Details"
+              multiline
+              rows={4}
+              className={classes.eminput}
+              defaultValue=""
+              variant="outlined"
+            />
+            <FormControl className={classes.formControl}>
+              <InputLabel id="demo-simple-select-label">Stock</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={age}
+                onChange={handleStock}
+              >
+                <MenuItem value={10}>Ten</MenuItem>
+                <MenuItem value={20}>Twenty</MenuItem>
+                <MenuItem value={30}>Thirty</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+        </div>
       </form>
     </div>
   );

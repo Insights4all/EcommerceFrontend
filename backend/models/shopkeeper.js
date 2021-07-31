@@ -3,20 +3,22 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const ShopKeeperSchema = new Schema({
-  
-    shopName:String,
-    bussinessEmail:String,
-    bussinessContact:String,
-    bussinessAddress:String,
-    bussinessInstaID:String,
-    bussinessFacebookID:String,
-    fullName:String,
-    email:String,
-    contact:String,
-    password:String,
-    confirmPassword:String,
-  
-
+  shopName: String,
+  bussinessContact: String,
+  bussinessAddress: String,
+  bussinessInstaID: String,
+  bussinessFacebookID: String,
+  shopType: String,
+  aboutShop: String,
+  businessTagLine: String,
+  businesslogo: String,
+  fullName: String,
+  email: String,
+  contact: String,
+  credentials: {
+    bussinessEmail: String,
+    password: String,
+  },
 });
 
 //Model

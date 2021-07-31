@@ -15,6 +15,7 @@ import Select from "@material-ui/core/Select";
 import Box from "@material-ui/core/Box";
 import ShopDetailsInput from "../../Components/ShopDetails.Input";
 import ShopOwnerInput from "../../Components/ShopOwner.Input";
+import ShopRegisterInput from "../../Components/ShopRegister.Input";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
@@ -89,14 +90,20 @@ function ShopRegister(props) {
           />
         );
       case 2:
-        return "This is the bit I really care about!";
+        return (
+          <ShopRegisterInput
+            verifyStep={verifyStep}
+            submit={props.formData}
+            getData={getData}
+            submitFormData={props.submitFormData}
+          />
+        );
       default:
         return "Unknown stepIndex";
     }
   }
 
   const classes = useStyles();
-  
 
   const history = useHistory();
 

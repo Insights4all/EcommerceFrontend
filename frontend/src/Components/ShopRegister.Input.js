@@ -116,12 +116,12 @@ const ShopOwnerInput = (props) => {
     <div>
       <Box p={1}>
         <Paper className={classes.signup} elevation={0}>
-          <Typography className={classes.create}>Owner Details</Typography>
+          <Typography className={classes.create}>Register</Typography>
           <form className={classes.root}>
             <TextField
               className={classes.input}
               id="name"
-              label="Full Name"
+              label="Shop Email"
               variant="outlined"
               size="small"
               // value={shopname}
@@ -133,7 +133,7 @@ const ShopOwnerInput = (props) => {
             <TextField
               className={classes.eminput}
               id="email"
-              label="Email"
+              label="Password"
               variant="outlined"
               size="small"
               // value={shopemail}
@@ -145,7 +145,7 @@ const ShopOwnerInput = (props) => {
             <TextField
               className={classes.eminput}
               id="contact"
-              label="Contact"
+              label="Confirm Password"
               variant="outlined"
               size="small"
               // value={shopcontact}
@@ -155,25 +155,6 @@ const ShopOwnerInput = (props) => {
               }
             />
             <br />
-
-            {/* <Button
-                className={classes.signupbtn}
-                variant="contained"
-                color="primary"
-                size="small"
-                type="submit"
-              >
-                Register
-              </Button>
-              <Button
-                className={classes.loginbtn}
-                variant="outlined"
-                color="primary"
-                href="#outlined-buttons"
-                size="small"
-              >
-                Login
-              </Button> */}
             <br />
             <br />
           </form>
