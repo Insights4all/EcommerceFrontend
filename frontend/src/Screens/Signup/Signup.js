@@ -9,6 +9,7 @@ import TextField from "@material-ui/core/TextField";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { Input } from "@material-ui/core";
+import useForm from "../../Utils/useForm"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -86,57 +87,58 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Signup() {
+function Signup(props) {
   const classes = useStyles();
   const [fullname, setfullname] = useState("");
   const [email, setemail] = useState("");
-  const [contact, setcontact] = useState(0);
+  const [contact, setcontact] = useState(null);
   const [address, setaddress] = useState("");
   const [password, setpassword] = useState("");
   const history = useHistory();
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    const payload = {
-      fullname: fullname,
-      username: email,
-      contact: contact,
-      address: address,
-      password: password,
-    };
-    console.log(payload);
+console.log("signup", props)
+React.useEffect(()=>{
 
-    axios({
-      url: "/register",
-      method: "POST",
-      data: payload,
-    }).then((res) => console.log(res), history.push("/signup"));
+if(Object.keys(props.customer_register_Data.data).length){
+  history.push("/home")
+}
 
-    reset();
-  }
+},[props])
 
-  function reset() {
-    setfullname("");
-    setemail("");
-    setcontact("");
-    setaddress("");
-    setpassword("");
-  }
+  const handleSubmit = () => {
+    console.log("userValue", userValue);
+    props.UserRegister(userValue)
+  };
+
+  const validate = (values) => {
+    let errors = {};
+    console.log("validations", values);
+    console.log("errors", typeof errors, Object.keys(userValueErrors).length);
+
+    return errors;
+  };
+  const {
+    values: userValue,
+    errors: userValueErrors,
+    handleChange: onSignupChange,
+    handleSubmit: onSignupSubmit,
+  } = useForm(handleSubmit, validate);
 
   return (
-    <div class={classes.root}>
+    <div className={classes.root}>
       <Navbar />
       <Paper className={classes.signup} elevation={0}>
         <Typography className={classes.create}>Create Account</Typography>
-        <form onSubmit={handleSubmit} className={classes.root} noValidate>
+        <form className={classes.root}>
           <TextField
             className={classes.input}
             id="name"
             label="Full Name"
             variant="outlined"
             size="small"
-            value={fullname}
-            onChange={(e) => setfullname(e.target.value)}
+            onChange={(e) =>
+              onSignupChange({ name: "fullName", value: e.target.value })
+            }
           />
           <TextField
             className={classes.eminput}
@@ -144,8 +146,9 @@ function Signup() {
             label="Email"
             variant="outlined"
             size="small"
-            value={email}
-            onChange={(e) => setemail(e.target.value)}
+            onChange={(e) =>
+              onSignupChange({ name: "email", value: e.target.value })
+            }
           />
           <TextField
             className={classes.eminput}
@@ -153,10 +156,11 @@ function Signup() {
             label="Contact"
             variant="outlined"
             size="small"
-            value={contact}
-            onChange={(e) => setcontact(e.target.value)}
+            onChange={(e) =>
+              onSignupChange({ name: "contact", value: e.target.value })
+            }
           />
-          <TextField
+          {/* <TextField
             className={classes.eminput}
             id="address"
             label="Address"
@@ -164,22 +168,24 @@ function Signup() {
             size="small"
             value={address}
             onChange={(e) => setaddress(e.target.value)}
-          />
+          /> */}
           <TextField
             className={classes.eminput}
             id="password"
             label="Password"
             variant="outlined"
             size="small"
-            value={password}
-            onChange={(e) => setpassword(e.target.value)}
+            onChange={(e) =>
+              onSignupChange({ name: "password", value: e.target.value })
+            }
           />
           <Button
             className={classes.signupbtn}
             variant="contained"
             color="primary"
             size="small"
-            type="submit"
+            // type="submit"
+            onClick={handleSubmit}
           >
             Signup
           </Button>

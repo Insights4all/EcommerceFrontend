@@ -15,7 +15,9 @@ const initialState = {
         isLoading: false,
         isLoadingFailed: false,
         isInitialCalled: false,
-        data: [],
+        data: {},
+        errorMessage:"",
+        error:""
         
     }
 
@@ -42,7 +44,6 @@ export const AuthReducer = (state = initialState, action) => {
                     ...state.customer_login_Data,
                     isLoading: false,
                     isLoadingFailed: false,
-                    // data: action.res,
                     data: action.response.data,
                     errorMessage:""
 

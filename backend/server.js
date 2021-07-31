@@ -37,10 +37,10 @@ const Shopkeeper = require("./models/shopkeeper");
 const Admin = require("./models/admin");
 
 
-passport.use(User.createStrategy());
+// passport.use(User.createStrategy());
 
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+// passport.serializeUser(User.serializeUser());
+// passport.deserializeUser(User.deserializeUser());
 
 //Using Mongodb atlas
 const mongodburi =
@@ -145,7 +145,7 @@ app.get("/logout", function (req, res) {
 });
 
 app.post("/newregister", async (req, res) => {
-  console.log("adasdf", req.body);
+  console.log("register Body", req.body);
   try {
     try {
       const salt = await bcrypt.genSalt();
@@ -155,7 +155,9 @@ app.post("/newregister", async (req, res) => {
 
       let newUser = new Admin({
         email: user.email,
-        password:user.password
+        password:user.password,
+        fullName:user.fullName,
+        contact:user.contact
     })
       
     newUser.save((err,result)=>{

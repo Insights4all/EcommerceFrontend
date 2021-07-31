@@ -9,7 +9,7 @@ import Cart from "./Screens/Cart/Cart";
 import UserProfile from "./Screens/UserProfile/UserProfile";
 import Login from "./Screens/Login";
 import Logout from "./Screens/Login/Logout";
-import Signup from "./Screens/Signup/Signup";
+import Signup from "./Screens/Signup";
 import { BrowserRouter as Router } from "react-router-dom";
 import ShopRegister from "./Screens/ShopRegister";
 import Main from "./Screens/ShopRegister/Main";
