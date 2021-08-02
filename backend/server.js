@@ -70,12 +70,15 @@ app.get("/allproducts", (req, res) => {
 app.post("/shopregister", (req, res) => {
   console.log("shopRegisterBody", req.body);
   let shopData = req.body
-  let ShopData = new Shopkeeper({ shopName: shopData.shopName });
+  // ...[name, address] = shopdata
+  let ShopData = new Shopkeeper({ shopName: shopData.name, });
   ShopData.save(function (err, data) {
     if (err) return console.error("error in shopkeeper",err);
-    console.log(data, " saved to bookstore collection.");
+    //error
+    console.log(" saved to bookstore collection.");
   });
 
+  //toke code
   res.json(shopData);
 });
 

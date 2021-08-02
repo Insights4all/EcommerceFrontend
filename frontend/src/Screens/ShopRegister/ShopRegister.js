@@ -58,7 +58,7 @@ function ShopRegister(props) {
   //   // props.formData("abc")
   // }, []);
 
-  console.log("newprops", props);
+  // console.log("newprops", props);
 
   const dataArray = [];
 
@@ -96,6 +96,7 @@ function ShopRegister(props) {
             submit={props.formData}
             getData={getData}
             submitFormData={props.submitFormData}
+            allProps={props}
           />
         );
       default:
@@ -150,7 +151,7 @@ function ShopRegister(props) {
                 <Typography className={classes.instructions}>
                   {getStepContent(activeStep)}
                 </Typography>
-                <div>
+                {/* <div>
                   <Button
                     disabled={activeStep === 0}
                     onClick={handleBack}
@@ -165,7 +166,7 @@ function ShopRegister(props) {
                   >
                     {activeStep === steps.length - 1 ? "Finish" : "Next"}
                   </Button>
-                </div>
+                </div> */}
               </div>
             )}
           </div>

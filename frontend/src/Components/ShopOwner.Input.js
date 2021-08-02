@@ -49,6 +49,16 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 10,
     marginTop: 20,
   },
+  buttonContainer:{
+    [theme.breakpoints.up("sm")]: {
+      width: 320,
+      marginLeft: 70,
+      marginTop: 20,
+    },
+    width: 320,
+    marginLeft: 10,
+    marginTop: 20,
+  },
   eminput: {
     [theme.breakpoints.up("sm")]: {
       width: 320,
@@ -79,6 +89,16 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 10,
     width: 155,
   },
+  formControl: {
+    [theme.breakpoints.up("sm")]: {
+      width: 320,
+      marginLeft: 70,
+      marginTop: 20,
+    },
+    width: 320,
+    marginLeft: 10,
+    marginTop: 20,
+  },
 }));
 
 const ShopOwnerInput = (props) => {
@@ -90,16 +110,25 @@ const ShopOwnerInput = (props) => {
 
   const handleSubmit = () => {
     console.log("userValue", userValue);
-    // props.verifyStep(2);
-    // props.getData();
     props.submit(userValue);
-    props.submitFormData(userValue);
+
+    props.verifyStep(2);
+    // props.getData();
+    // props.submit(userValue);
   };
 
   const validate = (values) => {
     let errors = {};
-    console.log("validations", values);
-    console.log("errors", typeof errors, Object.keys(userValueErrors).length);
+  
+    if(!values.owner_name){
+      errors.owner_name="Required"
+    }
+    if(!values.owner_email){
+      errors.owner_email="Required"
+    }
+    if(!values.owner_contact){
+      errors.owner_contact="Required"
+    }
 
     return errors;
   };
@@ -130,6 +159,9 @@ const ShopOwnerInput = (props) => {
                 onLoginChange({ name: "owner_name", value: e.target.value })
               }
             />
+             {
+              userValueErrors.owner_name ?  <Typography  className={classes.formControl} style={{fontSize:"12px", marginTop:"2px", color:"red"}} > {userValueErrors.owner_name} </Typography> : null
+            }
             <TextField
               className={classes.eminput}
               id="email"
@@ -142,6 +174,9 @@ const ShopOwnerInput = (props) => {
                 onLoginChange({ name: "owner_email", value: e.target.value })
               }
             />
+             {
+              userValueErrors.owner_email ?  <Typography  className={classes.formControl} style={{fontSize:"12px", marginTop:"2px", color:"red"}} > {userValueErrors.owner_email} </Typography> : null
+            }
             <TextField
               className={classes.eminput}
               id="contact"
@@ -154,40 +189,38 @@ const ShopOwnerInput = (props) => {
                 onLoginChange({ name: "owner_contact", value: e.target.value })
               }
             />
+             {
+              userValueErrors.owner_contact ?  <Typography  className={classes.formControl} style={{fontSize:"12px", marginTop:"2px", color:"red"}} > {userValueErrors.owner_contact} </Typography> : null
+            }
             <br />
-
-            {/* <Button
-                className={classes.signupbtn}
-                variant="contained"
-                color="primary"
-                size="small"
-                type="submit"
-              >
-                Register
-              </Button>
-              <Button
-                className={classes.loginbtn}
-                variant="outlined"
-                color="primary"
-                href="#outlined-buttons"
-                size="small"
-              >
-                Login
-              </Button> */}
             <br />
             <br />
           </form>
         </Paper>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            onLoginSubmit();
-          }}
-          className={classes.button}
+        <div
+          className={classes.buttonContainer}
+          style={{ display: "flex", flexDirection: "row" }}
         >
-          Next
-        </Button>
+          <Button
+            className={classes.button}
+            variant="contained"
+            color="primary"
+            onClick={() => props.verifyStep(0)}
+            style={{ marginRight: 20 }}
+          >
+            Back
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              onLoginSubmit();
+            }}
+            className={classes.button}
+          >
+            Next
+          </Button>
+        </div>
       </Box>
     </div>
   );
