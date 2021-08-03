@@ -97,7 +97,14 @@ const useStyles = makeStyles((theme) => ({
     color: "#f50057",
   },
 }));
-function Product() {
+function Product(props) {
+
+const handleSubmit =(data)=>{
+props.AddToCart(data)
+}
+
+  console.log("product store", props)
+
   const classes = useStyles();
   return (
     <Grid item>
@@ -122,6 +129,7 @@ function Product() {
           variant="outlined"
           className={classes.addtocart}
           color="secondary"
+          onClick={()=> handleSubmit({name:"eyeliner"})}
         >
           Add to Cart
         </Button>

@@ -13,6 +13,10 @@ export const CustomerActionTypes = {
     SUBMIT_SHOPKEEPER_DATA_SUCCESS:"SUBMIT_SHOPKEEPER_DATA_SUCCESS",
     SUBMIT_SHOPKEEPER_DATA_FAILED:"SUBMIT_SHOPKEEPER_DATA_FAILED",
 
+    //add to cart
+    ADD_TO_CART_REQUEST:"ADD_TO_CART_REQUEST",
+    ADD_TO_CART_SUCCESS:"ADD_TO_CART_SUCCESS"
+
 
   
 }
@@ -29,6 +33,9 @@ const ShopkeeperData = (payload) => {
     return { type: CustomerActionTypes.SUBMIT_SHOPKEEPER_DATA_REQUEST, payload };
 }
 
+const AddToCart = (payload) => {   
+    return { type: CustomerActionTypes.ADD_TO_CART_REQUEST, payload };
+}
 
 
 
@@ -37,4 +44,5 @@ export const CustomerAction = {
     GetAllProducts,
     SaveFormData,
     ShopkeeperData,
+    AddToCart
 }

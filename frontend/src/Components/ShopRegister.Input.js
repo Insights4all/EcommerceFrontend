@@ -118,6 +118,7 @@ const ShopOwnerInput = (props) => {
     // setNewArray(allFormData.push(userValue));
         // setNewArray([...allFormData, userValue])
         setAllFormData(prevState => [...prevState, userValue])
+
         console.log("handleSubmitchanges", allFormData)
 
     // props.verifyStep(2);
@@ -131,17 +132,18 @@ const ShopOwnerInput = (props) => {
     // console.log("props", props.allProps.form_Data.data)
     // console.log("useffect form Data",allFormData )
     setAllFormData(props.allProps.form_Data.data)
-    // setNewArray(allFormData => [allFormData, {salman:"kazii"}])
-    console.log("newwest", allFormData)
+  },[] )
 
-
+  React.useEffect(() => {
+    console.log("allformdata", allFormData);
     if(allFormData.length === 3){
     props.submitFormData(allFormData)
     history.push("/home")
       // alert("3")
     }
+  }, [allFormData]);
 
-  },[props, allFormData] )
+
 
   const validate = (values) => {
     let errors = {};

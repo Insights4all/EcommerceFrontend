@@ -26,6 +26,9 @@ const initialState = {
         isInitialCalled: false,
         data: []
     },
+    add_to_cart:{
+        data:[]
+    }
 
 }
 
@@ -121,6 +124,34 @@ export const CustomerReducer = (state = initialState, action) => {
                     }
                 };
             };
+
+            case CustomerActionTypes.ADD_TO_CART_REQUEST :
+                return {
+                    ...state,
+                    add_to_cart:{
+                        ...state.add_to_cart,
+                        // isLoading: true,
+                        // isInitialCalled: true
+                    }
+                };
+            
+            case CustomerActionTypes.ADD_TO_CART_SUCCESS:
+                console.log("redededed", action)
+                return {
+                    ...state,
+                    add_to_cart:{
+                        ...state.add_to_cart,
+                        // isLoading: false,
+                        // isLoadingFailed: false,
+                        // data: action.payload
+                        data: [...state.add_to_cart.data , action.payload]
+
+                    }
+                };
+            
+           
+
+
 
             //CUSTOMER LOGIN
             // case CustomerActionTypes.USER_LOGIN_REQUEST :

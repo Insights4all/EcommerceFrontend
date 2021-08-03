@@ -50,8 +50,19 @@ function* SaveFormData(action) {
     }
 }
 
+function* AddToCart(action) {
+    try {
+     yield put({ type: CustomerActionTypes.ADD_TO_CART_SUCCESS , payload:action.payload});
+
+    } catch (error) {
+        console.log(`Action ${action.type} failed with ${error}`);
+    }
+}
+
 export function* CustomerSaga() {
     yield takeLatest(CustomerActionTypes.GET_ALL_PRODUCTS_REQUEST , GetAllProducts);
     yield takeLatest(CustomerActionTypes.SAVE_FORM_DATA_REQUEST , SaveFormData);
     yield takeLatest(CustomerActionTypes.SUBMIT_SHOPKEEPER_DATA_REQUEST , SubmitShopkeeperData);
+    yield takeLatest(CustomerActionTypes.ADD_TO_CART_REQUEST , AddToCart);
+
 }

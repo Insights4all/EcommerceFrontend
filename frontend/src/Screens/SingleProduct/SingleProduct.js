@@ -4,7 +4,7 @@ import Navbar from "../Navbar/Navbar";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import { Grid, List, Paper, Typography } from "@material-ui/core";
-import Product from "../Product/Product";
+import Product from "../Product";
 import Button from "@material-ui/core/Button";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";

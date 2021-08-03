@@ -8,7 +8,7 @@ import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
-import Product from "../Product/Product";
+import Product from "../Product";
 import EachCategory from "../EachCategory/EachCategory";
 import { Button } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
@@ -113,32 +113,32 @@ function Home(props) {
   // const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setusername] = useState("unknown");
 
-  useEffect(() => {
-    checklogin();
-    console.log("Home props", props);
-  }, [props]);
+  // useEffect(() => {
+  //   checklogin();
+  //   console.log("Home props", props);
+  // }, [props]);
 
-  function checklogin() {
-    axios
-      .get("/checklogin")
-      .then((response) => {
-        if (response.data["status"] === "Yes") {
-          console.log(response.data["status"]);
-          // setIsLoggedIn(true);
-          localStorage.setItem("isLoggedin", true);
+  // function checklogin() {
+  //   axios
+  //     .get("/checklogin")
+  //     .then((response) => {
+  //       if (response.data["status"] === "Yes") {
+  //         console.log(response.data["status"]);
+  //         // setIsLoggedIn(true);
+  //         localStorage.setItem("isLoggedin", true);
 
-          setusername(response.data["fullname"]);
-        } else {
-          console.log(response.data["status"]);
-          //setIsLoggedIn(false);
-          localStorage.setItem("isLoggedin", false);
-        }
-      })
-      .catch((error) => {
-        console.log("Erroorrrr");
-      });
-    console.log("Local storage value", localStorage.getItem("isLoggedin"));
-  }
+  //         setusername(response.data["fullname"]);
+  //       } else {
+  //         console.log(response.data["status"]);
+  //         //setIsLoggedIn(false);
+  //         localStorage.setItem("isLoggedin", false);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log("Erroorrrr");
+  //     });
+  //   console.log("Local storage value", localStorage.getItem("isLoggedin"));
+  // }
 
   return (
     <div className={classes.root}>

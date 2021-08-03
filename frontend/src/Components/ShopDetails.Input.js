@@ -143,30 +143,30 @@ const ShopDetailsInput = (props) => {
     console.log("a", values)
     console.log("b", userValueErrors)
 
-    if(!values.shop_name){
-      errors.shop_name="Required"
-    }
-    if(!values.shop_contact){
-      errors.shop_contact="Required"
-    }
-    if(!values.shop_address){
-      errors.shop_address="Required"
-    }
-    if(!values.shop_insta_id){
-      errors.shop_insta_id="Required"
-    }
-    if(!values.shop_facebook_id){
-      errors.shop_facebook_id="Required"
-    }
-    if(!values.shop_Type){
-      errors.shop_Type="Required"
-    }
-    if(!values.shop_details){
-      errors.shop_details="Required"
-    }
-    if(!values.shop_tagLine){
-      errors.shop_tagLine="Required"
-    }
+    // if(!values.shop_name){
+    //   errors.shop_name="Required"
+    // }
+    // if(!values.shop_contact){
+    //   errors.shop_contact="Required"
+    // }
+    // if(!values.shop_address){
+    //   errors.shop_address="Required"
+    // }
+    // if(!values.shop_insta_id){
+    //   errors.shop_insta_id="Required"
+    // }
+    // if(!values.shop_facebook_id){
+    //   errors.shop_facebook_id="Required"
+    // }
+    // if(!values.shop_Type){
+    //   errors.shop_Type="Required"
+    // }
+    // if(!values.shop_details){
+    //   errors.shop_details="Required"
+    // }
+    // if(!values.shop_tagLine){
+    //   errors.shop_tagLine="Required"
+    // }
 
     console.log(errors,"xxxx")
 
