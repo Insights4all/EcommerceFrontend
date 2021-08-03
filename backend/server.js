@@ -35,6 +35,7 @@ const User = require("./models/User");
 const Product = require("./models/products");
 const Shopkeeper = require("./models/shopkeeper");
 const Admin = require("./models/admin");
+const Cart = require("./models/cart");
 
 
 // passport.use(User.createStrategy());
@@ -219,6 +220,36 @@ console.log("body is", req.body)
   });
 });
 
+
+
+app.post("/addtocart", (req, res) => {
+  console.log("req.body", req.body);
+
+  let cart = new Cart({
+    name: req.body.name,
+    color: req.body.color,
+    userid: req.body.userid,
+  });
+
+  cart.save((err, result) => {
+    if (err) {
+      res.status(500).send();
+    }
+    res.status(201).send("sucess");
+  });
+});
+
+app.get("/cart/:userid", (req,res)=>{
+  const UserID =  req.params.userid
+  Cart.find({ userid:UserID},  function (err, docs) {
+    if(err){
+      res.json(err)
+    }else {
+      res.json(docs)
+    }
+
+})
+})
 
 
 app.get("/authcheck",authenticateToken, (req,res) => {
