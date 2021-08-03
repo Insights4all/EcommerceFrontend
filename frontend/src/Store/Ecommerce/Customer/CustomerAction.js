@@ -15,7 +15,15 @@ export const CustomerActionTypes = {
 
     //add to cart
     ADD_TO_CART_REQUEST:"ADD_TO_CART_REQUEST",
-    ADD_TO_CART_SUCCESS:"ADD_TO_CART_SUCCESS"
+    ADD_TO_CART_SUCCESS:"ADD_TO_CART_SUCCESS",
+
+    //add to cart
+    ADD_TO_CART_API_REQUEST:"ADD_TO_CART_API_REQUEST",
+    ADD_TO_CART__API_SUCCESS:"ADD_TO_CART__API_SUCCESS",
+    ADD_TO_CART__API_FAILED:"ADD_TO_CART__API_FAILED",
+
+
+
 
 
   
@@ -37,6 +45,10 @@ const AddToCart = (payload) => {
     return { type: CustomerActionTypes.ADD_TO_CART_REQUEST, payload };
 }
 
+const AddToCartApi = (payload) => {   
+    return { type: CustomerActionTypes.ADD_TO_CART_API_REQUEST, payload };
+}
+
 
 
 
@@ -44,5 +56,6 @@ export const CustomerAction = {
     GetAllProducts,
     SaveFormData,
     ShopkeeperData,
-    AddToCart
+    AddToCart,
+    AddToCartApi
 }

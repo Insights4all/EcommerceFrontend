@@ -12,6 +12,10 @@ const SubmitShopkeeperData = (payload) => {
     return axios.post(`http://localhost:8080/shopregister`, payload)
 }
 
+const AddToCartApi = (payload) => {
+    return axios.post(`http://localhost:8080/addtocart`, payload)
+}
+
 // const CustomerLogin = (payload) => {
 //     console.log("payload",payload)
 
@@ -25,5 +29,6 @@ const SubmitShopkeeperData = (payload) => {
 export const CustomerService = {
     GetAllProducts,
     SubmitShopkeeperData,
+    AddToCartApi
     // CustomerLogin
 }

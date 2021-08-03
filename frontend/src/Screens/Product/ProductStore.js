@@ -11,7 +11,8 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-    AddToCart: CustomerAction.AddToCart
+    AddToCart: CustomerAction.AddToCart,
+    AddToCartApi:CustomerAction.AddToCartApi
    
 
     //  CPCustomerAction.CPCustomerList ,

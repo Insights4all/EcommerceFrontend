@@ -101,9 +101,10 @@ function Product(props) {
 
 const handleSubmit =(data)=>{
 props.AddToCart(data)
+props.AddToCartApi(data)
 }
 
-  console.log("product store", props)
+  // console.log("product store", props)
 
   const classes = useStyles();
   return (
@@ -129,7 +130,7 @@ props.AddToCart(data)
           variant="outlined"
           className={classes.addtocart}
           color="secondary"
-          onClick={()=> handleSubmit({name:"eyeliner"})}
+          onClick={()=> {handleSubmit({name:"eyeliner", color:"black", userid:"324"})}}
         >
           Add to Cart
         </Button>

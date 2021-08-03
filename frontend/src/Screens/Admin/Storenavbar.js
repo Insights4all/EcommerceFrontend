@@ -216,9 +216,9 @@ function Storenavbar(props) {
   });
 
   const history = useHistory();
-  useEffect(() => {
-    console.log("Navbar props", props.data);
-  }, [props]);
+  // useEffect(() => {
+  //   console.log("Navbar props", props.data);
+  // }, [props]);
 
   const handleChange = (event) => {
     const name = event.target.name;

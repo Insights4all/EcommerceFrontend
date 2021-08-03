@@ -51,8 +51,18 @@ function* SaveFormData(action) {
 }
 
 function* AddToCart(action) {
+    yield put({ type: CustomerActionTypes.ADD_TO_CART_SUCCESS , payload:action.payload});
+
     try {
-     yield put({ type: CustomerActionTypes.ADD_TO_CART_SUCCESS , payload:action.payload});
+        const res = yield call(CustomerService.AddToCartApi, action.payload);
+        if ([1, 200,201].includes(res.status)) {
+            console.log("saga yes")
+        // const payload = yield call(CPCustomerParser.CPCustomerPersonalInfo, res);
+        yield put({ type: CustomerActionTypes.ADD_TO_CART__API_SUCCESS, payload:action.payload });
+    } else {
+        console.log("saga no", res)
+        yield put({ type: CustomerActionTypes.ADD_TO_CART__API_FAILED });
+    }
 
     } catch (error) {
         console.log(`Action ${action.type} failed with ${error}`);

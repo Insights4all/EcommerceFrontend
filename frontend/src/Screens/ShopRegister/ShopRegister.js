@@ -63,9 +63,9 @@ function ShopRegister(props) {
   const dataArray = [];
 
   const getData = (formData) => {
-    console.log("formData is", formData);
+    // console.log("formData is", formData);
     dataArray.push(formData);
-    console.log("dataArrayIs", dataArray);
+    // console.log("dataArrayIs", dataArray);
   };
 
   function getStepContent(stepIndex) {

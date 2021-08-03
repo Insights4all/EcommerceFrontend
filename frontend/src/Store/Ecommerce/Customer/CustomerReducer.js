@@ -28,6 +28,12 @@ const initialState = {
     },
     add_to_cart:{
         data:[]
+    },
+    add_to_cartApi:{
+        isLoading: false,
+        isLoadingFailed: false,
+        isInitialCalled: false,
+        data: []
     }
 
 }
@@ -148,6 +154,40 @@ export const CustomerReducer = (state = initialState, action) => {
 
                     }
                 };
+                case CustomerActionTypes.ADD_TO_CART_API_REQUEST :
+                return {
+                    ...state,
+                    add_to_cartApi:{
+                        ...state.add_to_cartApi,
+                        isLoading: true,
+                        isInitialCalled: true
+                    }
+                };
+            
+            case CustomerActionTypes.ADD_TO_CART_API_SUCCESS:
+                console.log("redededed", action)
+                return {
+                    ...state,
+                    add_to_cartApi:{
+                        ...state.add_to_cartApi,
+                        isLoading: false,
+                        isLoadingFailed: false,
+                        // data: action.payload
+                        data: [...state.add_to_cartApi.data , action.payload]
+
+                    }
+                };
+                case CustomerActionTypes.ADD_TO_CART_API_FAILED: {
+                    return {
+                        ...state,
+                        add_to_cartApi:{
+                            ...state.add_to_cartApi,
+                            isLoading: false,
+                            isLoadingFailed: true,
+                        }
+                    };
+                };    
+                
             
            
 

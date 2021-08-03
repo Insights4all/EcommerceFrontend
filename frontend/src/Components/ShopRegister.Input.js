@@ -119,7 +119,7 @@ const ShopOwnerInput = (props) => {
         // setNewArray([...allFormData, userValue])
         setAllFormData(prevState => [...prevState, userValue])
 
-        console.log("handleSubmitchanges", allFormData)
+        // console.log("handleSubmitchanges", allFormData)
 
     // props.verifyStep(2);
     // props.getData();
@@ -135,7 +135,7 @@ const ShopOwnerInput = (props) => {
   },[] )
 
   React.useEffect(() => {
-    console.log("allformdata", allFormData);
+    // console.log("allformdata", allFormData);
     if(allFormData.length === 3){
     props.submitFormData(allFormData)
     history.push("/home")

@@ -262,7 +262,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#81d4fa",
   },
 }));
-function Cart() {
+function Cart(props) {
   const classes = useStyles();
   const [c, setc] = React.useState(1);
   const increase = (event) => {
@@ -271,6 +271,8 @@ function Cart() {
   const decrease = (event) => {
     setc(c - 1);
   };
+
+  console.log("cart props", props.location.state)
 
   return (
     <div>

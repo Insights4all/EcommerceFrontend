@@ -349,7 +349,7 @@ const login = localStorage.getItem("token")
                 </Typography>
               </div>
               <div className={classes.icondesign}>
-                <ShoppingCartIcon />
+                <ShoppingCartIcon onClick={()=>history.push("/Cart", {name:"Salman"}  )} />
                 <Typography className={classes.cartnumber}>2</Typography>
               </div>
             </IconButton>

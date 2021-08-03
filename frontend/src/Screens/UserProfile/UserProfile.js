@@ -149,7 +149,7 @@ function UserProfile() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   const [gender, setGender] = React.useState("");
-  console.log("In profile.js", localStorage.getItem("isLoggedin"));
+  // console.log("In profile.js", localStorage.getItem("isLoggedin"));
 
   const handleChange = (event, newValue) => {
     setValue(newValue);

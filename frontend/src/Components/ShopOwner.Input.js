@@ -109,7 +109,7 @@ const ShopOwnerInput = (props) => {
   const [shoppassword, setshoppassword] = useState("");
 
   const handleSubmit = () => {
-    console.log("userValue", userValue);
+    // console.log("userValue", userValue);
     props.submit(userValue);
 
     props.verifyStep(2);
