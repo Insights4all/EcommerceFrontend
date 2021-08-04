@@ -1,16 +1,10 @@
 import React, { useState } from "react";
-import Admin from "./Admin";
-import Storenavbar from "./Storenavbar";
-import Footer from "../Footer/Footer";
-import Navbar from "../Navbar/Navbar";
-import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import { useHistory } from "react-router-dom";
 import { Input } from "@material-ui/core";
-import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
@@ -18,15 +12,9 @@ import Select from "@material-ui/core/Select";
 import Chip from "@material-ui/core/Chip";
 import Checkbox from "@material-ui/core/Checkbox";
 import ListItemText from "@material-ui/core/ListItemText";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import MuiTableCell from "@material-ui/core/TableCell";
 import firebase from "./Firebase";
 import "firebase/storage"; // <----
+import axios from "axios";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -39,23 +27,41 @@ const MenuProps = {
   },
 };
 
-const names = [
-  "Oliver Hansen",
-  "Van Henry",
-  "April Tucker",
-  "Ralph Hubbard",
-  "Omar Alexander",
-  "Carlos Abbott",
-  "Miriam Wagner",
-  "Bradley Wilkerson",
-  "Virginia Andrews",
-  "Kelly Snyder",
+const sizenames = ["XS", "S", "M", "L", "XL", "XXL"];
+const colornames = [
+  "Red",
+  "Orange",
+  "Yellow",
+  "Green",
+  "Blue",
+  "Cyan",
+  "Purple",
+  "White",
+  "Black",
+  "Brown",
+  "Magenta",
+  "Tan",
+  "Olive",
+  "Maroon",
+  "Navy",
+  "Aquamarine",
+  "Turquoise",
+  "Silver",
+  "Lime",
+  "Teal",
+  "Indigo",
+  "Violet",
+  "Pink",
+  "Gray",
+  "Off White",
+  "Navy Blue",
+  "Baby Pink",
 ];
 
-function getStyles(name, personName, theme) {
+function getStylesColors(names, colors, theme) {
   return {
     fontWeight:
-      personName.indexOf(name) === -1
+      colors.indexOf(names) === -1
         ? theme.typography.fontWeightRegular
         : theme.typography.fontWeightMedium,
   };
@@ -166,13 +172,16 @@ const useStyles = makeStyles((theme) => ({
 function AddProduct() {
   const classes = useStyles();
   const [productname, setproductname] = useState("");
-  const [productprice, setproductprice] = useState("");
-  const [discountprice, setdiscountprice] = useState(0);
-  const [percentagediscount, setpercentagediscount] = useState("");
+  const [productprice, setproductprice] = useState();
+  const [discountprice, setdiscountprice] = useState();
+  const [percentagediscount, setpercentagediscount] = useState();
+  const [aboutproduct, setAboutproduct] = useState("");
+  const [productdetails, setProductdetails] = useState("");
+  const [colors, setColors] = useState([]);
+  const [size, setSize] = useState([]);
+
   const history = useHistory();
   const theme = useTheme();
-  const [personName, setPersonName] = React.useState([]);
-  const [age, setAge] = React.useState("");
 
   const [count, setCount] = React.useState(0);
   const [allfile, setAllfile] = React.useState([]);
@@ -180,12 +189,13 @@ function AddProduct() {
 
   const [getref, setGetref] = React.useState([]);
 
-  const handleStock = (event) => {
-    setAge(event.target.value);
+  const handleSize = (event) => {
+    setSize(event.target.value);
   };
 
-  const handleChange = (event) => {
-    setPersonName(event.target.value);
+  const handleColors = (event) => {
+    console.log("value", event.target.value);
+    setColors(event.target.value);
   };
 
   const handleFile = (event) => {
@@ -198,11 +208,12 @@ function AddProduct() {
       URL.createObjectURL(event.target.files[0]),
     ]);
   };
-
+  console.log("colors", colors);
+  console.log("size", size);
   const uploadImage = (event) => {
     console.log("in upload file", allfile);
     console.log("in upload file imageurl", imageurl);
-    console.log(allfile.length);
+
     var storageRef = firebase.storage().ref();
 
     for (var i = 0; i < allfile.length; i++) {
@@ -217,21 +228,28 @@ function AddProduct() {
         for (var i = 0; i < allfile.length; i++) {
           var newgetref = storageRef.child(allfile[i].name).getDownloadURL();
           setGetref([...getref, newgetref]);
-          console.log(getref);
+          console.log(newgetref);
         }
       })
       .catch((e) => console.log("uploading image error => ", e));
   };
-  //   function handleSubmit(e) {
-  //     e.preventDefault();
-  //     const payload = {
-  //       fullname: fullname,
-  //       username: email,
-  //       contact: contact,
-  //       address: address,
-  //       password: password,
-  //     };
-  //     console.log(payload);
+
+  console.log("getreferece", getref);
+  function handleSubmit(e) {
+    e.preventDefault();
+    const payload = {
+      productname: productname,
+      price: productprice,
+      percentagediscount: percentagediscount,
+      discountprice: discountprice,
+      colors: colors,
+      size: size,
+      about: aboutproduct,
+      details: productdetails,
+      images: getref,
+    };
+    console.log("Data payload", payload);
+  }
 
   //     axios({
   //       url: "/register",
@@ -252,10 +270,11 @@ function AddProduct() {
 
   return (
     <div>
-      <form className={classes.root} enctype="multipart/form-data" noValidate>
+      <form onSubmit={handleSubmit} className={classes.root} noValidate>
         <div style={{ display: "flex", flexDirection: "row" }}>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <TextField
+              required
               className={classes.eminput}
               id="product_name"
               label="Product Name"
@@ -274,11 +293,10 @@ function AddProduct() {
               variant="outlined"
               size="small"
               value={percentagediscount}
-              onChange={(e) =>
-                setpercentagediscount(e.target.percentagediscount)
-              }
+              onChange={(e) => setpercentagediscount(e.target.value)}
             />
             <InputLabel className={classes.eglabel}>For eg - 10%</InputLabel>
+
             <FormControl className={classes.formControl}>
               <InputLabel id="demo-mutiple-chip-label">
                 Available Colors
@@ -287,8 +305,8 @@ function AddProduct() {
                 labelId="demo-mutiple-chip-label"
                 id="demo-mutiple-chip"
                 multiple
-                value={personName}
-                onChange={handleChange}
+                value={colors}
+                onChange={handleColors}
                 input={<Input id="select-multiple-chip" />}
                 renderValue={(selected) => (
                   <div className={classes.chips}>
@@ -303,13 +321,13 @@ function AddProduct() {
                 )}
                 MenuProps={MenuProps}
               >
-                {names.map((name) => (
+                {colornames.map((name) => (
                   <MenuItem
                     key={name}
                     value={name}
-                    style={getStyles(name, personName, theme)}
+                    style={getStylesColors(name, colors, theme)}
                   >
-                    <Checkbox checked={personName.indexOf(name) > -1} />
+                    <Checkbox checked={colors.indexOf(name) > -1} />
                     <ListItemText primary={name} />
                   </MenuItem>
                 ))}
@@ -323,12 +341,15 @@ function AddProduct() {
               className={classes.eminput}
               defaultValue=""
               variant="outlined"
+              value={aboutproduct}
+              onChange={(e) => setAboutproduct(e.target.value)}
             />
             <InputLabel className={classes.label} id="demo-simple-select-label">
               Product Images
             </InputLabel>
 
             <Input
+              required
               className={classes.upload}
               onChange={handleFile}
               type="file"
@@ -355,13 +376,14 @@ function AddProduct() {
           </div>
           <div className={classes.secondflex}>
             <TextField
+              required
               className={classes.eminput}
               id="productprice"
               label="Product Price"
               variant="outlined"
               size="small"
               value={productprice}
-              onChange={(e) => setproductprice(e.target.productprice)}
+              onChange={(e) => setproductprice(e.target.value)}
             />
             <InputLabel className={classes.eglabel}>For eg - 600</InputLabel>
             <TextField
@@ -371,7 +393,7 @@ function AddProduct() {
               variant="outlined"
               size="small"
               value={discountprice}
-              onChange={(e) => setdiscountprice(e.target.discountprice)}
+              onChange={(e) => setdiscountprice(e.target.value)}
             />
             <InputLabel className={classes.eglabel}>
               For eg - (10/100)*600 = 540
@@ -384,8 +406,8 @@ function AddProduct() {
                 labelId="demo-mutiple-chip-label"
                 id="demo-mutiple-chip"
                 multiple
-                value={personName}
-                onChange={handleChange}
+                value={size}
+                onChange={handleSize}
                 input={<Input id="select-multiple-chip" />}
                 renderValue={(selected) => (
                   <div className={classes.chips}>
@@ -400,19 +422,21 @@ function AddProduct() {
                 )}
                 MenuProps={MenuProps}
               >
-                {names.map((name) => (
+                {sizenames.map((name) => (
                   <MenuItem
                     key={name}
                     value={name}
-                    style={getStyles(name, personName, theme)}
+                    style={getStylesColors(name, size, theme)}
                   >
-                    <Checkbox checked={personName.indexOf(name) > -1} />
+                    <Checkbox checked={colors.indexOf(name) > -1} />
                     <ListItemText primary={name} />
                   </MenuItem>
                 ))}
               </Select>
             </FormControl>
+
             <TextField
+              required
               id="outlined-multiline-static"
               label="Product Details"
               multiline
@@ -420,20 +444,9 @@ function AddProduct() {
               className={classes.eminput}
               defaultValue=""
               variant="outlined"
+              value={productdetails}
+              onChange={(e) => setProductdetails(e.target.value)}
             />
-            <FormControl className={classes.formControl}>
-              <InputLabel id="demo-simple-select-label">Stock</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={age}
-                onChange={handleStock}
-              >
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
-              </Select>
-            </FormControl>
           </div>
         </div>
       </form>
