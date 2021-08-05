@@ -3,21 +3,19 @@ const mongoose = require("mongoose");
 //Schema
 const Schema = mongoose.Schema;
 const ProductSchema = new Schema({
-  storeId: Number,
+  storeid: Number,
   name: String,
   price: Number,
   percentageDiscount: Number,
   discountPrice: Number,
-  colors: Object,
-  size: Object,
+  colors: Array,
+  size: Array,
   about: String,
   details: String,
-  images: String,
-  stock: Number,
-  mileage: Number,
+  images: Array,
 });
 
 //Model
-const Product = mongoose.model("allProducts", ProductSchema);
+const allProduct = mongoose.model("allProduct", ProductSchema);
 
-module.exports = allProducts;
+module.exports = allProduct;

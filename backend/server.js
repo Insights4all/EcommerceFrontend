@@ -1,18 +1,18 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
-var cors = require('cors')
+var cors = require("cors");
 var session = require("express-session");
 const passport = require("passport");
 const cookieParser = require("cookie-parser");
 
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 //Initializing express
 const app = express();
 const PORT = process.env.PORT || 8080;
-app.use(cors())
+app.use(cors());
 
 app.use(express.json());
 const users = [];
@@ -33,10 +33,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 const User = require("./models/User");
 const Product = require("./models/products");
-const Shopkeeper = require("./models/shopkeeper");
+const Shop = require("./models/shopkeeper");
 const Admin = require("./models/admin");
 const Cart = require("./models/cart");
-
+const AllProduct = require("./models/allproducts");
 
 // passport.use(User.createStrategy());
 
@@ -47,8 +47,6 @@ const Cart = require("./models/cart");
 const mongodburi =
   "mongodb+srv://insights4all:insights4all@7866@ourshop.kuht5.mongodb.net/OurShop?retryWrites=true&w=majority";
 
-
-  
 mongoose.connect(mongodburi, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -59,30 +57,93 @@ mongoose.connection.on("connected", () => {
   console.log("Mongoose is connected!!");
 });
 
-
 app.get("/allproducts", (req, res) => {
   Product.find({}, function (err, products) {
     res.send(products);
   });
 });
-
-
-
-app.post("/shopregister", (req, res) => {
-  console.log("shopRegisterBody", req.body);
-  let shopData = req.body
-  // ...[name, address] = shopdata
-  let ShopData = new Shopkeeper({ shopName: shopData.name, });
-  ShopData.save(function (err, data) {
-    if (err) return console.error("error in shopkeeper",err);
-    //error
-    console.log(" saved to bookstore collection.");
+app.post("/addproduct", (req, res) => {
+  console.log("body", req.body);
+  const data = req.body;
+  const newProduct = new AllProduct(data);
+  newProduct.save((error) => {
+    if (error) {
+      console.log("Sorry Error");
+    } else {
+      console.log("Data saved to mongoose");
+    }
   });
-
-  //toke code
-  res.json(shopData);
+  res.json({
+    msg: "We received your data",
+  });
 });
 
+app.post("/shopregister", async (req, res) => {
+  //console.log("shopRegisterBody", req.body);
+  const arrObj = req.body;
+  const newObj = arrObj.reduce(function (result, current) {
+    return Object.assign(result, current);
+  }, {});
+  console.log("My updated object ", newObj);
+
+  const salt = await bcrypt.genSalt();
+  const hashedPassword = await bcrypt.hash(newObj.shop_password, salt);
+  const shopcre = {
+    shop_email: newObj.shop_email,
+    shop_password: hashedPassword,
+  };
+  console.log("In try block");
+  console.log(shopcre);
+
+  let newShop = new Shop({
+    shopName: newObj.shop_name,
+    bussinessAddress: newObj.shop_address,
+    bussinessContact: newObj.shop_contact,
+    bussinessInstaID: newObj.shop_insta_id,
+    bussinessFacebookID: newObj.shop_facebook_id,
+    shopType: newObj.shop_type,
+    aboutShop: newObj.shop_details,
+    businessTagLine: newObj.shop_tagline,
+    businesslogo: "hi",
+    fullName: newObj.owner_name,
+    email: newObj.owner_email,
+    contact: newObj.owner_contact,
+    shopEmail: shopcre.shop_email,
+    shoppassword: shopcre.shop_password,
+  });
+  console.log(newShop);
+
+  newShop.save((err, result) => {
+    if (err) {
+      res.status(500).send();
+    }
+  });
+  const ShopEmail = {
+    shop_email: newShop.shopEmail,
+  };
+  const accessToken = generateAccessToken(ShopEmail);
+  console.log("Accesstoken", accessToken);
+  const refreshToken = jwt.sign(ShopEmail, process.env.REFRESH_TOKEN_SECRET);
+  console.log("refreshtoken", refreshToken);
+  //   res.json({ accessToken: accessToken, refreshToken: refreshToken });
+  res
+    .status(201)
+    .json({ accessToken: accessToken, refreshToken: refreshToken });
+
+  //res.status(201).send(newShop);
+
+  // let shopData = req.body;
+  // // ...[name, address] = shopdata
+  // let ShopData = new Shopkeeper({ shopName: shopData.name });
+  // ShopData.save(function (err, data) {
+  //   if (err) return console.error("error in shopkeeper", err);
+  //   //error
+  //   console.log(" saved to bookstore collection.");
+  // });
+
+  // //toke code
+  // res.json(shopData);
+});
 
 app.post("/register", (req, res) => {
   console.log("In register route");
@@ -120,7 +181,7 @@ app.post("/login", function (req, res) {
   req.login(user, function (err) {
     if (err) {
       console.log(err);
-    } 
+    }
     // if (user == null) {
     //   res.json("aaa");
     // }
@@ -159,16 +220,16 @@ app.post("/newregister", async (req, res) => {
 
       let newUser = new Admin({
         email: user.email,
-        password:user.password,
-        fullName:user.fullName,
-        contact:user.contact
-    })
-      
-    newUser.save((err,result)=>{
-      if(err){
-        res.status(500).send();
-      }
-    })
+        password: user.password,
+        fullName: user.fullName,
+        contact: user.contact,
+      });
+
+      newUser.save((err, result) => {
+        if (err) {
+          res.status(500).send();
+        }
+      });
       const User = {
         email: req.body.email,
       };
@@ -189,17 +250,17 @@ app.post("/newregister", async (req, res) => {
 
 app.post("/newlogin", async (req, res) => {
   // const user = users.find((user) => user.email === req.body.email);
-console.log("body is", req.body)
+  console.log("body is", req.body);
   Admin.find({ email: req.body.email }, async function (err, docs) {
     if (err) {
       console.log("mongoose error", err);
-      res.status(500).send("Mongoose error")
+      res.status(500).send("Mongoose error");
     } else {
       if (!docs.length) {
         return res.status(400).send("Cannot Find User");
       }
-      const [docsData] = docs
-      const data = await bcrypt.compare(req.body.password, docsData.password)
+      const [docsData] = docs;
+      const data = await bcrypt.compare(req.body.password, docsData.password);
       if (data) {
         try {
           const User = {
@@ -220,8 +281,6 @@ console.log("body is", req.body)
   });
 });
 
-
-
 app.post("/addtocart", (req, res) => {
   console.log("req.body", req.body);
 
@@ -239,24 +298,21 @@ app.post("/addtocart", (req, res) => {
   });
 });
 
-app.get("/cart/:userid", (req,res)=>{
-  const UserID =  req.params.userid
-  Cart.find({ userid:UserID},  function (err, docs) {
-    if(err){
-      res.json(err)
-    }else {
-      res.json(docs)
+app.get("/cart/:userid", (req, res) => {
+  const UserID = req.params.userid;
+  Cart.find({ userid: UserID }, function (err, docs) {
+    if (err) {
+      res.json(err);
+    } else {
+      res.json(docs);
     }
+  });
+});
 
-})
-})
-
-
-app.get("/authcheck",authenticateToken, (req,res) => {
-  console.log(req.user.email)
-  res.json("good User")
-
-})
+app.get("/authcheck", authenticateToken, (req, res) => {
+  console.log(req.user.email);
+  res.json("good User");
+});
 
 const generateAccessToken = (user) => {
   return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "300s" });
@@ -272,12 +328,9 @@ function authenticateToken(req, res, next) {
     req.user = user;
     next();
   });
-}  
-
+}
 
 app.listen(PORT, console.log(`Server is starting at ${PORT}`));
-
-
 
 // if (!user) {
 //   return res.status(400).send("Cannot Find User");

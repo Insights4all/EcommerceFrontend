@@ -215,33 +215,93 @@ function AddProduct() {
     console.log("in upload file imageurl", imageurl);
 
     var storageRef = firebase.storage().ref();
-
-    for (var i = 0; i < allfile.length; i++) {
-      var imageref = storageRef.child(allfile[i].name);
-      var uploadTask = imageref.put(allfile[i]);
-    }
-
-    uploadTask
-      .then(() => {
-        console.log("Image uploaded to the bucket!");
-
-        for (var i = 0; i < allfile.length; i++) {
-          var newgetref = storageRef.child(allfile[i].name).getDownloadURL();
-          setGetref([...getref, newgetref]);
-          console.log(newgetref);
+    allfile.map(function (x) {
+      var imageref = storageRef.child(x.name);
+      var uploadTask = imageref.put(x);
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          // Observe state change events such as progress, pause, and resume
+          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+          var progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log("Upload is " + progress + "% done");
+          switch (snapshot.state) {
+            case firebase.storage.TaskState.PAUSED: // or 'paused'
+              console.log("Upload is paused");
+              break;
+            case firebase.storage.TaskState.RUNNING: // or 'running'
+              console.log("Upload is running");
+              break;
+          }
+        },
+        (error) => {
+          console.log("Upload unsuccessful");
+        },
+        () => {
+          // Handle successful uploads on complete
+          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+          uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+            console.log("File available at", downloadURL);
+            setGetref((getref) => [...getref, downloadURL]);
+          });
         }
-      })
-      .catch((e) => console.log("uploading image error => ", e));
+      );
+    });
+
+    // for (var i = 0; i < allfile.length; i++) {
+    //   var imageref = storageRef.child(allfile[i].name);
+    //   var uploadTask = imageref.put(allfile[i]);
+    // }
+    // uploadTask.on(
+    //   "state_changed",
+    //   (snapshot) => {
+    //     // Observe state change events such as progress, pause, and resume
+    //     // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+    //     var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+    //     console.log("Upload is " + progress + "% done");
+    //     switch (snapshot.state) {
+    //       case firebase.storage.TaskState.PAUSED: // or 'paused'
+    //         console.log("Upload is paused");
+    //         break;
+    //       case firebase.storage.TaskState.RUNNING: // or 'running'
+    //         console.log("Upload is running");
+    //         break;
+    //     }
+    //   },
+    //   (error) => {
+    //     console.log("Upload unsuccessful");
+    //   },
+    //   () => {
+    //     // Handle successful uploads on complete
+    //     // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+    //     uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+    //       console.log("File available at", downloadURL);
+    //       setGetref((getref) => [...getref, downloadURL]);
+    //     });
+    //   }
+    // );
+
+    //   uploadTask
+    //     .then(() => {
+    //       console.log("Image uploaded to bucket");
+    //       for (var i = 0; i < allfile.length; i++) {
+    //         var newgetref = storageRef.child(allfile[i].name).getDownloadURL();
+    //         setGetref((getref) => [...getref, newgetref]);
+    //       }
+    //     })
+    //     .catch((e) => console.log("uploading image error => ", e));
   };
 
   console.log("getreferece", getref);
   function handleSubmit(e) {
     e.preventDefault();
     const payload = {
-      productname: productname,
+      storeid: "storeid",
+      name: productname,
       price: productprice,
-      percentagediscount: percentagediscount,
-      discountprice: discountprice,
+      percentageDiscount: percentagediscount,
+      discountPrice: discountprice,
       colors: colors,
       size: size,
       about: aboutproduct,
@@ -249,24 +309,14 @@ function AddProduct() {
       images: getref,
     };
     console.log("Data payload", payload);
+    axios({
+      url: "/addproduct",
+      method: "POST",
+      data: payload,
+    }).then((response) => {
+      console.log(response);
+    });
   }
-
-  //     axios({
-  //       url: "/register",
-  //       method: "POST",
-  //       data: payload,
-  //     }).then((res) => console.log(res), history.push("/signup"));
-
-  //     reset();
-  //   }
-
-  //   function reset() {
-  //     setfullname("");
-  //     setemail("");
-  //     setcontact("");
-  //     setaddress("");
-  //     setpassword("");
-  //   }
 
   return (
     <div>

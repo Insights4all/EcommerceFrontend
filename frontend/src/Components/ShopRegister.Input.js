@@ -8,7 +8,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import useForm from "../Utils/useForm";
 import { useHistory } from "react-router-dom";
 
-
 const useStyles = makeStyles((theme) => ({
   root: {
     overflow: "hidden",
@@ -51,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 10,
     marginTop: 20,
   },
-  buttonContainer:{
+  buttonContainer: {
     [theme.breakpoints.up("sm")]: {
       width: 320,
       marginLeft: 70,
@@ -107,56 +106,53 @@ const ShopOwnerInput = (props) => {
   const history = useHistory();
   const classes = useStyles();
   const [allFormData, setAllFormData] = useState([]);
-  const [newArray, setNewArray] = useState([])
-  
-  
+  const [newArray, setNewArray] = useState([]);
 
   const handleSubmit = () => {
     // console.log("userValue", userValue);
     // console.log("allFormDataaaa", allFormData)
     // setAllFormData(props.allProps.form_Data.data)
     // setNewArray(allFormData.push(userValue));
-        // setNewArray([...allFormData, userValue])
-        setAllFormData(prevState => [...prevState, userValue])
+    // setNewArray([...allFormData, userValue])
+    setAllFormData((prevState) => [...prevState, userValue]);
 
-        // console.log("handleSubmitchanges", allFormData)
+    // console.log("handleSubmitchanges", allFormData)
 
     // props.verifyStep(2);
     // props.getData();
   };
 
-
-
-
-  React.useEffect(()=>{
+  React.useEffect(() => {
     // console.log("props", props.allProps.form_Data.data)
     // console.log("useffect form Data",allFormData )
-    setAllFormData(props.allProps.form_Data.data)
-  },[] )
+    setAllFormData(props.allProps.form_Data.data);
+  }, []);
 
   React.useEffect(() => {
     // console.log("allformdata", allFormData);
-    if(allFormData.length === 3){
-    props.submitFormData(allFormData)
-    history.push("/home")
+    if (allFormData.length === 3) {
+      props.submitFormData(allFormData);
+      history.push("/home");
       // alert("3")
     }
   }, [allFormData]);
 
-
-
   const validate = (values) => {
     let errors = {};
-    if(!values.owner_email){
-      errors.owner_email="Required"
+    if (!values.shop_email) {
+      errors.shop_email = "Required";
     }
-    if(!values.owner_password){
-      errors.owner_password="Required"
+    if (!values.shop_password) {
+      errors.shop_password = "Required";
     }
-    if(!values.owner_confirmPassword){
-      errors.owner_confirmPassword="Required"
+    if (!values.shop_confirmPassword) {
+      errors.shop_confirmPassword = "Required";
     }
-    // console.log("validations", values);
+    if (values.shop_password !== values.shop_confirmPassword) {
+      errors.shop_confirmPassword = "Password does not match";
+    }
+
+    //console.log("validations", values);
     // console.log("errors", typeof errors, Object.keys(userValueErrors).length);
 
     return errors;
@@ -169,8 +165,10 @@ const ShopOwnerInput = (props) => {
   } = useForm(handleSubmit, validate);
 
   // const [shopname, setshopname] = useState("");
-  console.log("submitteddddddd",allFormData, allFormData.length )
-
+  console.log("submitteddddddd", allFormData, allFormData.length);
+  function validatepw(e) {
+    console.log(e.target.value);
+  }
   return (
     <div>
       <Box p={1}>
@@ -183,15 +181,19 @@ const ShopOwnerInput = (props) => {
               label="Shop Email"
               variant="outlined"
               size="small"
-              // value={shopname}
-              // onChange={(e) => setshopname(e.target.value)}
               onChange={(e) =>
-                onLoginChange({ name: "owner_email", value: e.target.value })
+                onLoginChange({ name: "shop_email", value: e.target.value })
               }
             />
-             {
-              userValueErrors.owner_email ?  <Typography  className={classes.formControl} style={{fontSize:"12px", marginTop:"2px", color:"red"}} > {userValueErrors.owner_email} </Typography> : null
-            }
+            {userValueErrors.shop_email ? (
+              <Typography
+                className={classes.formControl}
+                style={{ fontSize: "12px", marginTop: "2px", color: "red" }}
+              >
+                {" "}
+                {userValueErrors.shop_email}{" "}
+              </Typography>
+            ) : null}
             <TextField
               className={classes.eminput}
               id="email"
@@ -201,12 +203,18 @@ const ShopOwnerInput = (props) => {
               // value={shopemail}
               // onChange={(e) => setshopemail(e.target.value)}
               onChange={(e) =>
-                onLoginChange({ name: "owner_password", value: e.target.value })
+                onLoginChange({ name: "shop_password", value: e.target.value })
               }
             />
-             {
-              userValueErrors.owner_password ?  <Typography  className={classes.formControl} style={{fontSize:"12px", marginTop:"2px", color:"red"}} > {userValueErrors.owner_password} </Typography> : null
-            }
+            {userValueErrors.shop_password ? (
+              <Typography
+                className={classes.formControl}
+                style={{ fontSize: "12px", marginTop: "2px", color: "red" }}
+              >
+                {" "}
+                {userValueErrors.shop_password}{" "}
+              </Typography>
+            ) : null}
             <TextField
               className={classes.eminput}
               id="contact"
@@ -214,40 +222,51 @@ const ShopOwnerInput = (props) => {
               variant="outlined"
               size="small"
               // value={shopcontact}
-              // onChange={(e) => setshopcontact(e.target.value)}
+              //onChange={validatepw}
               onChange={(e) =>
-                onLoginChange({ name: "owner_confirmPassword", value: e.target.value })
+                onLoginChange({
+                  name: "shop_confirmPassword",
+                  value: e.target.value,
+                })
               }
             />
-             {
-              userValueErrors.owner_confirmPassword ?  <Typography  className={classes.formControl} style={{fontSize:"12px", marginTop:"2px", color:"red"}} > {userValueErrors.owner_confirmPassword} </Typography> : null
-            }
+            {userValueErrors.shop_confirmPassword ? (
+              <Typography
+                className={classes.formControl}
+                style={{ fontSize: "12px", marginTop: "2px", color: "red" }}
+              >
+                {" "}
+                {userValueErrors.shop_confirmPassword}{" "}
+              </Typography>
+            ) : null}
             <br />
             <br />
             <br />
           </form>
         </Paper>
-        <div className={classes.buttonContainer} style={{display:"flex", flexDirection:"row"}}>
+        <div
+          className={classes.buttonContainer}
+          style={{ display: "flex", flexDirection: "row" }}
+        >
           <Button
             className={classes.button}
             variant="contained"
             color="primary"
-            onClick={()=>props.verifyStep(1)}
-            style={{marginRight:20}}
-
+            onClick={() => props.verifyStep(1)}
+            style={{ marginRight: 20 }}
           >
             Back
           </Button>
           <Button
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            onLoginSubmit();
-          }}
-          className={classes.button}
-        >
-          Next
-        </Button>
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              onLoginSubmit();
+            }}
+            className={classes.button}
+          >
+            Next
+          </Button>
         </div>
       </Box>
     </div>

@@ -4,8 +4,8 @@ const Schema = mongoose.Schema;
 
 const ShopKeeperSchema = new Schema({
   shopName: String,
-  bussinessContact: String,
   bussinessAddress: String,
+  bussinessContact: Number,
   bussinessInstaID: String,
   bussinessFacebookID: String,
   shopType: String,
@@ -14,14 +14,12 @@ const ShopKeeperSchema = new Schema({
   businesslogo: String,
   fullName: String,
   email: String,
-  contact: String,
-  credentials: {
-    bussinessEmail: String,
-    password: String,
-  },
+  contact: Number,
+  shopEmail: String,
+  shoppassword: String,
 });
 
 //Model
-const Shopkeer = mongoose.model("Shopkeer", ShopKeeperSchema);
+const Shop = mongoose.model("Shop", ShopKeeperSchema);
 
-module.exports = Shopkeer;
+module.exports = Shop;

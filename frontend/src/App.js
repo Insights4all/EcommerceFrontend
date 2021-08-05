@@ -16,6 +16,8 @@ import Main from "./Screens/ShopRegister/Main";
 import Admin from "./Screens/Admin/Admin";
 import AddProduct from "./Screens/Admin/AddProduct";
 
+import ShopLogin from "./Screens/ShopLogin/ShopLogin";
+
 function App() {
   return (
     <Router>
@@ -32,6 +34,7 @@ function App() {
         <Route path="/main" exact component={Main} />
         <Route path="/admin" exact component={Admin} />
         <Route path="/addproduct" exact component={AddProduct} />
+        <Route path="/shoplogin" exact component={ShopLogin} />
       </Switch>
     </Router>
   );
