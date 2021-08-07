@@ -310,7 +310,7 @@ function AddProduct() {
     };
     console.log("Data payload", payload);
     axios({
-      url: "/addproduct",
+      url: "http://localhost:8080/addproduct",
       method: "POST",
       data: payload,
     }).then((response) => {

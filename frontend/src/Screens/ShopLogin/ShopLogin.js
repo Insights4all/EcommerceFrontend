@@ -6,9 +6,7 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
-import axios from "axios";
 import { useHistory } from "react-router-dom";
-import { Input } from "@material-ui/core";
 import useForm from "../../Utils/useForm";
 
 const useStyles = makeStyles((theme) => ({
@@ -81,12 +79,43 @@ function ShopLogin(props) {
   const classes = useStyles();
   const [error, setError] = useState(false);
 
+  const history = useHistory();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    props.ShopLogin(userValue);
+    //console.log("newprops", props);
+  };
+
+  React.useEffect(() => {
+    console.log("useffect props", props);
+    if (Object.keys(props.shop_login_Data.data).length) {
+      history.push("/admin");
+      window.location.reload();
+    } else if (props.shop_login_Data.errorMessage.length) {
+      setError(true);
+    }
+  }, [props]);
+
+  const validate = (values) => {
+    let errors = {};
+    console.log("validations", values);
+    console.log("errors", typeof errors, Object.keys(userValueErrors).length);
+    return errors;
+  };
+  const {
+    values: userValue,
+    errors: userValueErrors,
+    handleChange: onLoginChange,
+    handleSubmit: onLoginSubmit,
+  } = useForm(handleSubmit, validate);
+
   return (
     <div class={classes.root}>
       <Navbar />
       <Paper className={classes.signup} elevation={0}>
         <Typography className={classes.create}>Shop Login</Typography>
-        <form>
+        <form onSubmit={handleSubmit}>
           <TextField
             className={classes.eminput}
             id="email"
@@ -95,15 +124,21 @@ function ShopLogin(props) {
             size="small"
             // value={loginemail}
             // onChange={(e) => setloginemail(e.target.value)}
+            onChange={(e) =>
+              onLoginChange({ name: "shopemail", value: e.target.value })
+            }
           />
           <TextField
             className={classes.eminput}
             id="password"
-            label="Shop Password"
+            label="Password"
             variant="outlined"
             size="small"
             // value={loginpassword}
             // onChange={(e) => setloginpassword(e.target.value)}
+            onChange={(e) =>
+              onLoginChange({ name: "shoppassword", value: e.target.value })
+            }
           />
 
           {error ? (
@@ -116,7 +151,7 @@ function ShopLogin(props) {
             className={classes.signupbtn}
             variant="outlined"
             color="primary"
-            href="/signup"
+            href="/registershop"
             size="small"
           >
             Signup

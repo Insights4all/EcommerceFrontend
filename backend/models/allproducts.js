@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 //Schema
 const Schema = mongoose.Schema;
 const ProductSchema = new Schema({
-  storeid: Number,
+  storeid: String,
   name: String,
   price: Number,
   percentageDiscount: Number,

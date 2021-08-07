@@ -36,7 +36,7 @@ const Product = require("./models/products");
 const Shop = require("./models/shopkeeper");
 const Admin = require("./models/admin");
 const Cart = require("./models/cart");
-const AllProduct = require("./models/allproducts");
+const allProduct = require("./models/allproducts");
 
 // passport.use(User.createStrategy());
 
@@ -65,10 +65,10 @@ app.get("/allproducts", (req, res) => {
 app.post("/addproduct", (req, res) => {
   console.log("body", req.body);
   const data = req.body;
-  const newProduct = new AllProduct(data);
+  const newProduct = new allProduct(data);
   newProduct.save((error) => {
     if (error) {
-      console.log("Sorry Error");
+      console.log(error);
     } else {
       console.log("Data saved to mongoose");
     }
@@ -129,20 +129,44 @@ app.post("/shopregister", async (req, res) => {
   res
     .status(201)
     .json({ accessToken: accessToken, refreshToken: refreshToken });
+});
 
-  //res.status(201).send(newShop);
-
-  // let shopData = req.body;
-  // // ...[name, address] = shopdata
-  // let ShopData = new Shopkeeper({ shopName: shopData.name });
-  // ShopData.save(function (err, data) {
-  //   if (err) return console.error("error in shopkeeper", err);
-  //   //error
-  //   console.log(" saved to bookstore collection.");
-  // });
-
-  // //toke code
-  // res.json(shopData);
+app.post("/shoplogin", async (req, res) => {
+  console.log("body is", req.body);
+  Shop.find({ shopEmail: req.body.shopemail }, async function (err, docs) {
+    if (err) {
+      console.log("mongoose error", err);
+      res.status(500).send("Mongoose error");
+    } else {
+      if (!docs.length) {
+        return res.status(400).send("Cannot Find Shop");
+      }
+      const [docsData] = docs;
+      const data = await bcrypt.compare(
+        req.body.shoppassword,
+        docsData.shoppassword
+      );
+      if (data) {
+        try {
+          const shopEmail = {
+            ShopEmail: req.body.shopemail,
+          };
+          const accessToken = generateAccessToken(shopEmail);
+          const refreshToken = jwt.sign(
+            shopEmail,
+            process.env.REFRESH_TOKEN_SECRET
+          );
+          res
+            .status(201)
+            .json({ accessToken: accessToken, refreshToken: refreshToken });
+        } catch (error) {
+          res.status(500).send();
+        }
+      } else {
+        res.status(400).send("Not allowed");
+      }
+    }
+  });
 });
 
 app.post("/register", (req, res) => {

@@ -16,7 +16,7 @@ import Main from "./Screens/ShopRegister/Main";
 import Admin from "./Screens/Admin/Admin";
 import AddProduct from "./Screens/Admin/AddProduct";
 
-import ShopLogin from "./Screens/ShopLogin/ShopLogin";
+import ShopLogin from "./Screens/ShopLogin";
 
 function App() {
   return (
