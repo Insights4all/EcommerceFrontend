@@ -57,6 +57,20 @@ mongoose.connection.on("connected", () => {
   console.log("Mongoose is connected!!");
 });
 
+app.get("/getproduct", (req, res) => {
+  console.log("Inside gET API");
+
+  allProduct
+    .find({})
+    .then((data) => {
+      console.log("product Data", data);
+      res.json(data);
+    })
+    .catch((error) => {
+      console.log("No data found");
+    });
+});
+
 app.get("/allproducts", (req, res) => {
   Product.find({}, function (err, products) {
     res.send(products);

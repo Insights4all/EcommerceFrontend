@@ -111,7 +111,24 @@ const useStyles = makeStyles((theme) => ({
 function Home(props) {
   const classes = useStyles();
   // const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setusername] = useState("unknown");
+  const [products, setProducts] = useState([]);
+  useEffect(() => {
+    getAllProduct();
+  }, []);
+
+  function getAllProduct() {
+    axios
+      .get("http://localhost:8080/getproduct")
+      .then((response) => {
+        const data = response.data;
+        setProducts(data);
+      })
+      .catch((error) => {
+        console.log("Erroorrrr");
+      });
+  }
+
+  console.log("My Products", products);
 
   // useEffect(() => {
   //   checklogin();
@@ -190,12 +207,16 @@ function Home(props) {
         <Grid className={classes.product}>
           <Grid item xs={12}>
             <Grid container justify="center" spacing={2}>
-              <Product />
-              <Product />
-              <Product />
-              <Product />
-              <Product />
-              <Product />
+              {products.map((x) => (
+                <Product
+                  key={x._id}
+                  product_title={x.name}
+                  original_price={x.price}
+                  discount_price={x.discountPrice}
+                  discount={x.percentageDiscount}
+                  images={x.images}
+                />
+              ))}
             </Grid>
           </Grid>
         </Grid>
