@@ -20,13 +20,13 @@ const useStyles = makeStyles((theme) => ({
   },
   mybox: {
     [theme.breakpoints.up("sm")]: {
-      height: 190,
+      height: 220,
 
       marginTop: 8,
       backgroundColor: "transparent",
     },
     marginTop: 8,
-    height: 190,
+    height: 230,
   },
 
   control: {
@@ -96,6 +96,14 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 15,
     color: "#f50057",
   },
+  myproimg: {
+    [theme.breakpoints.up("sm")]: {
+      height: 210,
+      width: 210,
+    },
+    height: 210,
+    width: 170,
+  },
 }));
 function Product(props) {
   const handleSubmit = (data) => {
@@ -112,8 +120,7 @@ function Product(props) {
         <Box className={classes.mybox} p={1} bgcolor="grey.300">
           <Link href="/singleproduct">
             <img
-              width="100%"
-              height="180px"
+              className={classes.myproimg}
               alt="offer"
               src={props.images[0]}
             />

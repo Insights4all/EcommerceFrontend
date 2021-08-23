@@ -90,8 +90,13 @@ function ShopLogin(props) {
   React.useEffect(() => {
     console.log("useffect props", props);
     if (Object.keys(props.shop_login_Data.data).length) {
-      history.push("/admin");
-      window.location.reload();
+      localStorage.setItem("shopid", props.shop_login_Data.data.id);
+      history.push({
+        pathname: "/admin",
+        state: props.shop_login_Data.data.id,
+      });
+      console.log(props.shop_login_Data.data.id);
+      //window.location.reload();
     } else if (props.shop_login_Data.errorMessage.length) {
       setError(true);
     }

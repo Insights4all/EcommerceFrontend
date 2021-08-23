@@ -57,13 +57,35 @@ mongoose.connection.on("connected", () => {
   console.log("Mongoose is connected!!");
 });
 
+const ObjectID = require("mongodb").ObjectId;
+
+app.get("/getshop/:shopid", (req, res) => {
+  console.log(req.params);
+  Shop.findById(ObjectID(req.params.shopid))
+    .then((doc) => {
+      res.json(doc);
+    })
+    .catch((error) => {
+      console.log("No data found");
+    });
+});
+app.get("/getproductdata/:shopid", (req, res) => {
+  allProduct
+    .find({ storeid: req.params.shopid })
+    .then((doc) => {
+      res.json(doc);
+    })
+    .catch((error) => {
+      console.log("No data found");
+    });
+});
+
 app.get("/getproduct", (req, res) => {
   console.log("Inside gET API");
 
   allProduct
     .find({})
     .then((data) => {
-      console.log("product Data", data);
       res.json(data);
     })
     .catch((error) => {
@@ -115,10 +137,10 @@ app.post("/shopregister", async (req, res) => {
     bussinessContact: newObj.shop_contact,
     bussinessInstaID: newObj.shop_insta_id,
     bussinessFacebookID: newObj.shop_facebook_id,
-    shopType: newObj.shop_type,
+    shopType: newObj.shop_Type,
     aboutShop: newObj.shop_details,
-    businessTagLine: newObj.shop_tagline,
-    businesslogo: "hi",
+    businessTagLine: newObj.shop_tagLine,
+    businesslogo: newObj.businesslogo,
     fullName: newObj.owner_name,
     email: newObj.owner_email,
     contact: newObj.owner_contact,
@@ -130,6 +152,8 @@ app.post("/shopregister", async (req, res) => {
   newShop.save((err, result) => {
     if (err) {
       res.status(500).send();
+    } else {
+      console.log("Data saves");
     }
   });
   const ShopEmail = {
@@ -156,6 +180,7 @@ app.post("/shoplogin", async (req, res) => {
         return res.status(400).send("Cannot Find Shop");
       }
       const [docsData] = docs;
+
       const data = await bcrypt.compare(
         req.body.shoppassword,
         docsData.shoppassword
@@ -170,9 +195,11 @@ app.post("/shoplogin", async (req, res) => {
             shopEmail,
             process.env.REFRESH_TOKEN_SECRET
           );
-          res
-            .status(201)
-            .json({ accessToken: accessToken, refreshToken: refreshToken });
+          res.status(201).json({
+            accessToken: accessToken,
+            refreshToken: refreshToken,
+            id: docsData.id,
+          });
         } catch (error) {
           res.status(500).send();
         }

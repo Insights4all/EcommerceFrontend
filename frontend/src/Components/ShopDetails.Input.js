@@ -9,6 +9,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import { makeStyles } from "@material-ui/core/styles";
 import { Input } from "@material-ui/core";
 import useForm from "../Utils/useForm";
+import firebase from "../Screens/Admin/Firebase";
+import "firebase/storage"; // <----
 
 // import Typography from "@material-ui/core/Typography";
 // import Typography from "@material-ui/core/Typography";
@@ -71,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 20,
   },
 
-  buttonContainer:{
+  buttonContainer: {
     [theme.breakpoints.up("sm")]: {
       width: 320,
       marginLeft: 70,
@@ -125,7 +127,9 @@ const useStyles = makeStyles((theme) => ({
 
 const ShopDetailsInput = (props) => {
   const classes = useStyles();
-  const [shoptype, setshoptype] = useState("");
+  const [file, setfile] = React.useState([]);
+
+  const [getref, setGetref] = React.useState("");
 
   const handleSubmit = () => {
     props.verifyStep(1);
@@ -133,39 +137,75 @@ const ShopDetailsInput = (props) => {
   };
   // console.log("Child props", props)
 
-  const handletype = (event) => {
-    setshoptype(event.target.value);
+  const handleFile = (event) => {
+    setfile(event.target.files[0]);
+    console.log("in handle file", file);
   };
+  const uploadImage = (event) => {
+    console.log("in upload file", file);
 
+    var storageRef = firebase.storage().ref();
+    var imageref = storageRef.child(file.name);
+    var uploadTask = imageref.put(file);
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        // Observe state change events such as progress, pause, and resume
+        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+        switch (snapshot.state) {
+          case firebase.storage.TaskState.PAUSED: // or 'paused'
+            console.log("Upload is paused");
+            break;
+          case firebase.storage.TaskState.RUNNING: // or 'running'
+            console.log("Upload is running");
+            break;
+        }
+      },
+      (error) => {
+        console.log("Upload unsuccessful");
+      },
+      () => {
+        // Handle successful uploads on complete
+        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+          console.log("File available at", downloadURL);
+          setGetref(downloadURL);
+          onLoginChange({ name: "businesslogo", value: downloadURL });
+        });
+      }
+    );
+  };
 
   const validate = (values) => {
     let errors = {};
     // console.log("a", values)
     // console.log("b", userValueErrors)
 
-    if(!values.shop_name){
-      errors.shop_name="Required"
+    if (!values.shop_name) {
+      errors.shop_name = "Required";
     }
-    if(!values.shop_contact){
-      errors.shop_contact="Required"
+    if (!values.shop_contact) {
+      errors.shop_contact = "Required";
     }
-    if(!values.shop_address){
-      errors.shop_address="Required"
+    if (!values.shop_address) {
+      errors.shop_address = "Required";
     }
-    if(!values.shop_insta_id){
-      errors.shop_insta_id="Required"
+    if (!values.shop_insta_id) {
+      errors.shop_insta_id = "Required";
     }
-    if(!values.shop_facebook_id){
-      errors.shop_facebook_id="Required"
+    if (!values.shop_facebook_id) {
+      errors.shop_facebook_id = "Required";
     }
-    if(!values.shop_Type){
-      errors.shop_Type="Required"
+    if (!values.shop_Type) {
+      errors.shop_Type = "Required";
     }
-    if(!values.shop_details){
-      errors.shop_details="Required"
+    if (!values.shop_details) {
+      errors.shop_details = "Required";
     }
-    if(!values.shop_tagLine){
-      errors.shop_tagLine="Required"
+    if (!values.shop_tagLine) {
+      errors.shop_tagLine = "Required";
     }
 
     // console.log(errors,"xxxx")
@@ -200,9 +240,15 @@ const ShopDetailsInput = (props) => {
                 onLoginChange({ name: "shop_name", value: e.target.value })
               }
             />
-            {
-              userValueErrors.shop_contact ?  <Typography  className={classes.formControl} style={{fontSize:"12px", marginTop:"2px", color:"red"}} > {userValueErrors.shop_contact} </Typography> : null
-            }
+            {userValueErrors.shop_contact ? (
+              <Typography
+                className={classes.formControl}
+                style={{ fontSize: "12px", marginTop: "2px", color: "red" }}
+              >
+                {" "}
+                {userValueErrors.shop_contact}{" "}
+              </Typography>
+            ) : null}
             <TextField
               className={classes.eminput}
               id="contact"
@@ -215,9 +261,15 @@ const ShopDetailsInput = (props) => {
                 onLoginChange({ name: "shop_contact", value: e.target.value })
               }
             />
-             {
-              userValueErrors.shop_name ?  <Typography  className={classes.formControl} style={{fontSize:"12px", marginTop:"2px", color:"red"}} > {userValueErrors.shop_name} </Typography> : null
-            }
+            {userValueErrors.shop_name ? (
+              <Typography
+                className={classes.formControl}
+                style={{ fontSize: "12px", marginTop: "2px", color: "red" }}
+              >
+                {" "}
+                {userValueErrors.shop_name}{" "}
+              </Typography>
+            ) : null}
             <TextField
               className={classes.eminput}
               id="address"
@@ -230,9 +282,15 @@ const ShopDetailsInput = (props) => {
                 onLoginChange({ name: "shop_address", value: e.target.value })
               }
             />
-             {
-              userValueErrors.shop_address ?  <Typography  className={classes.formControl} style={{fontSize:"12px", marginTop:"2px", color:"red"}} > {userValueErrors.shop_address} </Typography> : null
-            }
+            {userValueErrors.shop_address ? (
+              <Typography
+                className={classes.formControl}
+                style={{ fontSize: "12px", marginTop: "2px", color: "red" }}
+              >
+                {" "}
+                {userValueErrors.shop_address}{" "}
+              </Typography>
+            ) : null}
             <TextField
               className={classes.eminput}
               id="instagram"
@@ -245,9 +303,15 @@ const ShopDetailsInput = (props) => {
                 onLoginChange({ name: "shop_insta_id", value: e.target.value })
               }
             />
-             {
-              userValueErrors.shop_insta_id ?  <Typography  className={classes.formControl} style={{fontSize:"12px", marginTop:"2px", color:"red"}} > {userValueErrors.shop_insta_id} </Typography> : null
-            }
+            {userValueErrors.shop_insta_id ? (
+              <Typography
+                className={classes.formControl}
+                style={{ fontSize: "12px", marginTop: "2px", color: "red" }}
+              >
+                {" "}
+                {userValueErrors.shop_insta_id}{" "}
+              </Typography>
+            ) : null}
             <TextField
               className={classes.eminput}
               id="facebook"
@@ -263,9 +327,15 @@ const ShopDetailsInput = (props) => {
                 })
               }
             />
-             {
-              userValueErrors.shop_facebook_id ?  <Typography  className={classes.formControl} style={{fontSize:"12px", marginTop:"2px", color:"red"}} > {userValueErrors.shop_facebook_id} </Typography> : null
-            }
+            {userValueErrors.shop_facebook_id ? (
+              <Typography
+                className={classes.formControl}
+                style={{ fontSize: "12px", marginTop: "2px", color: "red" }}
+              >
+                {" "}
+                {userValueErrors.shop_facebook_id}{" "}
+              </Typography>
+            ) : null}
 
             <br />
             {/* <FormControl className={classes.formControl}>
@@ -308,13 +378,15 @@ const ShopDetailsInput = (props) => {
             </FormControl> */}
 
             <FormControl variant="outlined" className={classes.formControl}>
-              <InputLabel htmlFor="outlined-age-native-simple">Shop Type</InputLabel>
+              <InputLabel htmlFor="outlined-age-native-simple">
+                Shop Type
+              </InputLabel>
               <Select
                 native
                 // value={state.age}
                 onChange={(e) =>
                   onLoginChange({ name: "shop_Type", value: e.target.value })
-                }                
+                }
                 inputProps={{
                   name: "age",
                   id: "outlined-age-native-simple",
@@ -324,7 +396,9 @@ const ShopDetailsInput = (props) => {
                 <option value={"Automotive"}>Automotive</option>
                 <option value={"Baby & Toddler"}>Baby & Toddler</option>
                 <option value={"Clothing & Shoes"}>Clothing & Shoes</option>
-                <option value={"Entertainment & Art"}>Entertainment & Art</option>
+                <option value={"Entertainment & Art"}>
+                  Entertainment & Art
+                </option>
                 <option value={"Electronics"}>Electronics</option>
                 <option value={"Food"}>Food</option>
                 <option value={"Gifts"}>Gifts</option>
@@ -340,17 +414,20 @@ const ShopDetailsInput = (props) => {
                 <option value={"Restaurants & Dining"}>
                   Restaurants & Dining
                 </option>
-                <option value={"Sports & Outdoors"}>
-                  Sports & Outdoors
-                </option>
+                <option value={"Sports & Outdoors"}>Sports & Outdoors</option>
                 <option value={"Travel"}>Travel</option>
                 <option value={"Others"}>Others</option>
-
               </Select>
             </FormControl>
-            {
-              userValueErrors.shop_Type ?  <Typography  className={classes.formControl} style={{fontSize:"12px", marginTop:"2px", color:"red"}} > {userValueErrors.shop_Type} </Typography> : null
-            }
+            {userValueErrors.shop_Type ? (
+              <Typography
+                className={classes.formControl}
+                style={{ fontSize: "12px", marginTop: "2px", color: "red" }}
+              >
+                {" "}
+                {userValueErrors.shop_Type}{" "}
+              </Typography>
+            ) : null}
 
             <TextField
               id="outlined-multiline-static"
@@ -363,9 +440,15 @@ const ShopDetailsInput = (props) => {
                 onLoginChange({ name: "shop_details", value: e.target.value })
               }
             />
-             {
-              userValueErrors.shop_details ?  <Typography  className={classes.formControl} style={{fontSize:"12px", marginTop:"2px", color:"red"}} > {userValueErrors.shop_details} </Typography> : null
-            }
+            {userValueErrors.shop_details ? (
+              <Typography
+                className={classes.formControl}
+                style={{ fontSize: "12px", marginTop: "2px", color: "red" }}
+              >
+                {" "}
+                {userValueErrors.shop_details}{" "}
+              </Typography>
+            ) : null}
 
             <br />
             <TextField
@@ -380,9 +463,15 @@ const ShopDetailsInput = (props) => {
                 onLoginChange({ name: "shop_tagLine", value: e.target.value })
               }
             />
-             {
-              userValueErrors.shop_tagLine ?  <Typography  className={classes.formControl} style={{fontSize:"12px", marginTop:"2px", color:"red"}} > {userValueErrors.shop_tagLine} </Typography> : null
-            }
+            {userValueErrors.shop_tagLine ? (
+              <Typography
+                className={classes.formControl}
+                style={{ fontSize: "12px", marginTop: "2px", color: "red" }}
+              >
+                {" "}
+                {userValueErrors.shop_tagLine}{" "}
+              </Typography>
+            ) : null}
 
             <br />
             <br />
@@ -392,12 +481,29 @@ const ShopDetailsInput = (props) => {
             >
               Business logo
             </InputLabel>
+            <Input
+              required
+              className={classes.upload}
+              onChange={handleFile}
+              type="file"
+              accept="image/*"
+              multiple
+            />
+            <Button
+              onClick={uploadImage}
+              className={classes.addbtn}
+              variant="contained"
+            >
+              Upload
+            </Button>
 
-            <Input type="file" className={classes.eminput} />
             <br />
           </div>
         </Paper>
-        <div className={classes.buttonContainer} style={{display:"flex", flexDirection:"row"}}>
+        <div
+          className={classes.buttonContainer}
+          style={{ display: "flex", flexDirection: "row" }}
+        >
           {/* <Button
             className={classes.button}
             variant="contained"
@@ -409,15 +515,15 @@ const ShopDetailsInput = (props) => {
             Back
           </Button> */}
           <Button
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            onLoginSubmit();
-          }}
-          className={classes.button}
-        >
-          Next
-        </Button>
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              onLoginSubmit();
+            }}
+            className={classes.button}
+          >
+            Next
+          </Button>
         </div>
       </Box>
     </div>

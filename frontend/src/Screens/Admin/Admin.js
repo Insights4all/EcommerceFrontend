@@ -16,6 +16,9 @@ import Navbar from "../Navbar/Navbar";
 import Storenavbar from "./Storenavbar";
 import StoreProducts from "./StoreProducts";
 import AddProduct from "./AddProduct";
+import axios from "axios";
+import Button from "@material-ui/core/Button";
+import { useHistory } from "react-router-dom";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -104,6 +107,13 @@ const useStyles = makeStyles((theme) => ({
     },
     fontSize: 0,
   },
+  loginbutton: {
+    [theme.breakpoints.up("sm")]: {
+      marginLeft: 985,
+      display: "inline",
+    },
+    display: "none",
+  },
   sidebar: {
     backgroundColor: "#2196f3",
     color: "white",
@@ -133,33 +143,79 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Admin() {
+function Admin(props) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+  const [shopid, setShopid] = React.useState(0);
+
+  const [shopdata, setShop] = React.useState({});
+
+  const login = localStorage.getItem("token");
+
+  const history = useHistory();
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
+  React.useEffect(() => {
+    setShopid(props.location.state);
+    getShopData(props.location.state);
+  }, []);
+  function getShopData(shopid) {
+    axios
+      .get(`http://localhost:8080/getshop/${shopid}`)
+      .then((response) => {
+        const data = response.data;
+
+        console.log(data);
+        setShop(data);
+      })
+      .catch((error) => {
+        console.log("Erroorrrr");
+      });
+  }
+
+  console.log(shopdata);
+  function logout() {
+    localStorage.removeItem("token");
+    localStorage.removeItem("shopid");
+    history.push("/home");
+  }
+
   return (
     <div className={classes.root}>
       <Storenavbar />
+
       <div className={classes.navbar}>
         <Box display="flex" flexDirection="row">
-          <Avatar
-            alt="Remy Sharp"
-            src="https://www.giftcart.com/pub/media/giftcart/manifest/icons/default/giftcart-pwa.png"
-          />
+          <Avatar alt="Remy Sharp" src={shopdata.businesslogo} />
 
           <Box>
             <Typography className={classes.shopname}>
-              Customised Gift Cart
+              {shopdata.shopName}
             </Typography>
           </Box>
           <Box>
-            <Link to="#" className={classes.navlinks}>
-              Logout
-            </Link>
+            {login && login.length ? (
+              <Button
+                className={classes.loginbutton}
+                variant="contained"
+                color="primary"
+                onClick={logout}
+              >
+                Logout
+              </Button>
+            ) : (
+              <Button
+                className={classes.loginbutton}
+                variant="contained"
+                color="primary"
+                onClick={() => history.push("/shoplogin")}
+              >
+                Login
+              </Button>
+            )}
           </Box>
         </Box>
       </div>
@@ -183,7 +239,7 @@ function Admin() {
           <Storehome />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <StoreProducts />
+          <StoreProducts shopid={shopid} />
         </TabPanel>
         <TabPanel value={value} index={2}>
           Item Three

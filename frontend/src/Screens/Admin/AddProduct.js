@@ -169,7 +169,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function AddProduct() {
+function AddProduct(props) {
   const classes = useStyles();
   const [productname, setproductname] = useState("");
   const [productprice, setproductprice] = useState();
@@ -179,6 +179,7 @@ function AddProduct() {
   const [productdetails, setProductdetails] = useState("");
   const [colors, setColors] = useState([]);
   const [size, setSize] = useState([]);
+  const shopid = props.shopid;
 
   const history = useHistory();
   const theme = useTheme();
@@ -297,7 +298,7 @@ function AddProduct() {
   function handleSubmit(e) {
     e.preventDefault();
     const payload = {
-      storeid: "storeid",
+      storeid: shopid,
       name: productname,
       price: productprice,
       percentageDiscount: percentagediscount,

@@ -7,6 +7,7 @@ import { DataGrid } from "@material-ui/data-grid";
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import AddProduct from "./AddProduct";
+import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   neworders: {
@@ -46,6 +47,31 @@ const useStyles = makeStyles((theme) => ({
 function StoreProducts(props) {
   const classes = useStyles();
   const [addproduct, setAddproduct] = React.useState(false);
+
+  const [product, setProduct] = React.useState([]);
+  React.useEffect(() => {
+    getProductData(props.shopid);
+  }, []);
+  function getProductData(shopid) {
+    axios
+      .get(`http://localhost:8080/getproductdata/${shopid}`)
+      .then((response) => {
+        const data = response.data;
+        setProduct(data);
+      })
+      .catch((error) => {
+        console.log("Erroorrrr");
+      });
+  }
+  console.log("MyProduct", product);
+  const length = product.length;
+  console.log(length);
+  const ids = [];
+  for (var i = 0; i < length; i++) {
+    ids[i] = i;
+    product[i].id = ids[i];
+  }
+  console.log("Updated product", product);
   const columns: GridColDef[] = [
     { field: "id", headerName: "Product Id", width: 150 },
     {
@@ -54,17 +80,17 @@ function StoreProducts(props) {
       width: 250,
     },
     {
-      field: "productmrp",
+      field: "price",
       headerName: "MRP",
       width: 150,
     },
     {
-      field: "discount",
+      field: "discountPrice",
       headerName: "Discount Price",
       width: 180,
     },
     {
-      field: "percentage",
+      field: "percentageDiscount",
       headerName: "Percentage Off",
       width: 200,
     },
@@ -75,23 +101,18 @@ function StoreProducts(props) {
       width: 200,
     },
     {
-      field: "color",
+      field: "colors",
       headerName: "Colors",
       width: 200,
     },
     {
-      field: "features",
-      headerName: "Features",
+      field: "details",
+      headerName: "Details",
       width: 200,
     },
     {
       field: "about",
       headerName: "About",
-      width: 200,
-    },
-    {
-      field: "stock",
-      headerName: "Stock",
       width: 200,
     },
     {
@@ -117,18 +138,7 @@ function StoreProducts(props) {
     },
   ];
 
-  const rows = [
-    {
-      id: "1",
-      img: "abcd",
-      productName: "Snowhedhhh",
-      price: 599,
-    },
-    { id: "2", img: "abcd", productName: "Lannister", price: 599 },
-    { id: "3", img: "abcd", productName: "Lannister", price: 599 },
-    { id: "4", img: "abcd", productName: "Lannister", price: 599 },
-    { id: "5", img: "abcd", productName: "Lannister", price: 599 },
-  ];
+  const rows = product;
 
   function settrue() {
     setAddproduct(true);
@@ -146,7 +156,7 @@ function StoreProducts(props) {
         >
           Add New Product
         </Button>
-        {addproduct ? <AddProduct /> : " "}
+        {addproduct ? <AddProduct shopid={props.shopid} /> : " "}
         <Typography className={classes.neworders}>All Products</Typography>
         <Divider className={classes.divider} />
 
