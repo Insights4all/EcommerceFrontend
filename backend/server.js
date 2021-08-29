@@ -59,6 +59,16 @@ mongoose.connection.on("connected", () => {
 
 const ObjectID = require("mongodb").ObjectId;
 
+app.get("/geteachproduct/:productid", (req, res) => {
+  allProduct
+    .findById(ObjectID(req.params.productid))
+    .then((doc) => {
+      res.json(doc);
+    })
+    .catch((error) => {
+      console.log("No data found");
+    });
+});
 app.get("/getshop/:shopid", (req, res) => {
   console.log(req.params);
   Shop.findById(ObjectID(req.params.shopid))

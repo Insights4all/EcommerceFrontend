@@ -215,6 +215,12 @@ function Home(props) {
                   discount_price={x.discountPrice}
                   discount={x.percentageDiscount}
                   images={x.images}
+                  product_id={x._id}
+                  colors={x.colors}
+                  about={x.about}
+                  details={x.details}
+                  size={x.size}
+                  store_id={x.storeid}
                 />
               ))}
             </Grid>

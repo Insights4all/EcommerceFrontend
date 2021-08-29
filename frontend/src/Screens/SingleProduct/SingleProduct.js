@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Footer from "../Footer/Footer";
 import Navbar from "../Navbar/Navbar";
 import { makeStyles } from "@material-ui/core/styles";
 import Box from "@material-ui/core/Box";
 import { Grid, List, Paper, Typography } from "@material-ui/core";
-import Product from "../Product";
 import Button from "@material-ui/core/Button";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -18,6 +17,7 @@ import Tab from "@material-ui/core/Tab";
 import PropTypes from "prop-types";
 import { blue } from "@material-ui/core/colors";
 import Divider from "@material-ui/core/Divider";
+import axios from "axios";
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -233,11 +233,52 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function SingleProduct() {
+function SingleProduct(props) {
   const classes = useStyles();
   const [size, setSize] = React.useState("");
   const [color, setColor] = React.useState("");
   const [value, setValue] = React.useState(0);
+
+  const [productdata, setProductdata] = React.useState([]);
+  const [product_id, setproductid] = React.useState(props.location.state);
+  const [images, setImages] = React.useState([]);
+  const [mainimage, setmainimage] = React.useState("");
+  const [maincolors, setmaincolors] = React.useState("");
+  const [mainsize, setmainsize] = React.useState("");
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:8080/geteachproduct/${product_id}`)
+      .then((response) => {
+        const data = response.data;
+
+        console.log(data);
+        setProductdata(data);
+        setImages(data.images);
+
+        setmaincolors(data.colors);
+
+        setmainsize(data.size);
+
+        setmainimage(data.images[0]);
+      })
+      .catch((error) => {
+        console.log("Erroorrrr");
+      });
+  }, []);
+
+  //   imagesToRender = images.map((item) => {
+  //     return (
+  //       <div>
+  //         <Box className={classes.mybox} border={1}>
+  //           <img width="90px" height="90px" alt="myimage" src={item} />
+  //         </Box>
+  //       </div>
+  //     );
+  //   });
+  // } else {
+  //   imagesToRender = "Loading...";
+  // }
 
   const handleTabs = (event, newValue) => {
     setValue(newValue);
@@ -256,64 +297,38 @@ function SingleProduct() {
       <Grid container spacing={1} className={classes.allgrids}>
         <Grid item xs={12} sm={3}>
           <Paper className={classes.firstpaper} elevation={0}>
-            <Box className={classes.mybox} border={1}>
-              <img
-                width="90px"
-                height="90px"
-                alt="myimage"
-                src="https://cdn.shopify.com/s/files/1/0486/7552/0664/products/rice-water-bright-cleansing-foam_180x.jpg?v=1621925486"
-              />
-            </Box>
-            <Box className={classes.mybox} border={1}>
-              <img
-                width="90px"
-                height="90px"
-                alt="myimage"
-                src="https://cdn.shopify.com/s/files/1/0486/7552/0664/products/rice-water-bright-cleansing-foam_180x.jpg?v=1621925486"
-              />
-            </Box>
-            <Box className={classes.mybox} border={1}>
-              <img
-                width="90px"
-                height="90px"
-                alt="myimage"
-                src="https://cdn.shopify.com/s/files/1/0486/7552/0664/products/rice-water-bright-cleansing-foam_180x.jpg?v=1621925486"
-              />
-            </Box>
-
-            <Box className={classes.mybox} border={1}>
-              <img
-                width="90px"
-                height="90px"
-                alt="myimage"
-                src="https://cdn.shopify.com/s/files/1/0486/7552/0664/products/rice-water-bright-cleansing-foam_180x.jpg?v=1621925486"
-              />
-            </Box>
+            {images
+              ? images.map((x) => {
+                  return (
+                    <Box className={classes.mybox} border={1}>
+                      <img width="90px" height="90px" alt="myimage" src={x} />
+                    </Box>
+                  );
+                })
+              : "Loading..."}
           </Paper>
         </Grid>
         <Grid item xs={12} sm={3}>
           <Paper className={classes.secondpaper} elevation={0}>
             <Box className={classes.mainbox} border={1}>
-              <img
-                width="325px"
-                height="325px"
-                alt="myimage"
-                src="https://cdn.shopify.com/s/files/1/0486/7552/0664/products/rice-water-bright-cleansing-foam_180x.jpg?v=1621925486"
-              />
+              <img width="325px" height="325px" alt="myimage" src={mainimage} />
             </Box>
           </Paper>
         </Grid>
         <Grid item xs={12} sm={6}>
           <Paper className={classes.thirdpaper} elevation={3}>
             <Typography className={classes.productname}>
-              Rice Water Bright Cleansing Foam
+              {productdata.name}
             </Typography>
             <Typography className={classes.price}>
-              ₹599{" "}
+              {productdata.discountPrice}
               <span className={classes.cancelprice}>
-                <del>₹650</del>
+                <del>₹{productdata.price}</del>
               </span>
-              <span className={classes.offerprice}> | 14% off</span>
+              <span className={classes.offerprice}>
+                {" "}
+                | {productdata.percentageDiscount}% off
+              </span>
             </Typography>
 
             <FormControl className={classes.formControl}>
@@ -325,10 +340,11 @@ function SingleProduct() {
                 onChange={handleChange}
                 input={<Input />}
               >
-                <MenuItem value={"XLL"}>XL</MenuItem>
-                <MenuItem value={"L"}>L</MenuItem>
-                <MenuItem value={"M"}>M</MenuItem>
-                <MenuItem value={"XLL"}>S</MenuItem>
+                {mainsize
+                  ? mainsize.map((x) => {
+                      return <MenuItem value={x}>{x}</MenuItem>;
+                    })
+                  : "Loading..."}
               </Select>
             </FormControl>
             <FormControl className={classes.formControl}>
@@ -340,10 +356,11 @@ function SingleProduct() {
                 onChange={handleColor}
                 input={<Input />}
               >
-                <MenuItem value={"XLL"}>Red</MenuItem>
-                <MenuItem value={"L"}>Blue</MenuItem>
-                <MenuItem value={"M"}>Green</MenuItem>
-                <MenuItem value={"XLL"}>Blue</MenuItem>
+                {maincolors
+                  ? maincolors.map((x) => {
+                      return <MenuItem value={x}>{x}</MenuItem>;
+                    })
+                  : "Loading..."}
               </Select>
             </FormControl>
 
@@ -365,45 +382,15 @@ function SingleProduct() {
             onChange={handleTabs}
             aria-label="simple tabs example"
           >
-            <Tab label="Features" {...a11yProps(0)} />
             <Tab label="About" {...a11yProps(1)} />
             <Tab label="Description" {...a11yProps(2)} />
           </Tabs>
         </AppBar>
         <TabPanel value={value} index={0}>
-          <List href="#simple-list">
-            <ListItemText primary="1 . After using the toner and serum, take an appropriate amount of emulsion and lightly dab it on the face." />
-            <ListItemText primary="2.  The emulsion will seep deep into the layers of skin and reduce the" />
-          </List>
+          <Typography>{productdata.about}</Typography>
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <Typography>
-            Water, Glycerin, Alcohol, Dipropylene Glycol, Caprylic/Capric
-            Triglyceride, Hydrogenated Polydecene, Betaine, Cyclomethicone,
-            Cetyl Ethylhexanoate, Polyglyceryl-3 Methylglucose Distearate,
-            DI-C12-13 Alkyl Malate, Oryza Sativa (Rice) Extract (1.0%), Cetearyl
-            Alcohol, Glyceryl Stearate, PEG-100 Stearate, Butyrospermum Parkii
-            (Shea Butter), Dimethicone, Lecithin, Caprylic/Capric Glycerides,
-            Dimethicone/Vinyl Dimethicone Crosspolymer, Oryza Sativa (Rice) Bran
-            Oil (0.1%), Acrylates/C10-30 Alkyl Acrylate Crosspolymer, Butylene
-            Glycol, C12-14 Pareth-12, Sodium Hyaluronate, Ceramide 3 (0.001%),
-            Polyglyceryl-10 Oleate, Hydrogenated Lecithin, Glycosphingolipids,
-            Carbomer, Potassium Hydroxide, Fragrance, Methylparaben, Disodium
-            EDTA, Alpha-Isomethyl Ionone, Benzyl Salicylate, Butylphenyl
-            Methylpropional, CItronellol, Coumarin, Geraniol, Hexyl CInnamal,
-            Hydroxycitronellal, Hydroxyisohexyl 3-Cyclohexene Carboxaldehyde,
-            Limonene, Linalool
-          </Typography>
-        </TabPanel>
-        <TabPanel value={value} index={2}>
-          <List href="#simple-list">
-            <ListItemText
-              primary="1 . Helps to seal in all the hydration
-Moisturizes the skin
-"
-            />
-            <ListItemText primary="2.  It is a lighter version of a cream and can be used during the day" />
-          </List>
+          {productdata.details}
         </TabPanel>
       </Box>
 
@@ -412,13 +399,7 @@ Moisturizes the skin
 
       <Grid>
         <Grid item xs={12}>
-          <Grid container justify="center" spacing={2}>
-            <Product />
-            <Product />
-            <Product />
-            <Product />
-            <Product />
-          </Grid>
+          <Grid container justify="center" spacing={2}></Grid>
         </Grid>
       </Grid>
 

@@ -6,6 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Link from "@material-ui/core/Link";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   productpaper: {
@@ -110,6 +111,13 @@ function Product(props) {
     props.AddToCart(data);
     props.AddToCartApi(data);
   };
+  const history = useHistory();
+  function singleproduct() {
+    history.push({
+      pathname: "/singleproduct",
+      state: props.product_id,
+    });
+  }
 
   // console.log("product store", props)
 
@@ -138,8 +146,16 @@ function Product(props) {
           variant="outlined"
           className={classes.addtocart}
           color="secondary"
+          onClick={singleproduct}
+        >
+          See Product
+        </Button>
+        <Button
+          variant="outlined"
+          className={classes.addtocart}
+          color="secondary"
           onClick={() => {
-            handleSubmit({ name: "eyeliner", color: "black", userid: "324" });
+            handleSubmit(props);
           }}
         >
           Add to Cart
