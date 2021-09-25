@@ -59,6 +59,69 @@ mongoose.connection.on("connected", () => {
 
 const ObjectID = require("mongodb").ObjectId;
 
+app.post("/newnewregister", async (req, res) => {
+  console.log("UserRegisterBody", req.body);
+
+  const salt = await bcrypt.genSalt();
+  const hashedPassword = await bcrypt.hash(req.body.password, salt);
+  const usercre = {
+    email: req.body.email,
+    password: hashedPassword,
+  };
+  console.log(usercre);
+
+  let newuser = new User({
+    fullName: req.body.fullName,
+    contact: req.body.contact,
+    password: usercre.password,
+    email: usercre.email,
+  });
+  console.log(newuser);
+
+  newuser.save((err, result) => {
+    if (err) {
+      res.status(500).send();
+      console.log(err);
+    } else {
+      console.log("Data saves");
+    }
+  });
+  const UserEmail = {
+    email: newuser.email,
+  };
+  User.find({ email: newuser.email }, async function (err, docs) {
+    const [docsData] = docs;
+    const userid = docsData.id;
+    console.log("userid", userid);
+  });
+  const accessToken = generateAccessToken(UserEmail);
+  console.log("Accesstoken", accessToken);
+  const refreshToken = jwt.sign(UserEmail, process.env.REFRESH_TOKEN_SECRET);
+  console.log("refreshtoken", refreshToken);
+  //res.json({ accessToken: accessToken, refreshToken: refreshToken });
+  res
+    .status(201)
+    .json({ accessToken: accessToken, refreshToken: refreshToken, id: userid });
+});
+
+app.post("/addcartdata", (req, res) => {
+  console.log("cartbody", req.body);
+  const data = req.body;
+  const newProduct = new Cart(data);
+
+  console.log("newcartdata", newProduct);
+  newProduct.save((error) => {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Data saved to mongoose");
+    }
+  });
+  res.json({
+    msg: "We received your data",
+  });
+});
+
 app.get("/geteachproduct/:productid", (req, res) => {
   allProduct
     .findById(ObjectID(req.params.productid))
@@ -284,49 +347,10 @@ app.get("/logout", function (req, res) {
   res.json({ status: "No" });
 });
 
-app.post("/newregister", async (req, res) => {
-  console.log("register Body", req.body);
-  try {
-    try {
-      const salt = await bcrypt.genSalt();
-      const hashedPassword = await bcrypt.hash(req.body.password, salt);
-      const user = { email: req.body.email, password: hashedPassword };
-      users.push(user);
-
-      let newUser = new Admin({
-        email: user.email,
-        password: user.password,
-        fullName: user.fullName,
-        contact: user.contact,
-      });
-
-      newUser.save((err, result) => {
-        if (err) {
-          res.status(500).send();
-        }
-      });
-      const User = {
-        email: req.body.email,
-      };
-      const accessToken = generateAccessToken(User);
-      const refreshToken = jwt.sign(User, process.env.REFRESH_TOKEN_SECRET);
-      //   res.json({ accessToken: accessToken, refreshToken: refreshToken });
-      res
-        .status(201)
-        .json({ accessToken: accessToken, refreshToken: refreshToken });
-    } catch (error) {
-      res.status(500).send();
-    }
-    res.status(201).send(user);
-  } catch {
-    res.status(500).send();
-  }
-});
-
 app.post("/newlogin", async (req, res) => {
   // const user = users.find((user) => user.email === req.body.email);
   console.log("body is", req.body);
-  Admin.find({ email: req.body.email }, async function (err, docs) {
+  User.find({ email: req.body.email }, async function (err, docs) {
     if (err) {
       console.log("mongoose error", err);
       res.status(500).send("Mongoose error");
@@ -343,9 +367,11 @@ app.post("/newlogin", async (req, res) => {
           };
           const accessToken = generateAccessToken(User);
           const refreshToken = jwt.sign(User, process.env.REFRESH_TOKEN_SECRET);
-          res
-            .status(201)
-            .json({ accessToken: accessToken, refreshToken: refreshToken });
+          res.status(201).json({
+            accessToken: accessToken,
+            refreshToken: refreshToken,
+            id: docsData.id,
+          });
         } catch (error) {
           res.status(500).send();
         }

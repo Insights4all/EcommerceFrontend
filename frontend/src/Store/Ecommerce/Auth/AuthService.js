@@ -10,7 +10,7 @@ const UserLogin = (payload) => {
 
 const UserRegister = (payload) => {
   console.log("payloadREGISTER", payload);
-  return axios.post(`http://localhost:8080/newregister`, payload);
+  return axios.post(`http://localhost:8080/newnewregister`, payload);
 };
 
 const ShopLogin = (payload) => {

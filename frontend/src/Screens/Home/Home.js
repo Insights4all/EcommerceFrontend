@@ -112,8 +112,10 @@ function Home(props) {
   const classes = useStyles();
   // const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [products, setProducts] = useState([]);
+  const [userid, setUserid] = useState([]);
   useEffect(() => {
     getAllProduct();
+    setUserid(props.location.state);
   }, []);
 
   function getAllProduct() {

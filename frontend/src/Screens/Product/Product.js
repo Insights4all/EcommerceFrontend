@@ -108,6 +108,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 function Product(props) {
   const handleSubmit = (data) => {
+    console.log(props);
     props.AddToCart(data);
     props.AddToCartApi(data);
   };

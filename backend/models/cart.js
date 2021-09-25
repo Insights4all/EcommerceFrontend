@@ -11,11 +11,19 @@ const Schema = mongoose.Schema;
 // });
 
 const CartSchema = new Schema({
-
-        name:String,
-        color:String,
-        userid:String
-
+  about: String,
+  colors: String,
+  details: String,
+  discountPrice: Number,
+  images: Array,
+  name: String,
+  percentageDiscount: Number,
+  price: Number,
+  size: String,
+  color: String,
+  storeid: String,
+  userid: String,
+  productid: String,
 });
 
 //Model

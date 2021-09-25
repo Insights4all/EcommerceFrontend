@@ -9,7 +9,7 @@ import TextField from "@material-ui/core/TextField";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { Input } from "@material-ui/core";
-import useForm from "../../Utils/useForm"
+import useForm from "../../Utils/useForm";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -96,18 +96,16 @@ function Signup(props) {
   const [password, setpassword] = useState("");
   const history = useHistory();
 
-console.log("signup", props)
-React.useEffect(()=>{
-
-if(Object.keys(props.customer_register_Data.data).length){
-  history.push("/home")
-}
-
-},[props])
+  console.log("signup", props);
+  React.useEffect(() => {
+    if (Object.keys(props.customer_register_Data.data).length) {
+      history.push("/login");
+    }
+  }, [props]);
 
   const handleSubmit = () => {
     console.log("userValue", userValue);
-    props.UserRegister(userValue)
+    props.UserRegister(userValue);
   };
 
   const validate = (values) => {

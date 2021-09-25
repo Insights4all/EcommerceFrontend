@@ -3,7 +3,7 @@ import { Switch, Route } from "react-router-dom";
 import Home from "./Screens/Home/Home";
 import React from "react";
 import "./App.css";
-import SingleProduct from "./Screens/SingleProduct/SingleProduct";
+import SingleProduct from "./Screens/SingleProduct";
 import Categories from "./Screens/Categories/Categories";
 import Cart from "./Screens/Cart/Cart";
 import UserProfile from "./Screens/UserProfile/UserProfile";
@@ -15,7 +15,6 @@ import ShopRegister from "./Screens/ShopRegister";
 import Main from "./Screens/ShopRegister/Main";
 import Admin from "./Screens/Admin/Admin";
 import AddProduct from "./Screens/Admin/AddProduct";
-
 import ShopLogin from "./Screens/ShopLogin";
 
 function App() {

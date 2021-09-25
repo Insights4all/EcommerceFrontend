@@ -245,6 +245,22 @@ function SingleProduct(props) {
   const [mainimage, setmainimage] = React.useState("");
   const [maincolors, setmaincolors] = React.useState("");
   const [mainsize, setmainsize] = React.useState("");
+  const [userid, setuserid] = React.useState(localStorage.getItem("userid"));
+  console.log("Single product props", props);
+
+  const handleSubmit = (data) => {
+    props.AddToCart(productdata);
+    props.AddToCartApi(productdata);
+    console.log("Cart data", props.cartData.data);
+    productdata.productid = productdata._id;
+    axios({
+      url: "http://localhost:8080/addcartdata",
+      method: "POST",
+      data: productdata,
+    }).then((response) => {
+      console.log(response);
+    });
+  };
 
   useEffect(() => {
     axios
@@ -252,8 +268,9 @@ function SingleProduct(props) {
       .then((response) => {
         const data = response.data;
 
-        console.log(data);
-        setProductdata(data);
+        setProductdata(data, userid);
+        productdata.userid = userid;
+
         setImages(data.images);
 
         setmaincolors(data.colors);
@@ -266,6 +283,8 @@ function SingleProduct(props) {
         console.log("Erroorrrr");
       });
   }, []);
+  productdata.userid = userid;
+  console.log("Prodcut data", productdata);
 
   //   imagesToRender = images.map((item) => {
   //     return (
@@ -286,9 +305,11 @@ function SingleProduct(props) {
 
   const handleChange = (event) => {
     setSize(event.target.value);
+    productdata.size = size;
   };
   const handleColor = (event) => {
     setColor(event.target.value);
+    productdata.colors = color;
   };
 
   return (
@@ -367,8 +388,10 @@ function SingleProduct(props) {
             <Button
               variant="outlined"
               color="primary"
-              href="#contained-buttons"
               className={classes.addtocart}
+              onClick={() => {
+                handleSubmit(productdata);
+              }}
             >
               Add to Cart
             </Button>

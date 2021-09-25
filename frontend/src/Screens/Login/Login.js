@@ -9,7 +9,7 @@ import TextField from "@material-ui/core/TextField";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { Input } from "@material-ui/core";
-import useForm from '../../Utils/useForm'
+import useForm from "../../Utils/useForm";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -85,24 +85,37 @@ function Login(props) {
 
   const history = useHistory();
 
-
   const handleSubmit = (e) => {
-    e.preventDefault()
-    props.UserLogin(userValue)
+    e.preventDefault();
+    props.UserLogin(userValue);
     // console.log("newprops", props)
   };
- 
-React.useEffect(() => {
-  console.log("useffect props", props);
+  React.useEffect(() => {
+    console.log("useffect props", props);
+    if (Object.keys(props.customer_login_Data.data).length) {
+      localStorage.setItem("userid", props.customer_login_Data.data.id);
+      history.push({
+        pathname: "/home",
+        state: props.customer_login_Data.data.id,
+      });
+      console.log(props.customer_login_Data.data.id);
+      //window.location.reload();
+    } else if (props.customer_login_Data.errorMessage.length) {
+      setError(true);
+    }
+  }, [props]);
 
-  if (Object.keys(props.customer_login_Data.data).length) {
-    history.push("/home");
-    window.location.reload()
-  } else if(props.customer_login_Data.errorMessage.length){
-    setError(true)
-  }
+  // React.useEffect(() => {
+  //   console.log("useffect props", props);
 
-}, [props]);
+  //   if (Object.keys(props.customer_login_Data.data).length) {
+  //     history.push("/home");
+  //     window.location.reload()
+  //   } else if(props.customer_login_Data.errorMessage.length){
+  //     setError(true)
+  //   }
+
+  // }, [props]);
 
   const validate = (values) => {
     let errors = {};
@@ -116,9 +129,6 @@ React.useEffect(() => {
     handleChange: onLoginChange,
     handleSubmit: onLoginSubmit,
   } = useForm(handleSubmit, validate);
-
-
-  
 
   return (
     <div class={classes.root}>
@@ -151,10 +161,11 @@ React.useEffect(() => {
             }
           />
 
-{
-error ? <p style={{textAlign:"center", color:"red"}}>Error, Please Enter Valid Credentials</p> : null
-}
-        
+          {error ? (
+            <p style={{ textAlign: "center", color: "red" }}>
+              Error, Please Enter Valid Credentials
+            </p>
+          ) : null}
 
           <Button
             className={classes.signupbtn}

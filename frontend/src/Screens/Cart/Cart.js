@@ -272,7 +272,7 @@ function Cart(props) {
     setc(c - 1);
   };
 
-  console.log("cart props", props.location.state)
+  console.log("cart props", props);
 
   return (
     <div>
